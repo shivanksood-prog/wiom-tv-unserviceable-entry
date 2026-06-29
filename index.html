@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Wiom TV · Unserviceable Entry — Prototype</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  /* ---- Wiom Design tokens (from customer-app: base_colors.dart / wiom_*.dart) ---- */
+  :root{
+    --brand600:#D9008D;  --brand300:#FFB2E4; --brand200:#FFCCED; --brand100:#FFE5F6;
+    --neutral900:#161021; --neutral800:#352D42; --neutral700:#665E75; --neutral500:#A7A1B2;
+    --neutral300:#D7D3E0; --neutral200:#E8E4F0; --neutral100:#F1EDF7; --white:#FAF9FC; --baseWhite:#FFFFFF;
+    --positive600:#008043; --positive100:#E1FAED;
+    --bgDark:#161021;
+    --radius:16px;
+  }
+  @font-face{font-family:'NotoSansDisplay';src:url('assets/NotoSansDisplay-Regular.ttf');font-weight:400;}
+  @font-face{font-family:'NotoSansDisplay';src:url('assets/NotoSansDisplay-SemiBold.ttf');font-weight:600;}
+  @font-face{font-family:'NotoSansDisplay';src:url('assets/NotoSansDisplay-Bold.ttf');font-weight:700;}
+
+  *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
+  body{
+    font-family:'Noto Sans Devanagari','NotoSansDisplay',system-ui,sans-serif;
+    background:#33373d; color:var(--neutral900);
+    min-height:100vh; padding:24px 12px 60px; display:flex; flex-direction:column; align-items:center;
+  }
+
+  /* ---- top controls ---- */
+  .controls{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-bottom:20px;}
+  .seg{display:inline-flex;background:#21242a;border-radius:12px;padding:4px;gap:2px;}
+  .seg button{
+    font-family:inherit;font-size:13px;font-weight:600;color:#cfd2da;background:transparent;
+    border:0;padding:8px 14px;border-radius:9px;cursor:pointer;transition:.15s;white-space:nowrap;
+  }
+  .seg button.active{background:var(--brand600);color:#fff;}
+  .hint{color:#9aa0ab;font-size:12px;text-align:center;max-width:760px;margin:0 auto 18px;line-height:1.5;}
+
+  /* ---- phone frame: 360x720 like the Figma frame ---- */
+  .stage{display:flex;gap:28px;flex-wrap:wrap;justify-content:center;align-items:flex-start;}
+  .phone-wrap{display:flex;flex-direction:column;align-items:center;gap:10px;}
+  .phone-label{color:#cfd2da;font-size:12px;font-weight:600;letter-spacing:.3px;}
+  .phone{
+    width:360px;height:720px;background:var(--bgDark);border-radius:28px;overflow:hidden;position:relative;
+    box-shadow:0 18px 50px rgba(0,0,0,.45);border:1px solid #0c0a12;
+  }
+
+  /* status bar */
+  .statusbar{position:absolute;top:0;left:0;right:0;height:28px;display:flex;align-items:center;justify-content:space-between;
+    padding:0 16px;font-size:12px;color:#fff;z-index:6;font-family:'NotoSansDisplay',sans-serif;}
+  .statusbar .r{display:flex;gap:6px;align-items:center;}
+
+  /* photo + gradient (GradientContainer) */
+  .hero{position:absolute;top:0;left:0;right:0;height:380px;z-index:1;}
+  .hero img{width:100%;height:100%;object-fit:cover;object-position:center top;display:block;}
+  /* top scrim for appbar legibility (bgDark .6 -> transparent) */
+  .hero .topscrim{position:absolute;top:0;left:0;right:0;height:100px;
+    background:linear-gradient(to bottom, rgba(22,16,33,.6), rgba(22,16,33,0));}
+  /* bottom fade photo -> solid dark (gradientHeight 240) */
+  .hero .botfade{position:absolute;left:0;right:0;bottom:0;height:240px;
+    background:linear-gradient(to top, #161021 18%, rgba(22,16,33,0));}
+  .belowfill{position:absolute;top:380px;left:0;right:0;bottom:0;background:var(--bgDark);z-index:1;}
+
+  /* app bar (transparent, white icons) */
+  .appbar{position:absolute;top:28px;left:0;right:0;height:48px;display:flex;align-items:center;justify-content:flex-end;
+    gap:14px;padding:0 16px;z-index:6;}
+  .appbar .ic{width:26px;height:26px;color:#fff;display:flex;align-items:center;justify-content:center;}
+  .appbar .help{display:flex;align-items:center;gap:4px;color:#fff;font-size:13px;font-weight:600;}
+  .appbar .help u{text-underline-offset:3px;}
+
+  /* content column (white text over dark) */
+  .content{position:absolute;left:0;right:0;bottom:0;z-index:5;padding:0 0 16px;display:flex;flex-direction:column;}
+  .copyblock{padding:0 16px;text-align:center;}
+  .title{color:var(--white);font-size:24px;font-weight:700;line-height:1.3;}
+  .subtitle{color:var(--white);font-size:16px;font-weight:400;line-height:1.5;margin-top:16px;opacity:.92;}
+
+  /* ===== Wiom TV promo card (the NEW addition) ===== */
+  .tvcard{
+    margin:20px 16px 4px;background:var(--white);border-radius:var(--radius);
+    padding:14px;box-shadow:0 6px 22px rgba(0,0,0,.35);text-align:right;position:relative;overflow:hidden;
+  }
+  .tvcard .row{display:flex;align-items:center;gap:12px;flex-direction:row-reverse;}
+  .tvcard .badge{position:absolute;top:0;right:0;background:var(--positive100);color:var(--positive600);
+    font-size:11px;font-weight:700;padding:5px 12px;border-bottom-left-radius:12px;}
+  .tvlogo{flex:0 0 auto;width:52px;height:52px;border-radius:13px;background:linear-gradient(135deg,#D9008D,#F00CA0);
+    display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:13px;line-height:1.05;
+    font-family:'NotoSansDisplay',sans-serif;text-align:center;box-shadow:0 3px 10px rgba(217,0,141,.4);}
+  .tvtext{flex:1;text-align:right;}
+  .tvtext .h{color:var(--neutral900);font-size:16px;font-weight:700;line-height:1.35;}
+  .tvtext .p{color:var(--neutral700);font-size:13px;font-weight:400;line-height:1.45;margin-top:3px;}
+  .tvcta{display:flex;align-items:center;justify-content:center;gap:6px;margin-top:12px;
+    background:var(--brand100);color:var(--brand600);font-weight:700;font-size:15px;
+    padding:11px;border-radius:12px;cursor:pointer;text-decoration:none;border:1px solid var(--brand200);}
+  .tvcta:active{background:var(--brand200);}
+
+  /* primary + secondary buttons (wiom_button.dart) */
+  .btns{padding:14px 16px 0;}
+  .pribtn{display:block;width:100%;background:var(--brand600);color:var(--white);font-weight:700;font-size:16px;
+    border:0;padding:14px 16px;border-radius:var(--radius);cursor:pointer;font-family:inherit;text-align:center;}
+  .pribtn:active{opacity:.92;}
+  .seclink{display:flex;align-items:center;justify-content:center;gap:4px;color:var(--white);font-size:14px;
+    font-weight:600;padding:14px 0 4px;cursor:pointer;}
+
+  /* "after" highlight ring on the card */
+  .ring .tvcard{outline:2px dashed var(--brand300);outline-offset:3px;}
+  .tag{position:absolute;left:50%;transform:translateX(-50%);bottom:-26px;background:var(--brand600);color:#fff;
+    font-size:11px;font-weight:700;padding:3px 10px;border-radius:8px;white-space:nowrap;}
+
+  @media(max-width:780px){.phone{transform:scale(.92);}}
+</style>
+</head>
+<body>
+
+  <div class="controls">
+    <div class="seg" id="variantSeg">
+      <button data-v="area" class="active">क्षेत्र में नहीं (AREA)</button>
+      <button data-v="city">शहर में नहीं (CITY)</button>
+    </div>
+    <div class="seg" id="viewSeg">
+      <button data-view="after" class="active">After (with TV)</button>
+      <button data-view="before">Before</button>
+      <button data-view="both">Compare</button>
+    </div>
+  </div>
+  <p class="hint">
+    Live <code>UnAvailableInArea</code> screen rebuilt with real Wiom design tokens (NotoSansDisplay · #D9008D · photo bg + dark gradient).
+    The <b>Wiom TV card</b> is the only addition. CTA → <b>wiom.tv</b>. Toggle AREA/CITY and Before/After above.
+  </p>
+
+  <div class="stage" id="stage"></div>
+
+<script>
+  const COPY = {
+    area:{
+      title:"जल्द आ रहा है व्योम!",
+      subtitle:"हम अभी आपके एरिया में उपलब्ध नहीं हैं",
+      button:"किसी और पते पर बुकिंग करें",
+      seclink:"पहले से व्योम लगा हुआ है"
+    },
+    city:{
+      title:"2-3 महीने में आ रहा है व्योम!",
+      subtitle:"हम अभी आपके शहर में उपलब्ध नहीं हैं",
+      button:"किसी और जगह के लिए चेक करें",
+      seclink:"पहले से व्योम लगा हुआ है"
+    }
+  };
+  const TV = {
+    badge:"बिल्कुल फ्री",
+    logo:"व्योम<br>TV",
+    h:"इंतज़ार में, TV का मज़ा लें",
+    p:"ढेरों लाइव TV चैनल — इसी फोन पर, अभी और मुफ़्त।",
+    cta:"व्योम TV खोलें",
+    href:"https://wiom.tv"
+  };
+
+  function statusbar(){
+    return `<div class="statusbar"><span>4:35</span>
+      <span class="r"><span>📶</span><span>📶</span><span>🔋50%</span></span></div>`;
+  }
+  function appbar(){
+    return `<div class="appbar">
+      <div class="ic" title="help">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M4 12a8 8 0 0116 0v4a3 3 0 01-3 3M4 12v4a3 3 0 003 3h1M4 12h3v6H6a2 2 0 01-2-2M20 12h-3v6h1a2 2 0 002-2"/></svg>
+      </div>
+      <div class="ic" title="language">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M3 5h7M6.5 5v2c0 3-1.5 5.5-4 7M4 9c0 2 2 4 5 5M12 20l4-9 4 9M13.5 17h5"/></svg>
+      </div>
+    </div>`;
+  }
+  function tvcard(){
+    return `<div class="tvcard">
+      <span class="badge">🎁 ${TV.badge}</span>
+      <div class="row">
+        <div class="tvlogo">${TV.logo}</div>
+        <div class="tvtext">
+          <div class="h">${TV.h}</div>
+          <div class="p">${TV.p}</div>
+        </div>
+      </div>
+      <a class="tvcta" href="${TV.href}" target="_blank" rel="noopener">${TV.cta} &#8592;</a>
+    </div>`;
+  }
+  function screen(variant, withTV, ring){
+    const c = COPY[variant];
+    return `<div class="phone ${ring?'ring':''}">
+      ${statusbar()}
+      ${appbar()}
+      <div class="hero">
+        <img src="assets/unserviceable.jpg" alt="">
+        <div class="topscrim"></div>
+        <div class="botfade"></div>
+      </div>
+      <div class="belowfill"></div>
+      <div class="content">
+        <div class="copyblock">
+          <div class="title">${c.title}</div>
+          <div class="subtitle">${c.subtitle}</div>
+        </div>
+        ${withTV?tvcard():''}
+        <div class="btns">
+          <button class="pribtn">${c.button}</button>
+          <div class="seclink">${c.seclink} &#8250;</div>
+        </div>
+      </div>
+    </div>`;
+  }
+
+  let variant='area', view='after';
+  function render(){
+    const stage=document.getElementById('stage');
+    if(view==='both'){
+      stage.innerHTML =
+        `<div class="phone-wrap"><div class="phone-label">BEFORE — current app</div>${screen(variant,false,false)}</div>`+
+        `<div class="phone-wrap"><div class="phone-label">AFTER — with Wiom TV card</div>${screen(variant,true,true)}</div>`;
+    }else{
+      const withTV = view==='after';
+      stage.innerHTML = `<div class="phone-wrap"><div class="phone-label">${withTV?'AFTER — with Wiom TV card':'BEFORE — current app'}</div>${screen(variant,withTV,withTV)}</div>`;
+    }
+  }
+  document.getElementById('variantSeg').addEventListener('click',e=>{
+    if(!e.target.dataset.v)return; variant=e.target.dataset.v;
+    [...e.currentTarget.children].forEach(b=>b.classList.toggle('active',b===e.target)); render();
+  });
+  document.getElementById('viewSeg').addEventListener('click',e=>{
+    if(!e.target.dataset.view)return; view=e.target.dataset.view;
+    [...e.currentTarget.children].forEach(b=>b.classList.toggle('active',b===e.target)); render();
+  });
+  render();
+</script>
+</body>
+</html>
