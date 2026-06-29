@@ -2,8 +2,8 @@
 <html lang="hi">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Wiom TV · Unserviceable Entry — Clean White (v3)</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<title>Wiom TV · इलाके में उपलब्ध नहीं</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@400;600;700&display=swap" rel="stylesheet">
@@ -15,63 +15,61 @@
     --positive600:#008043; --positive100:#E1FAED; --negative600:#E01E00;
     --bgDark:#161021; --radius:16px;
   }
-  @font-face{font-family:'NotoSansDisplay';src:url('assets/NotoSansDisplay-Regular.ttf');font-weight:400;}
-  @font-face{font-family:'NotoSansDisplay';src:url('assets/NotoSansDisplay-SemiBold.ttf');font-weight:600;}
-  @font-face{font-family:'NotoSansDisplay';src:url('assets/NotoSansDisplay-Bold.ttf');font-weight:700;}
-
   *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
-  body{font-family:'Noto Sans Devanagari','NotoSansDisplay',system-ui,sans-serif;background:#33373d;color:var(--neutral900);
-    min-height:100vh;padding:22px 12px 60px;display:flex;flex-direction:column;align-items:center;}
+  html,body{height:100%;}
+  body{font-family:'Noto Sans Devanagari',system-ui,sans-serif;background:#2a2d33;color:var(--neutral900);
+    display:flex;align-items:flex-start;justify-content:center;}
 
-  .controls{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-bottom:10px;}
-  .seg{display:inline-flex;background:#21242a;border-radius:12px;padding:4px;gap:2px;}
-  .seg button{font-family:inherit;font-size:13px;font-weight:600;color:#cfd2da;background:transparent;border:0;padding:8px 13px;border-radius:9px;cursor:pointer;transition:.15s;white-space:nowrap;}
-  .seg button.active{background:var(--brand600);color:#fff;}
-  .hint{color:#9aa0ab;font-size:12px;text-align:center;max-width:780px;margin:10px auto 16px;line-height:1.55;}
-  .hint b{color:#e9ecf2;} .hint code{color:#e3a7d2;}
+  /* ===== the app viewport: full-screen on mobile, framed on desktop ===== */
+  .viewport{position:relative;width:100vw;height:100dvh;background:var(--bgDark);overflow:hidden;}
+  @media(min-width:520px){
+    body{background:#2a2d33;padding:22px 0;}
+    .viewport{width:380px;height:812px;border-radius:34px;border:1px solid #0c0a12;
+      box-shadow:0 22px 60px rgba(0,0,0,.5);margin:0 auto;}
+  }
 
-  .stage{display:flex;gap:28px;flex-wrap:wrap;justify-content:center;align-items:flex-start;}
-  .phone-wrap{display:flex;flex-direction:column;align-items:center;gap:10px;}
-  .phone-label{color:#cfd2da;font-size:12px;font-weight:600;letter-spacing:.3px;}
-  .phone{width:360px;height:760px;background:var(--bgDark);border-radius:28px;overflow:hidden;position:relative;box-shadow:0 18px 50px rgba(0,0,0,.45);border:1px solid #0c0a12;}
+  /* ===== transparent navigation (helps move Before/After + area/city) ===== */
+  .nav{position:absolute;top:34px;left:10px;z-index:30;display:flex;gap:7px;align-items:center;}
+  .navbtn{display:inline-flex;align-items:center;gap:6px;font-family:inherit;font-size:12px;font-weight:600;
+    color:#fff;background:rgba(0,0,0,.32);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);
+    border:1px solid rgba(255,255,255,.22);border-radius:999px;padding:7px 12px;cursor:pointer;}
+  .navbtn:active{background:rgba(0,0,0,.5);}
+  .navseg{display:inline-flex;background:rgba(0,0,0,.32);backdrop-filter:blur(6px);border:1px solid rgba(255,255,255,.22);
+    border-radius:999px;padding:3px;}
+  .navseg button{font-family:inherit;font-size:12px;font-weight:600;color:rgba(255,255,255,.7);background:transparent;
+    border:0;padding:5px 11px;border-radius:999px;cursor:pointer;}
+  .navseg button.on{background:#fff;color:var(--brand600);}
 
-  .statusbar{position:absolute;top:0;left:0;right:0;height:28px;display:flex;align-items:center;justify-content:space-between;padding:0 16px;font-size:12px;color:#fff;z-index:6;font-family:'NotoSansDisplay',sans-serif;}
+  /* ===== app screen ===== */
+  .statusbar{position:absolute;top:0;left:0;right:0;height:30px;display:flex;align-items:center;justify-content:space-between;
+    padding:0 16px;font-size:12px;color:#fff;z-index:6;}
   .statusbar .r{display:flex;gap:6px;align-items:center;}
 
-  .hero{position:absolute;top:0;left:0;right:0;height:340px;z-index:1;}
+  .hero{position:absolute;top:0;left:0;right:0;height:40%;min-height:300px;z-index:1;}
   .hero img{width:100%;height:100%;object-fit:cover;object-position:center top;display:block;}
-  .hero .topscrim{position:absolute;top:0;left:0;right:0;height:100px;background:linear-gradient(to bottom, rgba(22,16,33,.6), rgba(22,16,33,0));}
-  .hero .botfade{position:absolute;left:0;right:0;bottom:0;height:220px;background:linear-gradient(to top, #161021 16%, rgba(22,16,33,0));}
-  .belowfill{position:absolute;top:340px;left:0;right:0;bottom:0;background:var(--bgDark);z-index:1;}
+  .hero .topscrim{position:absolute;top:0;left:0;right:0;height:120px;background:linear-gradient(to bottom, rgba(22,16,33,.55), rgba(22,16,33,0));}
+  .hero .botfade{position:absolute;left:0;right:0;bottom:0;height:200px;background:linear-gradient(to top, #161021 14%, rgba(22,16,33,0));}
+  .belowfill{position:absolute;top:40%;min-height:0;left:0;right:0;bottom:0;background:var(--bgDark);z-index:1;}
+  @media(max-width:519px){.belowfill{top:max(40%,300px);}}
 
-  .appbar{position:absolute;top:28px;left:0;right:0;height:48px;display:flex;align-items:center;justify-content:flex-end;gap:14px;padding:0 16px;z-index:6;}
+  .appbar{position:absolute;top:30px;left:0;right:0;height:46px;display:flex;align-items:center;justify-content:flex-end;gap:14px;padding:0 16px;z-index:6;}
   .appbar .ic{width:26px;height:26px;color:#fff;display:flex;align-items:center;justify-content:center;}
 
-  .content{position:absolute;left:0;right:0;bottom:0;z-index:5;padding:0 0 14px;display:flex;flex-direction:column;}
+  .content{position:absolute;left:0;right:0;bottom:0;z-index:5;padding:0 0 16px;display:flex;flex-direction:column;}
   .copyblock{padding:0 16px;text-align:center;}
   .title{color:var(--white);font-size:23px;font-weight:700;line-height:1.3;}
   .subtitle{color:var(--white);font-size:15px;font-weight:400;line-height:1.5;margin-top:12px;opacity:.9;}
-  /* block-level bridge line (Objective 2) — connects the unavailable msg to the offer */
-  .bridge{display:flex;align-items:center;gap:9px;margin:18px 16px 2px;background:rgba(255,178,228,.12);
-    border:1px solid rgba(255,178,228,.35);border-radius:12px;padding:11px 13px;}
-  .bridge .bt{color:#FFD6EF;font-size:14px;font-weight:600;line-height:1.4;text-align:left;}
-  .bridge .be{font-size:22px;flex:0 0 auto;}
 
-  /* ===== Clean White card — now SHOWS what Wiom TV is ===== */
-  .tvslot{margin:10px 16px 4px;}
-  .card{background:var(--white);border-radius:var(--radius);padding:14px;box-shadow:0 8px 26px rgba(0,0,0,.4);}
+  /* ===== Wiom TV banner (whole card is the link, like the app) ===== */
+  .tvslot{margin:16px 16px 4px;}
+  .card{display:block;text-decoration:none;background:var(--white);border-radius:var(--radius);padding:14px;
+    box-shadow:0 8px 26px rgba(0,0,0,.4);}
+  .card:active{transform:scale(.992);}
   .freepill{display:inline-flex;align-items:center;gap:5px;font-weight:700;font-size:12px;padding:4px 10px;border-radius:999px;line-height:1;background:var(--positive100);color:var(--positive600);}
-  /* bridge copy, now integrated as the banner's lead message */
-  .cbridge{margin-top:10px;font-size:14.5px;font-weight:600;line-height:1.5;color:var(--neutral900);}
-  .livepill{display:inline-flex;align-items:center;gap:5px;font-weight:700;font-size:11px;padding:4px 9px;border-radius:999px;line-height:1;background:#FFE9E5;color:var(--negative600);}
-  .livedot{width:7px;height:7px;border-radius:50%;background:var(--negative600);box-shadow:0 0 0 0 rgba(224,30,0,.5);animation:pulse 1.4s infinite;}
-  @keyframes pulse{0%{box-shadow:0 0 0 0 rgba(224,30,0,.5)}70%{box-shadow:0 0 0 6px rgba(224,30,0,0)}100%{box-shadow:0 0 0 0 rgba(224,30,0,0)}}
-
+  .cbridge{margin-top:10px;font-size:15px;font-weight:700;line-height:1.45;color:var(--neutral900);}
   .crow2{display:flex;gap:12px;align-items:center;margin-top:12px;}
-  /* mini live-TV frame: channel mosaic + play = unmistakably TV */
   .tvframe{flex:0 0 auto;width:88px;height:66px;border-radius:11px;overflow:hidden;position:relative;background:#000;box-shadow:0 2px 8px rgba(0,0,0,.3);}
   .mosaic{position:absolute;inset:0;display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr;}
-  .mosaic span{display:block;}
   .mosaic span:nth-child(1){background:linear-gradient(135deg,#E01E00,#ff5a3c);}
   .mosaic span:nth-child(2){background:linear-gradient(135deg,#1746a2,#3b82f6);}
   .mosaic span:nth-child(3){background:linear-gradient(135deg,#7a1fa2,#c026d3);}
@@ -81,50 +79,23 @@
   .playtri{width:0;height:0;border-style:solid;border-width:5px 0 5px 8px;border-color:transparent transparent transparent var(--brand600);margin-left:2px;}
   .tvframe .live{position:absolute;top:4px;left:4px;display:flex;align-items:center;gap:3px;background:rgba(0,0,0,.55);color:#fff;font-size:8px;font-weight:700;padding:2px 5px;border-radius:5px;}
   .tvframe .live i{width:5px;height:5px;border-radius:50%;background:var(--negative600);display:block;}
-
   .cmeta{flex:1;}
   .cmeta .h{font-size:16px;font-weight:700;color:var(--neutral900);line-height:1.25;}
   .cmeta .genres{font-size:12.5px;color:var(--neutral700);line-height:1.4;margin-top:4px;}
-
-  /* real channel-name chips = proof it's actual TV */
-  .chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:11px;}
-  .chip{font-size:11.5px;font-weight:600;color:var(--neutral700);background:var(--neutral100);border:1px solid var(--neutral200);border-radius:7px;padding:4px 8px;line-height:1;}
-  .chip.more{color:var(--brand600);background:var(--brand100);border-color:var(--brand200);}
-
-  /* in-card bridge strip (Objective 2, reinforced) */
-  .cardbridge{margin-top:12px;background:var(--brand100);border-radius:10px;padding:9px 11px;font-size:13px;font-weight:600;color:var(--brand600);line-height:1.4;text-align:center;}
-  .cta{display:flex;align-items:center;justify-content:center;gap:7px;margin-top:10px;background:var(--brand600);color:#fff;font-weight:700;font-size:15px;padding:12px;border-radius:12px;text-decoration:none;}
+  .cta{display:flex;align-items:center;justify-content:center;gap:7px;margin-top:13px;background:var(--brand600);color:#fff;
+    font-weight:700;font-size:15px;padding:13px;border-radius:12px;}
   .cta .playtri{border-color:transparent transparent transparent #fff;}
 
-  .btns{padding:13px 16px 0;}
+  .btns{padding:14px 16px 0;}
   .pribtn{display:block;width:100%;background:var(--brand600);color:var(--white);font-weight:700;font-size:16px;border:0;padding:14px 16px;border-radius:var(--radius);cursor:pointer;font-family:inherit;text-align:center;}
-  .seclink{display:flex;align-items:center;justify-content:center;gap:4px;color:var(--white);font-size:14px;font-weight:600;padding:13px 0 2px;}
-
-  .ring .tvslot .card{outline:2px dashed var(--brand300);outline-offset:4px;}
-  @media(max-width:780px){.phone{transform:scale(.9);}}
+  .seclink{display:flex;align-items:center;justify-content:center;gap:4px;color:var(--white);font-size:14px;font-weight:600;padding:14px 0 2px;}
 </style>
 </head>
 <body>
-
-  <div class="controls">
-    <div class="seg" id="variantSeg">
-      <button data-v="area" class="active">क्षेत्र में नहीं (AREA)</button>
-      <button data-v="city">शहर में नहीं (CITY)</button>
-    </div>
-    <div class="seg" id="viewSeg">
-      <button data-view="after" class="active">After</button>
-      <button data-view="before">Before</button>
-      <button data-view="both">Compare</button>
-    </div>
-  </div>
-  <p class="hint">
-    <b>Clean White v4</b> — bridge copy integrated into the banner; channel names removed; LIVE only on the TV frame
-    (no duplicate). Shows it's TV via mini live-frame (mosaic + play + 🔴LIVE) + genres + "ढेरों लाइव चैनल". CTA → <code>wiom.tv</code>.
-  </p>
-
-  <div class="stage" id="stage"></div>
+  <div class="viewport" id="vp"></div>
 
 <script>
+  const TV_URL = "https://wiom.tv";
   const COPY = {
     area:{title:"जल्द आ रहा है व्योम!", subtitle:"हम अभी आपके एरिया में उपलब्ध नहीं हैं",
           button:"किसी और पते पर बुकिंग करें", seclink:"पहले से व्योम लगा हुआ है"},
@@ -133,20 +104,18 @@
   };
   const TV = {
     free:"100% फ्री",
-    bridge:"नेट यहाँ आने में थोड़ा वक़्त है — पर मनोरंजन का इंतज़ार क्यों? तब तक व्योम TV बिल्कुल फ्री देखें।",
+    bridge:"पर व्योम TV अभी उपलब्ध है! 📺",
     h:"ढेरों लाइव चैनल",
     genres:"न्यूज़ • मूवी • भक्ति • मनोरंजन • खेल",
-    cta:"फ्री में देखना शुरू करें",
-    href:"https://wiom.tv"
+    cta:"फ्री में देखना शुरू करें"
   };
 
-  function statusbar(){return `<div class="statusbar"><span>4:35</span><span class="r"><span>📶</span><span>🔋50%</span></span></div>`;}
-  function appbar(){return `<div class="appbar">
+  const statusbar=()=>`<div class="statusbar"><span>4:35</span><span class="r"><span>📶</span><span>🔋50%</span></span></div>`;
+  const appbar=()=>`<div class="appbar">
     <div class="ic"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 12a8 8 0 0116 0v4a3 3 0 01-3 3M4 12v4a3 3 0 003 3h1M4 12h3v6H6a2 2 0 01-2-2M20 12h-3v6h1a2 2 0 002-2"/></svg></div>
-    <div class="ic"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 5h7M6.5 5v2c0 3-1.5 5.5-4 7M4 9c0 2 2 4 5 5M12 20l4-9 4 9M13.5 17h5"/></svg></div></div>`;}
+    <div class="ic"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 5h7M6.5 5v2c0 3-1.5 5.5-4 7M4 9c0 2 2 4 5 5M12 20l4-9 4 9M13.5 17h5"/></svg></div></div>`;
 
-  function card(){
-    return `<div class="card">
+  const card=()=>`<a class="card" href="${TV_URL}">
       <span class="freepill">🎁 ${TV.free}</span>
       <div class="cbridge">${TV.bridge}</div>
       <div class="crow2">
@@ -155,45 +124,37 @@
           <div class="live"><i></i>LIVE</div>
           <div class="play"><b><span class="playtri"></span></b></div>
         </div>
-        <div class="cmeta">
-          <div class="h">${TV.h}</div>
-          <div class="genres">${TV.genres}</div>
-        </div>
+        <div class="cmeta"><div class="h">${TV.h}</div><div class="genres">${TV.genres}</div></div>
       </div>
-      <a class="cta" href="${TV.href}" target="_blank" rel="noopener"><span class="playtri"></span>${TV.cta}</a>
+      <div class="cta"><span class="playtri"></span>${TV.cta}</div>
+    </a>`;
+
+  function nav(){
+    const other = view==='after' ? 'Before' : 'After';
+    return `<div class="nav">
+      <button class="navbtn" id="flip">↺ ${other}</button>
+      <div class="navseg" id="varseg">
+        <button data-v="area" class="${variant==='area'?'on':''}">एरिया</button>
+        <button data-v="city" class="${variant==='city'?'on':''}">शहर</button>
+      </div>
     </div>`;
   }
 
-  function screen(variant, withTV, ring){
-    const c = COPY[variant];
-    return `<div class="phone ${ring?'ring':''}">
-      ${statusbar()}${appbar()}
-      <div class="hero"><img src="assets/unserviceable.jpg" alt=""><div class="topscrim"></div><div class="botfade"></div></div>
-      <div class="belowfill"></div>
-      <div class="content">
-        <div class="copyblock"><div class="title">${c.title}</div><div class="subtitle">${c.subtitle}</div></div>
-        ${withTV?`<div class="tvslot">${card()}</div>`:''}
-        <div class="btns"><button class="pribtn">${c.button}</button><div class="seclink">${c.seclink} &#8250;</div></div>
-      </div></div>`;
-  }
-
-  let variant='area', view='after';
   function render(){
-    const stage=document.getElementById('stage');
-    if(view==='both'){
-      stage.innerHTML =
-        `<div class="phone-wrap"><div class="phone-label">BEFORE — current app</div>${screen(variant,false,false)}</div>`+
-        `<div class="phone-wrap"><div class="phone-label">AFTER — Clean White v3</div>${screen(variant,true,true)}</div>`;
-    }else{
-      const withTV = view==='after';
-      stage.innerHTML = `<div class="phone-wrap"><div class="phone-label">${withTV?'AFTER — Clean White v3':'BEFORE — current app'}</div>${screen(variant,withTV,withTV)}</div>`;
-    }
+    const c=COPY[variant]; const withTV = view==='after';
+    document.getElementById('vp').innerHTML =
+      nav()+statusbar()+appbar()+
+      `<div class="hero"><img src="assets/unserviceable.jpg" alt=""><div class="topscrim"></div><div class="botfade"></div></div>
+       <div class="belowfill"></div>
+       <div class="content">
+         <div class="copyblock"><div class="title">${c.title}</div><div class="subtitle">${c.subtitle}</div></div>
+         ${withTV?`<div class="tvslot">${card()}</div>`:''}
+         <div class="btns"><button class="pribtn">${c.button}</button><div class="seclink">${c.seclink} &#8250;</div></div>
+       </div>`;
+    document.getElementById('flip').onclick=()=>{view=(view==='after'?'before':'after');render();};
+    document.getElementById('varseg').onclick=(e)=>{const v=e.target.dataset.v;if(v){variant=v;render();}};
   }
-  function wire(id,attr,set){document.getElementById(id).addEventListener('click',e=>{
-    const v=e.target.dataset[attr]; if(v===undefined)return; set(v);
-    [...e.currentTarget.children].forEach(b=>b.classList.toggle('active',b===e.target)); render();});}
-  wire('variantSeg','v',v=>variant=v);
-  wire('viewSeg','view',v=>view=v);
+  let variant='area', view='after';
   render();
 </script>
 </body>
