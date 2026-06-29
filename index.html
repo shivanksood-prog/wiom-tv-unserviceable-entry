@@ -52,7 +52,10 @@
   .title{color:var(--white);font-size:23px;font-weight:700;line-height:1.3;}
   .subtitle{color:var(--white);font-size:15px;font-weight:400;line-height:1.5;margin-top:12px;opacity:.9;}
   /* block-level bridge line (Objective 2) — connects the unavailable msg to the offer */
-  .bridge{color:#FFB2E4;font-size:14px;font-weight:600;line-height:1.45;margin:16px 16px 0;text-align:center;}
+  .bridge{display:flex;align-items:center;gap:9px;margin:18px 16px 2px;background:rgba(255,178,228,.12);
+    border:1px solid rgba(255,178,228,.35);border-radius:12px;padding:11px 13px;}
+  .bridge .bt{color:#FFD6EF;font-size:14px;font-weight:600;line-height:1.4;text-align:left;}
+  .bridge .be{font-size:22px;flex:0 0 auto;}
 
   /* ===== Clean White card — now SHOWS what Wiom TV is ===== */
   .tvslot{margin:10px 16px 4px;}
@@ -129,14 +132,13 @@
           button:"किसी और जगह के लिए चेक करें", seclink:"पहले से व्योम लगा हुआ है"}
   };
   // block-level bridge — echoes "till Net is here, try Wiom TV" (Objective 2)
-  const BRIDGE = "पर मनोरंजन का इंतज़ार नहीं! 📺 नेट यहाँ आने तक व्योम TV फ्री में देखें 👇";
+  const BRIDGE = "नेट यहाँ आने में थोड़ा वक़्त है — पर मनोरंजन का इंतज़ार क्यों? तब तक व्योम TV बिल्कुल फ्री देखें।";
 
   const TV = {
     free:"100% फ्री",
     h:"फ्री लाइव टीवी",
     genres:"न्यूज़ • मूवी • भक्ति • मनोरंजन • खेल",
     chips:["Aaj Tak","DD National","Zee News","और भी कई"],
-    bridge:"जब तक व्योम नेट यहाँ नहीं आता — टीवी का पूरा मज़ा फ्री में लें",
     cta:"फ्री में देखना शुरू करें",
     href:"https://wiom.tv"
   };
@@ -165,7 +167,6 @@
         </div>
       </div>
       <div class="chips">${chips}</div>
-      <div class="cardbridge">${TV.bridge}</div>
       <a class="cta" href="${TV.href}" target="_blank" rel="noopener"><span class="playtri"></span>${TV.cta}</a>
     </div>`;
   }
@@ -178,7 +179,7 @@
       <div class="belowfill"></div>
       <div class="content">
         <div class="copyblock"><div class="title">${c.title}</div><div class="subtitle">${c.subtitle}</div></div>
-        ${withTV?`<div class="bridge">${BRIDGE}</div><div class="tvslot">${card()}</div>`:''}
+        ${withTV?`<div class="bridge"><span class="be">📺</span><span class="bt">${BRIDGE}</span></div><div class="tvslot">${card()}</div>`:''}
         <div class="btns"><button class="pribtn">${c.button}</button><div class="seclink">${c.seclink} &#8250;</div></div>
       </div></div>`;
   }
