@@ -59,9 +59,10 @@
 
   /* ===== Clean White card — now SHOWS what Wiom TV is ===== */
   .tvslot{margin:10px 16px 4px;}
-  .card{background:var(--white);border-radius:var(--radius);padding:13px;box-shadow:0 8px 26px rgba(0,0,0,.4);}
-  .crow1{display:flex;align-items:center;justify-content:space-between;}
+  .card{background:var(--white);border-radius:var(--radius);padding:14px;box-shadow:0 8px 26px rgba(0,0,0,.4);}
   .freepill{display:inline-flex;align-items:center;gap:5px;font-weight:700;font-size:12px;padding:4px 10px;border-radius:999px;line-height:1;background:var(--positive100);color:var(--positive600);}
+  /* bridge copy, now integrated as the banner's lead message */
+  .cbridge{margin-top:10px;font-size:14.5px;font-weight:600;line-height:1.5;color:var(--neutral900);}
   .livepill{display:inline-flex;align-items:center;gap:5px;font-weight:700;font-size:11px;padding:4px 9px;border-radius:999px;line-height:1;background:#FFE9E5;color:var(--negative600);}
   .livedot{width:7px;height:7px;border-radius:50%;background:var(--negative600);box-shadow:0 0 0 0 rgba(224,30,0,.5);animation:pulse 1.4s infinite;}
   @keyframes pulse{0%{box-shadow:0 0 0 0 rgba(224,30,0,.5)}70%{box-shadow:0 0 0 6px rgba(224,30,0,0)}100%{box-shadow:0 0 0 0 rgba(224,30,0,0)}}
@@ -117,9 +118,8 @@
     </div>
   </div>
   <p class="hint">
-    <b>Clean White v3</b> — now answers <b>"what is Wiom TV?"</b>: mini live-TV frame (channel mosaic + play + 🔴LIVE),
-    real channel chips (Aaj Tak · DD National · Zee News), genres, and a <b>bridge line</b> tying the whole block to
-    <i>"नेट यहाँ आने तक, फ्री TV देखें"</i>. CTA → <code>wiom.tv</code>.
+    <b>Clean White v4</b> — bridge copy integrated into the banner; channel names removed; LIVE only on the TV frame
+    (no duplicate). Shows it's TV via mini live-frame (mosaic + play + 🔴LIVE) + genres + "ढेरों लाइव चैनल". CTA → <code>wiom.tv</code>.
   </p>
 
   <div class="stage" id="stage"></div>
@@ -131,14 +131,11 @@
     city:{title:"2-3 महीने में आ रहा है व्योम!", subtitle:"हम अभी आपके शहर में उपलब्ध नहीं हैं",
           button:"किसी और जगह के लिए चेक करें", seclink:"पहले से व्योम लगा हुआ है"}
   };
-  // block-level bridge — echoes "till Net is here, try Wiom TV" (Objective 2)
-  const BRIDGE = "नेट यहाँ आने में थोड़ा वक़्त है — पर मनोरंजन का इंतज़ार क्यों? तब तक व्योम TV बिल्कुल फ्री देखें।";
-
   const TV = {
     free:"100% फ्री",
-    h:"फ्री लाइव टीवी",
+    bridge:"नेट यहाँ आने में थोड़ा वक़्त है — पर मनोरंजन का इंतज़ार क्यों? तब तक व्योम TV बिल्कुल फ्री देखें।",
+    h:"ढेरों लाइव चैनल",
     genres:"न्यूज़ • मूवी • भक्ति • मनोरंजन • खेल",
-    chips:["Aaj Tak","DD National","Zee News","और भी कई"],
     cta:"फ्री में देखना शुरू करें",
     href:"https://wiom.tv"
   };
@@ -149,12 +146,9 @@
     <div class="ic"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 5h7M6.5 5v2c0 3-1.5 5.5-4 7M4 9c0 2 2 4 5 5M12 20l4-9 4 9M13.5 17h5"/></svg></div></div>`;}
 
   function card(){
-    const chips = TV.chips.map((c,i)=>`<span class="chip${i===TV.chips.length-1?' more':''}">${c}</span>`).join('');
     return `<div class="card">
-      <div class="crow1">
-        <span class="freepill">🎁 ${TV.free}</span>
-        <span class="livepill"><span class="livedot"></span>LIVE</span>
-      </div>
+      <span class="freepill">🎁 ${TV.free}</span>
+      <div class="cbridge">${TV.bridge}</div>
       <div class="crow2">
         <div class="tvframe">
           <div class="mosaic"><span></span><span></span><span></span><span></span></div>
@@ -162,11 +156,10 @@
           <div class="play"><b><span class="playtri"></span></b></div>
         </div>
         <div class="cmeta">
-          <div class="h">व्योम TV — ${TV.h}</div>
+          <div class="h">${TV.h}</div>
           <div class="genres">${TV.genres}</div>
         </div>
       </div>
-      <div class="chips">${chips}</div>
       <a class="cta" href="${TV.href}" target="_blank" rel="noopener"><span class="playtri"></span>${TV.cta}</a>
     </div>`;
   }
@@ -179,7 +172,7 @@
       <div class="belowfill"></div>
       <div class="content">
         <div class="copyblock"><div class="title">${c.title}</div><div class="subtitle">${c.subtitle}</div></div>
-        ${withTV?`<div class="bridge"><span class="be">📺</span><span class="bt">${BRIDGE}</span></div><div class="tvslot">${card()}</div>`:''}
+        ${withTV?`<div class="tvslot">${card()}</div>`:''}
         <div class="btns"><button class="pribtn">${c.button}</button><div class="seclink">${c.seclink} &#8250;</div></div>
       </div></div>`;
   }
