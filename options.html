@@ -3,36 +3,36 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Wiom TV entry — hierarchy design options</title>
+<title>Wiom TV entry — hierarchy options on the LIVE (new-app) screen</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;600;700&family=Noto+Sans+Devanagari:wght@400;600;700&display=swap" rel="stylesheet">
 <style>
   :root{
-    --brand:#D9008D; --brand100:#FFE5F6; --brand300:#FFB2E4;
-    --ink:#161021; --muted:#665E75; --sub:#A7A1B2; --line:#D7D3E0; --zebra:#F1EDF7;
+    --brand:#D9008D; --brand500:#FF66C9; --brand100:#FFE5F6; --brand300:#FFB2E4;
+    --ink:#161021; --muted:#665E75; --sub:#A7A1B2; --line:#D7D3E0; --line2:#E8E4F0; --zebra:#F1EDF7;
     --bg:#FAF9FC; --card:#FFFFFF;
     --green:#008043; --green100:#E1FAED;
     --red:#E01E00; --red100:#FFE9E5;
     --amber:#FF8000; --amber100:#FFE6CC;
     --purple:#6D17CE; --purple100:#F1E5FF;
-    --dark:#161021; --dark800:#352D42;
   }
   *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
   body{font-family:'Noto Sans','Noto Sans Devanagari',system-ui,sans-serif;background:var(--bg);color:var(--ink);line-height:1.5;}
   a{color:inherit;}
-
   .wrap{max-width:1240px;margin:0 auto;padding:0 20px;}
   header{padding:40px 0 8px;}
   .eyebrow{color:var(--brand);font-weight:700;font-size:13px;letter-spacing:.08em;text-transform:uppercase;}
   h1{font-size:28px;line-height:1.25;margin-top:6px;}
-  .lede{color:var(--muted);max-width:760px;margin-top:10px;font-size:15px;}
+  .lede{color:var(--muted);max-width:800px;margin-top:10px;font-size:15px;}
+  .note{display:inline-block;background:var(--green100);color:var(--green);font-weight:700;font-size:12px;border-radius:8px;padding:4px 10px;margin-top:12px;}
 
   .diag{display:flex;gap:14px;flex-wrap:wrap;margin:22px 0 6px;}
   .diag .d{flex:1 1 220px;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px 16px;}
   .diag .d b{display:block;font-size:14px;}
   .diag .d span{font-size:13px;color:var(--muted);}
   .diag .d .no{display:inline-block;background:var(--red100);color:var(--red);font-weight:700;font-size:11px;border-radius:6px;padding:2px 7px;margin-bottom:7px;}
+  .diag .d .ok{display:inline-block;background:var(--green100);color:var(--green);font-weight:700;font-size:11px;border-radius:6px;padding:2px 7px;margin-bottom:7px;}
 
   h2{font-size:20px;margin:36px 0 4px;}
   .h2sub{color:var(--muted);font-size:14px;margin-bottom:18px;}
@@ -56,92 +56,98 @@
   .optcap li b{color:var(--ink);font-weight:600;}
   .replay{margin-top:8px;font-family:inherit;font-size:12px;font-weight:700;color:var(--brand);background:var(--brand100);border:0;border-radius:999px;padding:6px 13px;cursor:pointer;}
 
-  /* ===== phone mock ===== */
-  .phone{position:relative;width:312px;height:660px;background:var(--dark);border-radius:30px;overflow:hidden;
-    border:1px solid #0c0a12;box-shadow:0 16px 40px rgba(22,16,33,.28);font-family:'Noto Sans Devanagari',sans-serif;}
-  .statusbar{position:absolute;top:0;left:0;right:0;height:26px;display:flex;align-items:center;justify-content:space-between;padding:0 14px;font-size:10.5px;color:#fff;z-index:6;}
-  .appbar{position:absolute;top:26px;left:0;right:0;height:38px;display:flex;align-items:center;justify-content:flex-end;gap:12px;padding:0 14px;z-index:6;color:#fff;}
-  .appbar svg{width:20px;height:20px;}
-  .hero{position:absolute;top:0;left:0;right:0;height:37%;z-index:1;}
-  .hero img{width:100%;height:100%;object-fit:cover;object-position:center top;display:block;}
-  .hero .topscrim{position:absolute;top:0;left:0;right:0;height:90px;background:linear-gradient(to bottom, rgba(22,16,33,.55), rgba(22,16,33,0));}
-  .hero .botfade{position:absolute;left:0;right:0;bottom:0;height:150px;background:linear-gradient(to top, #161021 14%, rgba(22,16,33,0));}
-  .belowfill{position:absolute;top:37%;left:0;right:0;bottom:0;background:var(--dark);z-index:1;}
-  .content{position:absolute;left:0;right:0;bottom:0;z-index:5;padding:0 0 14px;display:flex;flex-direction:column;}
-  .copyblock{padding:0 14px;text-align:center;}
-  .ttl{color:#FAF9FC;font-size:19px;font-weight:700;line-height:1.3;}
-  .sttl{color:#FAF9FC;font-size:13px;line-height:1.5;margin-top:9px;opacity:.9;}
-  .btns{padding:12px 14px 0;}
-  .pribtn{display:block;width:100%;background:var(--brand);color:#FAF9FC;font-weight:700;font-size:14px;border:0;padding:12px 14px;border-radius:14px;font-family:inherit;text-align:center;}
-  .seclink{display:flex;align-items:center;justify-content:center;gap:4px;color:#FAF9FC;font-size:12.5px;font-weight:600;padding:12px 0 2px;}
+  /* ===== phone mock: LIVE new-app light screen ===== */
+  .phone{position:relative;width:312px;height:660px;background:var(--bg);border-radius:30px;overflow:hidden;
+    border:1px solid #d8d4e2;box-shadow:0 16px 40px rgba(22,16,33,.18);font-family:'Noto Sans Devanagari',sans-serif;}
+  .statusbar{position:absolute;top:0;left:0;right:0;height:26px;display:flex;align-items:center;justify-content:space-between;padding:0 14px;font-size:10.5px;color:var(--ink);z-index:6;}
+  .appbar{position:absolute;top:26px;left:0;right:0;height:38px;display:flex;align-items:center;padding:0 8px;z-index:6;color:var(--ink);}
+  .appbar svg{width:19px;height:19px;}
+  .pbody{position:absolute;top:64px;left:0;right:0;bottom:96px;overflow:hidden;padding:14px 14px 10px;display:flex;flex-direction:column;align-items:center;}
+  .gfx{width:170px;height:170px;flex:0 0 auto;}
+  .gfx img{width:100%;height:100%;object-fit:contain;display:block;}
+  .ttl{margin-top:12px;text-align:center;font-size:15.5px;font-weight:600;line-height:1.35;color:var(--ink);}
+  .addrcard{margin-top:12px;width:100%;display:flex;gap:7px;align-items:flex-start;background:var(--bg);
+    border:1px solid var(--line2);border-radius:13px;padding:11px 12px;}
+  .addrcard img{width:18px;height:18px;flex:0 0 auto;margin-top:1px;}
+  .addrcard .nm{font-size:12.5px;font-weight:600;color:var(--ink);line-height:1.3;}
+  .addrcard .ad{font-size:9.5px;color:var(--muted);line-height:1.45;margin-top:4px;}
+  .bottombar{position:absolute;left:0;right:0;bottom:0;z-index:7;background:var(--bg);
+    box-shadow:0 -2px 6px rgba(22,16,33,.12);padding:12px 12px 6px;}
+  .pribtn{display:block;width:100%;background:var(--brand500);color:var(--ink);font-weight:600;font-size:12.5px;
+    border:0;padding:11px 12px;border-radius:13px;font-family:inherit;text-align:center;}
+  .loginlink{display:flex;align-items:center;justify-content:center;gap:4px;color:var(--ink);font-size:11px;padding:9px 0 5px;}
+  .loginlink .arr{color:var(--brand);font-weight:700;}
 
   /* mini TV frame */
-  .tvframe{flex:0 0 auto;border-radius:9px;overflow:hidden;position:relative;background:#000;box-shadow:0 2px 8px rgba(0,0,0,.3);}
-  .tvframe.lg{width:76px;height:57px;}
-  .tvframe.sm{width:56px;height:42px;}
+  .tvframe{flex:0 0 auto;border-radius:8px;overflow:hidden;position:relative;background:#000;box-shadow:0 2px 8px rgba(22,16,33,.25);}
+  .tvframe.lg{width:64px;height:48px;}
+  .tvframe.sm{width:50px;height:38px;}
   .mosaic{position:absolute;inset:0;display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr;}
   .mosaic span:nth-child(1){background:linear-gradient(135deg,#E01E00,#ff5a3c);}
   .mosaic span:nth-child(2){background:linear-gradient(135deg,#1746a2,#3b82f6);}
   .mosaic span:nth-child(3){background:linear-gradient(135deg,#7a1fa2,#c026d3);}
   .mosaic span:nth-child(4){background:linear-gradient(135deg,#b8860b,#f2c94c);}
   .tvframe .play{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;}
-  .tvframe .play b{width:20px;height:20px;border-radius:50%;background:rgba(255,255,255,.92);display:flex;align-items:center;justify-content:center;box-shadow:0 2px 6px rgba(0,0,0,.4);}
-  .playtri{width:0;height:0;border-style:solid;border-width:4px 0 4px 6.5px;border-color:transparent transparent transparent var(--brand);margin-left:2px;}
-  .tvframe .live{position:absolute;top:3px;left:3px;display:flex;align-items:center;gap:3px;background:rgba(0,0,0,.55);color:#fff;font-size:6.5px;font-weight:700;padding:2px 4px;border-radius:4px;}
-  .tvframe .live i{width:4px;height:4px;border-radius:50%;background:var(--red);display:block;}
+  .tvframe .play b{width:18px;height:18px;border-radius:50%;background:rgba(255,255,255,.92);display:flex;align-items:center;justify-content:center;box-shadow:0 2px 6px rgba(0,0,0,.35);}
+  .playtri{width:0;height:0;border-style:solid;border-width:3.5px 0 3.5px 5.5px;border-color:transparent transparent transparent var(--brand);margin-left:1.5px;}
+  .tvframe .live{position:absolute;top:3px;left:3px;display:flex;align-items:center;gap:2px;background:rgba(0,0,0,.55);color:#fff;font-size:6px;font-weight:700;padding:1.5px 3.5px;border-radius:3.5px;}
+  .tvframe .live i{width:3.5px;height:3.5px;border-radius:50%;background:var(--red);display:block;}
 
-  /* current white card */
-  .tvslot{margin:13px 14px 2px;}
-  .wcard{display:block;text-decoration:none;background:#FAF9FC;border-radius:14px;padding:12px;box-shadow:0 8px 26px rgba(0,0,0,.4);}
-  .wcard .cbridge{font-size:13px;font-weight:700;line-height:1.45;color:var(--ink);}
-  .wcard .crow2{display:flex;gap:10px;align-items:center;margin-top:10px;}
-  .wcard .h{font-size:13.5px;font-weight:700;color:var(--ink);line-height:1.2;}
-  .freepill{display:inline-flex;align-items:center;gap:4px;font-weight:700;font-size:11px;padding:4px 9px;border-radius:999px;line-height:1;background:var(--green100);color:var(--green);}
-  .wcard .hrow{display:flex;align-items:center;gap:7px;flex-wrap:wrap;}
-  .wcard .genres{font-size:10.5px;color:var(--muted);line-height:1.4;margin-top:3px;}
-  .wcard .cta{display:flex;align-items:center;justify-content:center;gap:6px;margin-top:11px;background:var(--brand);color:#fff;font-weight:700;font-size:13px;padding:11px;border-radius:10px;}
+  /* current (v5) white card w/ own CTA */
+  .wcard{margin-top:12px;width:100%;display:block;text-decoration:none;background:#fff;border:1px solid var(--line2);border-radius:13px;padding:10px;box-shadow:0 6px 18px rgba(22,16,33,.10);}
+  .wcard .cbridge{font-size:11.5px;font-weight:700;line-height:1.4;color:var(--ink);}
+  .wcard .crow2{display:flex;gap:9px;align-items:center;margin-top:8px;}
+  .wcard .h{font-size:11.5px;font-weight:700;color:var(--ink);}
+  .freepill{display:inline-flex;align-items:center;gap:3px;font-weight:700;font-size:9px;padding:3px 7px;border-radius:999px;line-height:1;background:var(--green100);color:var(--green);}
+  .wcard .hrow{display:flex;align-items:center;gap:6px;flex-wrap:wrap;}
+  .wcard .genres{font-size:8.5px;color:var(--muted);margin-top:2px;}
+  .wcard .cta{display:flex;align-items:center;justify-content:center;gap:5px;margin-top:9px;background:var(--brand);color:#fff;font-weight:700;font-size:11px;padding:9px;border-radius:9px;}
   .wcard .cta .playtri{border-color:transparent transparent transparent #fff;}
 
-  /* quiet dark strip (options A & B) */
-  .qcard{display:flex;text-decoration:none;align-items:center;gap:10px;background:rgba(255,255,255,.07);
-    border:1px solid rgba(255,255,255,.16);border-radius:13px;padding:10px 12px;}
-  .qcard .qt{flex:1;min-width:0;}
-  .qcard .qt b{display:block;color:#FAF9FC;font-size:13px;font-weight:700;line-height:1.35;}
-  .qcard .qt span{display:block;color:#FAF9FC;opacity:.62;font-size:11px;margin-top:2px;}
-  .qcard .qt .fr{color:#59d99a;opacity:1;font-weight:700;}
-  .qcard .chev{color:#FAF9FC;opacity:.7;font-size:19px;line-height:1;}
-  .ordivider{display:flex;align-items:center;gap:10px;color:rgba(250,249,252,.45);font-size:10.5px;font-weight:600;padding:11px 14px 0;}
-  .ordivider::before,.ordivider::after{content:"";flex:1;height:1px;background:rgba(255,255,255,.14);}
+  /* quiet soft-brand card (A) */
+  .tvquiet{margin-top:12px;width:100%;display:flex;text-decoration:none;align-items:center;gap:9px;
+    background:var(--brand100);border:1px solid var(--brand300);border-radius:13px;padding:9px 11px;}
+  .tvquiet .qt{flex:1;min-width:0;}
+  .tvquiet .qt b{display:block;font-size:11px;font-weight:700;color:var(--ink);line-height:1.35;}
+  .tvquiet .qt b .fr{color:var(--green);}
+  .tvquiet .qt span{display:block;font-size:9px;color:var(--muted);margin-top:2px;}
+  .tvquiet .chev{color:var(--brand);font-size:17px;font-weight:600;}
 
-  /* option C teaser + sheet */
-  .teaser{display:flex;align-items:center;justify-content:center;gap:6px;margin:12px 14px 0;padding:11px;border-radius:13px;
-    border:1px dashed rgba(255,255,255,.3);color:#FAF9FC;font-size:12.5px;font-weight:700;text-decoration:none;cursor:pointer;}
-  .teaser .chev{opacity:.7;}
-  .sheetveil{position:absolute;inset:0;background:rgba(0,0,0,.45);z-index:20;opacity:0;pointer-events:none;transition:opacity .25s;}
-  .sheet{position:absolute;left:0;right:0;bottom:0;z-index:21;background:#FAF9FC;border-radius:20px 20px 0 0;padding:10px 14px 18px;
+  /* bottom-bar strip (B) */
+  .tvbar{display:flex;text-decoration:none;align-items:center;gap:8px;background:var(--zebra);
+    border:1px solid var(--line2);border-radius:11px;padding:7px 9px;margin-top:2px;margin-bottom:5px;}
+  .tvbar .qt b{display:block;font-size:10px;font-weight:700;color:var(--ink);}
+  .tvbar .qt span{display:block;font-size:8.5px;color:var(--muted);}
+  .tvbar .chev{margin-left:auto;color:var(--brand);font-size:15px;font-weight:600;}
+
+  /* teaser + sheet (C) */
+  .teaser{display:flex;align-items:center;justify-content:center;gap:5px;margin-top:12px;width:100%;padding:9px;border-radius:11px;
+    border:1px dashed var(--brand300);color:var(--ink);font-size:10.5px;font-weight:700;cursor:pointer;background:transparent;}
+  .teaser .chev{color:var(--brand);}
+  .sheetveil{position:absolute;inset:0;background:rgba(22,16,33,.45);z-index:20;opacity:0;pointer-events:none;transition:opacity .25s;}
+  .sheet{position:absolute;left:0;right:0;bottom:0;z-index:21;background:#fff;border-radius:18px 18px 0 0;padding:8px 12px 14px;
     transform:translateY(105%);transition:transform .3s cubic-bezier(.2,.8,.25,1);}
   .phone.open .sheetveil{opacity:1;pointer-events:auto;}
   .phone.open .sheet{transform:translateY(0);}
-  .sheet .handle{width:38px;height:4px;border-radius:99px;background:var(--line);margin:0 auto 12px;}
-  .sheet .wcard{box-shadow:none;padding:2px;}
+  .sheet .handle{width:34px;height:4px;border-radius:99px;background:var(--line);margin:0 auto 10px;}
+  .sheet .wcard{margin-top:0;box-shadow:none;border:0;padding:2px;}
 
-  /* option D snackbar */
-  .snack{position:absolute;left:10px;right:10px;bottom:12px;z-index:22;display:flex;align-items:center;gap:10px;
-    background:var(--dark800);border:1px solid rgba(255,255,255,.18);border-radius:14px;padding:10px 12px;
-    box-shadow:0 10px 30px rgba(0,0,0,.5);transform:translateY(140%);transition:transform .45s cubic-bezier(.2,.8,.25,1);}
-  .phone.snackin .snack{transform:translateY(0);}
+  /* snackbar (D) */
+  .snack{position:absolute;left:8px;right:8px;bottom:100px;z-index:22;display:flex;align-items:center;gap:8px;
+    background:var(--ink);border-radius:12px;padding:8px 10px;box-shadow:0 10px 30px rgba(22,16,33,.35);
+    transform:translateY(160%);opacity:0;transition:all .45s cubic-bezier(.2,.8,.25,1);}
+  .phone.snackin .snack{transform:translateY(0);opacity:1;}
   .snack .qt{flex:1;min-width:0;}
-  .snack .qt b{display:block;color:#FAF9FC;font-size:12.5px;font-weight:700;line-height:1.35;}
-  .snack .qt span{display:block;color:#FAF9FC;opacity:.62;font-size:10.5px;margin-top:2px;}
-  .snack .go{color:var(--brand300);font-weight:700;font-size:12.5px;white-space:nowrap;}
-  .snack .x{color:#FAF9FC;opacity:.55;font-size:14px;padding:2px 4px;cursor:pointer;}
+  .snack .qt b{display:block;color:#FAF9FC;font-size:10.5px;font-weight:700;}
+  .snack .qt span{display:block;color:#FAF9FC;opacity:.62;font-size:8.5px;margin-top:1px;}
+  .snack .go{color:var(--brand300);font-weight:700;font-size:10.5px;white-space:nowrap;}
+  .snack .x{color:#FAF9FC;opacity:.55;font-size:12px;padding:2px 4px;cursor:pointer;}
 
   /* ===== verdict table ===== */
   table{width:100%;border-collapse:collapse;background:var(--card);border:1px solid var(--line);border-radius:14px;overflow:hidden;font-size:13.5px;}
   th,td{padding:11px 14px;text-align:left;border-bottom:1px solid var(--line);}
   th{background:var(--zebra);font-size:12px;letter-spacing:.04em;text-transform:uppercase;color:var(--muted);}
   tr:last-child td{border-bottom:0;}
-  td b.opt-l{font-weight:700;}
   .pill{display:inline-block;font-size:11.5px;font-weight:700;padding:3px 9px;border-radius:999px;}
   .g{background:var(--green100);color:var(--green);} .r{background:var(--red100);color:var(--red);}
   .a{background:var(--amber100);color:#b45c00;} .n{background:var(--zebra);color:var(--muted);}
@@ -149,26 +155,26 @@
 
   .rec{background:var(--brand100);border:1px solid var(--brand300);border-radius:16px;padding:20px 22px;margin:26px 0 50px;}
   .rec h2{margin:0 0 6px;font-size:18px;}
-  .rec p{font-size:14px;color:var(--ink);max-width:860px;}
+  .rec p{font-size:14px;max-width:880px;}
   .rec p+p{margin-top:8px;}
 </style>
 </head>
 <body>
 
 <header class="wrap">
-  <div class="eyebrow">Unserviceable screen · Wiom TV entry</div>
-  <h1>Fixing the hierarchy: "Wiom isn't here yet" first, TV second</h1>
-  <p class="lede">The screen has two jobs — <b>primary:</b> tell the user Wiom Net isn't available and route them (try another address); <b>secondary:</b> offer Wiom TV as the meanwhile-consolation. The current design lets the secondary win. Why:</p>
+  <div class="eyebrow">Unserviceable screen · Wiom TV entry · v2</div>
+  <h1>Hierarchy options — rebuilt on the LIVE app screen</h1>
+  <p class="lede">The production app (new-app rebuild, <code>release/sprint-18</code>) uses a <b>light screen</b>: cartoon SVG graphic, address card, and a pink booking CTA pinned in a bottom bar. That changes the diagnosis — the old "white card outshines the dark screen" problem is gone, but two violations remain if we drop in the old rich card:</p>
   <div class="diag">
-    <div class="d"><span class="no">Violation 1 · Contrast</span><b>Brightest thing wins the eye</b><span>On a dark screen, the big white card is the highest-luminance element — the eye lands on TV before the message.</span></div>
-    <div class="d"><span class="no">Violation 2 · One primary CTA</span><b>Two filled pink buttons compete</b><span>"अभी देखें" (TV) and "किसी और पते पर बुकिंग करें" have identical primary treatment — and TV's sits higher.</span></div>
-    <div class="d"><span class="no">Violation 3 · Position</span><b>Promo interrupts message → action</b><span>The card is wedged between the headline and its action, breaking the natural reading flow of the primary job.</span></div>
+    <div class="d"><span class="ok">Resolved by new screen</span><b>No more contrast bomb</b><span>On the light screen a white card no longer dominates by luminance. The graphic and title keep the eye first.</span></div>
+    <div class="d"><span class="no">Violation 1 · Competing CTA</span><b>Card's pink beats the real CTA</b><span>The old card's brand-600 CTA (#D9008D) is <i>more</i> saturated than the actual booking button (#FF66C9) — the promo would look like the primary action.</span></div>
+    <div class="d"><span class="no">Violation 2 · Zone mixing</span><b>Promo must not enter the action bar</b><span>The bottom bar is the decision zone (button + login). Content zone and action zone are separate on this screen — the TV offer belongs to content.</span></div>
   </div>
 </header>
 
 <div class="wrap">
   <h2>Design options</h2>
-  <p class="h2sub">Each option fixes the hierarchy with a different product-design principle. Phones are interactive where noted.</p>
+  <p class="h2sub">All on the real live screen (area variant with address card). C and D are interactive.</p>
 </div>
 
 <div class="rail" id="rail"></div>
@@ -178,31 +184,34 @@
   <div class="tblwrap">
   <table>
     <tr><th>Option</th><th>Primary message clarity</th><th>TV visibility</th><th>Friction to TV</th><th>Build effort</th></tr>
-    <tr><td><b class="opt-l">Current</b> — white card + own CTA</td><td><span class="pill r">Poor — TV wins the eye</span></td><td><span class="pill g">Maximum</span></td><td><span class="pill g">Zero-tap</span></td><td><span class="pill n">Done</span></td></tr>
-    <tr><td><b class="opt-l">A</b> — quiet card, same slot</td><td><span class="pill a">Good — still above the action</span></td><td><span class="pill g">High</span></td><td><span class="pill g">Zero-tap</span></td><td><span class="pill g">Trivial restyle</span></td></tr>
-    <tr><td><b class="opt-l">B</b> — quiet card after actions</td><td><span class="pill g">Excellent</span></td><td><span class="pill g">High — still on screen</span></td><td><span class="pill g">Zero-tap</span></td><td><span class="pill g">Trivial</span></td></tr>
-    <tr><td><b class="opt-l">C</b> — teaser → bottom sheet</td><td><span class="pill g">Excellent — purest screen</span></td><td><span class="pill a">Low until tapped</span></td><td><span class="pill a">One tap</span></td><td><span class="pill a">Bottom sheet</span></td></tr>
-    <tr><td><b class="opt-l">D</b> — snackbar after delay</td><td><span class="pill g">Excellent at first paint</span></td><td><span class="pill a">High, but dismissible</span></td><td><span class="pill g">Zero-tap</span></td><td><span class="pill a">Timer + animation</span></td></tr>
+    <tr><td><b>Current (v5)</b> — rich card + own pink CTA</td><td><span class="pill r">Poor — promo reads as primary action</span></td><td><span class="pill g">Maximum</span></td><td><span class="pill g">Zero-tap</span></td><td><span class="pill n">Patch exists (wrong screen)</span></td></tr>
+    <tr><td><b>A</b> — soft-brand quiet card in content</td><td><span class="pill g">Excellent</span></td><td><span class="pill g">High — above the fold</span></td><td><span class="pill g">Zero-tap</span></td><td><span class="pill g">Trivial</span></td></tr>
+    <tr><td><b>B</b> — strip inside the bottom bar</td><td><span class="pill a">OK — but clutters decision zone</span></td><td><span class="pill g">High</span></td><td><span class="pill g">Zero-tap</span></td><td><span class="pill g">Trivial</span></td></tr>
+    <tr><td><b>C</b> — teaser → bottom sheet</td><td><span class="pill g">Excellent</span></td><td><span class="pill a">Low until tapped</span></td><td><span class="pill a">One tap</span></td><td><span class="pill a">Bottom sheet (native pattern)</span></td></tr>
+    <tr><td><b>D</b> — snackbar after delay</td><td><span class="pill g">Excellent at first paint</span></td><td><span class="pill a">High, but dismissible</span></td><td><span class="pill g">Zero-tap</span></td><td><span class="pill a">Timer + animation</span></td></tr>
   </table>
   </div>
 
   <div class="rec">
-    <h2>Recommendation: B — with D's entrance as optional polish</h2>
-    <p><b>Option B</b> is the only one that fixes all three violations at zero cost to TV visibility: the message and its action own the screen top-to-bottom, and the TV offer is still fully visible without a tap — just demoted in contrast (dark, borderless of pink) and in position (after the primary job is served). "तब तक" as a divider does the bridging that the bold in-card line used to do.</p>
-    <p><b>Layering D's entrance onto B</b> (strip slides in ~1.5s after the screen settles) is the highest-craft version: the user reads the message on a clean screen first, then motion draws one glance to the TV offer — attention is sequenced instead of contested. Ship B first; add the animation if it's cheap in Flutter.</p>
-    <p><b>Option C</b> is the fallback if leadership wants the screen 100% pure — but every tap costs conversions, and TV loses its show-don't-tell (the mini live frame) at first glance.</p>
+    <h2>Recommendation: A — quiet card in the content zone</h2>
+    <p>On the dark screen the recommendation was "move the card after the actions." On the live light screen that flips: the bottom bar is a small, pinned <b>decision zone</b> — putting the promo there (B) crowds the thumb area and mixes objectives. Meanwhile the content zone has free whitespace right under the address card, and a white/tinted card no longer overpowers a light screen.</p>
+    <p><b>A</b> puts a soft brand-tinted card there: message → address → "तब तक व्योम TV देखें — 100% फ्री" with the live-TV mini frame, a chevron instead of a button, and no saturated pink. The eye reads unavailability first, the offer second, and the only real CTA on screen stays the booking button. <b>D's entrance</b> (slide in ~1.5s after first paint) layers on cleanly if we want sequenced attention as polish.</p>
+    <p>This A design is now the default "After" state in the main prototype (index.html).</p>
   </div>
 </div>
 
 <script>
   const TV_URL="https://wiom.tv";
-  const AREA={title:"जल्द आ रहा है व्योम!",subtitle:"हम अभी आपके एरिया में उपलब्ध नहीं हैं",button:"किसी और पते पर बुकिंग करें",seclink:"पहले से व्योम लगा हुआ है"};
+  /* live copy (hi) from new_language_data.json */
+  const C={title:"हम अभी आपके इलाके में उपलब्ध नहीं हैं",button:"ये मेरे इलाके की लोकेशन नहीं है",login:"पहले से व्योम लगा हुआ है"};
+  const ADDR={nm:"Rajouri Garden",ad:"Rajouri Garden, New Delhi, Delhi 110027, India"};
 
   const statusbar=`<div class="statusbar"><span>4:35</span><span>📶 🔋50%</span></div>`;
-  const appbar=`<div class="appbar">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 12a8 8 0 0116 0v4a3 3 0 01-3 3M4 12v4a3 3 0 003 3h1M4 12h3v6H6a2 2 0 01-2-2M20 12h-3v6h1a2 2 0 002-2"/></svg>
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 5h7M6.5 5v2c0 3-1.5 5.5-4 7M4 9c0 2 2 4 5 5M12 20l4-9 4 9M13.5 17h5"/></svg></div>`;
-  const hero=`<div class="hero"><img src="assets/unserviceable.jpg" alt=""><div class="topscrim"></div><div class="botfade"></div></div><div class="belowfill"></div>`;
+  const appbar=`<div class="appbar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg></div>`;
+  const gfx=`<div class="gfx"><img src="assets/location_unserviceable_graphic.svg" alt=""></div>`;
+  const ttl=`<div class="ttl">${C.title}</div>`;
+  const addr=`<div class="addrcard"><img src="assets/location_pin.svg" alt=""><div><div class="nm">${ADDR.nm}</div><div class="ad">${ADDR.ad}</div></div></div>`;
+  const bar=(extra='')=>`<div class="bottombar">${extra}<div class="pribtn">${C.button}</div><div class="loginlink">${C.login} <span class="arr">›</span></div></div>`;
 
   const tvframe=(sz)=>`<div class="tvframe ${sz}">
       <div class="mosaic"><span></span><span></span><span></span><span></span></div>
@@ -221,54 +230,53 @@
       <div class="cta"><span class="playtri"></span>अभी देखें</div>
     </a>`;
 
-  const quietcard=()=>`<a class="qcard" href="${TV_URL}" onclick="return false">${tvframe('sm')}
-      <div class="qt"><b>व्योम TV अभी उपलब्ध है — <span class="fr">100% फ्री</span></b>
-      <span>ढेरों लाइव चैनल • न्यूज़ • मूवी • भक्ति</span></div>
+  const quietcard=()=>`<a class="tvquiet" href="${TV_URL}" onclick="return false">${tvframe('sm')}
+      <div class="qt"><b>तब तक व्योम TV देखें — <span class="fr">100% फ्री</span></b>
+      <span>ढेरों लाइव चैनल • न्यूज़ • मूवी • भक्ति • खेल</span></div>
       <span class="chev">›</span></a>`;
 
-  const copy=`<div class="copyblock"><div class="ttl">${AREA.title}</div><div class="sttl">${AREA.subtitle}</div></div>`;
-  const btns=`<div class="btns"><div class="pribtn">${AREA.button}</div><div class="seclink">${AREA.seclink} ›</div></div>`;
+  const barstrip=()=>`<a class="tvbar" href="${TV_URL}" onclick="return false">${tvframe('sm')}
+      <div class="qt"><b>तब तक व्योम TV — 100% फ्री</b><span>ढेरों लाइव चैनल</span></div>
+      <span class="chev">›</span></a>`;
 
   const OPTIONS=[
-    {key:'cur', lett:'—', cur:true, name:'Current (v5) — for reference', princ:['p-red','What it breaks: contrast, CTA & position'],
-     bullets:[`<li>White card + pink CTA <b>outshines the message</b> on the dark screen.</li><li>Sits between headline and primary button.</li>`],
-     content:`${copy}<div class="tvslot">${whitecard()}</div>${btns}`},
+    {key:'cur', lett:'—', cur:true, name:'Current (v5 card) — dropped onto live screen', princ:['p-red','What breaks: CTA competition'],
+     bullets:[`<li>The card's <b>brand-600 CTA outguns the real booking button</b> (brand-500) — promo reads as the primary action.</li><li>Contrast problem from the dark screen is gone, but this remains.</li>`],
+     body:`${gfx}${ttl}${addr}${whitecard()}`, bar:bar()},
 
-    {key:'a', lett:'A', name:'Quiet card — demote contrast, keep slot', princ:['p-amber','Principle: visual weight follows hierarchy'],
-     bullets:[`<li>Same position, but card turns <b>dark glass, no pink CTA</b> — chevron affordance only.</li><li>Primary button is again the only pink thing.</li><li>Weakest fix: promo still interrupts message → action.</li>`],
-     content:`${copy}<div class="tvslot">${quietcard()}</div>${btns}`},
+    {key:'a', lett:'A', name:'Quiet card in content — recommended', princ:['p-green','Principle: one CTA, zones respected'],
+     bullets:[`<li>Soft brand-tint card under the address; <b>chevron, no button</b>.</li><li>Zero-tap visible, above the fold, doesn't touch the decision zone.</li><li>Green फ्री accent + live mini-frame keep the show-don't-tell.</li>`],
+     body:`${gfx}${ttl}${addr}${quietcard()}`, bar:bar()},
 
-    {key:'b', lett:'B', name:'After the job — demote position too', princ:['p-green','Principle: position = priority, one CTA zone'],
-     bullets:[`<li>Message → primary action first; TV strip <b>after the actions</b>, under a "तब तक" divider.</li><li>Still zero-tap visible; nothing competes with the message.</li><li>Fixes all 3 violations, near-zero effort.</li>`],
-     content:`${copy}${btns}<div class="ordivider">तब तक</div><div class="tvslot" style="margin-top:9px">${quietcard()}</div>`},
+    {key:'b', lett:'B', name:'Strip inside the bottom bar', princ:['p-amber','Principle: position = priority (taken too far)'],
+     bullets:[`<li>TV strip above the button, inside the pinned bar.</li><li>Keeps content pure, but <b>crowds the thumb/decision zone</b> and pushes the CTA down.</li>`],
+     body:`${gfx}${ttl}${addr}`, bar:bar(barstrip())},
 
     {key:'c', lett:'C', name:'Teaser → bottom sheet', princ:['p-purple','Principle: progressive disclosure'],
-     bullets:[`<li>Screen stays 100% about unavailability; one dashed teaser line.</li><li><b>Tap the teaser</b> — full rich TV card opens in a sheet, earning full attention.</li><li>Cost: one tap of friction to TV.</li>`],
-     content:`${copy}${btns}<div class="teaser" data-open>📺 तब तक फ्री में TV देखें? <span class="chev">›</span></div>`,
+     bullets:[`<li>One dashed teaser line under the address; <b>tap it</b> — the rich card opens in a bottom sheet.</li><li>Native pattern: this screen already opens a sheet for location search.</li><li>Cost: one tap of friction to TV.</li>`],
+     body:`${gfx}${ttl}${addr}<button class="teaser" data-open>📺 तब तक फ्री में TV देखें? <span class="chev">›</span></button>`, bar:bar(),
      extra:`<div class="sheetveil" data-close></div><div class="sheet"><div class="handle"></div>${whitecard()}</div>`},
 
     {key:'d', lett:'D', name:'Snackbar — sequence attention in time', princ:['p-brand','Principle: temporal hierarchy'],
-     bullets:[`<li>First paint = pure message. <b>~1.5s later</b> the TV strip slides up.</li><li>Motion buys one glance <i>after</i> the message has landed; dismissible ✕.</li><li>Cost: animation + timer in Flutter.</li>`],
+     bullets:[`<li>First paint = pure live screen. <b>~1.5s later</b> the TV toast slides up above the bar.</li><li>Motion buys one glance <i>after</i> the message lands; dismissible ✕.</li><li>Cost: timer + animation in Flutter.</li>`],
      bt:`<button class="replay" data-replay>↺ Replay entrance</button>`,
-     content:`${copy}${btns}`,
+     body:`${gfx}${ttl}${addr}`, bar:bar(),
      extra:`<div class="snack">${tvframe('sm')}<div class="qt"><b>व्योम TV अभी फ्री उपलब्ध है</b><span>ढेरों लाइव चैनल • बिल्कुल फ्री</span></div><span class="go">देखें ›</span><span class="x" data-x>✕</span></div>`}
   ];
 
   document.getElementById('rail').innerHTML = OPTIONS.map(o=>`
     <div class="opt">
-      <div class="phone" id="ph-${o.key}">${statusbar}${appbar}${hero}<div class="content">${o.content}</div>${o.extra||''}</div>
+      <div class="phone" id="ph-${o.key}">${statusbar}${appbar}<div class="pbody">${o.body}</div>${o.bar}${o.extra||''}</div>
       <div class="optcap">
         <div class="tagrow"><span class="lett ${o.cur?'cur':''}">${o.lett}</span><span class="princ ${o.princ[0]}">${o.princ[1]}</span></div>
         <h3>${o.name}</h3><ul>${o.bullets.join('')}</ul>${o.bt||''}
       </div>
     </div>`).join('');
 
-  // C: sheet open/close
   const phC=document.getElementById('ph-c');
   phC.querySelector('[data-open]').onclick=()=>phC.classList.add('open');
   phC.querySelector('[data-close]').onclick=()=>phC.classList.remove('open');
 
-  // D: entrance + dismiss + replay
   const phD=document.getElementById('ph-d');
   const playD=()=>{phD.classList.remove('snackin');setTimeout(()=>phD.classList.add('snackin'),1500);};
   phD.querySelector('[data-x]').onclick=()=>phD.classList.remove('snackin');

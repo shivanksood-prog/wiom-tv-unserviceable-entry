@@ -3,94 +3,93 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-<title>Wiom TV · इलाके में उपलब्ध नहीं</title>
+<title>Wiom TV · इलाके में उपलब्ध नहीं (live new-app design)</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@400;600;700&display=swap" rel="stylesheet">
 <style>
   :root{
-    --brand700:#F00CA0; --brand600:#D9008D; --brand300:#FFB2E4; --brand200:#FFCCED; --brand100:#FFE5F6;
-    --neutral900:#161021; --neutral800:#352D42; --neutral700:#665E75; --neutral500:#A7A1B2;
-    --neutral300:#D7D3E0; --neutral200:#E8E4F0; --neutral100:#F1EDF7; --white:#FAF9FC; --baseWhite:#FFFFFF;
+    /* new_app tokens (verified from release/sprint-18 BaseColors/WiomColors) */
+    --brand600:#D9008D; --brand500:#FF66C9; --brand300:#FFB2E4; --brand100:#FFE5F6;
+    --neutral900:#161021; --neutral700:#665E75; --neutral200:#E8E4F0; --neutral100:#F1EDF7;
+    --neutralWhite:#FAF9FC; --baseWhite:#FFFFFF;
     --positive600:#008043; --positive100:#E1FAED; --negative600:#E01E00;
-    --bgDark:#161021; --radius:16px;
+    --radius:16px;
   }
   *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
   html,body{height:100%;}
   body{font-family:'Noto Sans Devanagari',system-ui,sans-serif;background:#2a2d33;color:var(--neutral900);
     display:flex;align-items:flex-start;justify-content:center;}
 
-  /* ===== the app viewport: full-screen on mobile, framed on desktop ===== */
-  .viewport{position:relative;width:100vw;height:100dvh;background:var(--bgDark);overflow:hidden;}
+  /* ===== app viewport: full-screen on mobile, framed on desktop ===== */
+  .viewport{position:relative;width:100vw;height:100dvh;background:var(--neutralWhite);overflow:hidden;}
   @media(min-width:520px){
-    body{background:#2a2d33;padding:22px 0;}
+    body{padding:22px 0;}
     .viewport{width:380px;height:812px;border-radius:34px;border:1px solid #0c0a12;
       box-shadow:0 22px 60px rgba(0,0,0,.5);margin:0 auto;}
   }
 
-  /* ===== transparent navigation (helps move Before/After + area/city) ===== */
-  .nav{position:absolute;top:34px;left:10px;z-index:30;display:flex;gap:7px;align-items:center;}
+  /* ===== prototype navigation (floating, light) ===== */
+  .nav{position:absolute;top:34px;right:10px;z-index:30;display:flex;gap:7px;align-items:center;}
   .navbtn{display:inline-flex;align-items:center;gap:6px;font-family:inherit;font-size:12px;font-weight:600;
-    color:#fff;background:rgba(0,0,0,.32);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);
-    border:1px solid rgba(255,255,255,.22);border-radius:999px;padding:7px 12px;cursor:pointer;}
-  .navbtn:active{background:rgba(0,0,0,.5);}
-  .navseg{display:inline-flex;background:rgba(0,0,0,.32);backdrop-filter:blur(6px);border:1px solid rgba(255,255,255,.22);
-    border-radius:999px;padding:3px;}
-  .navseg button{font-family:inherit;font-size:12px;font-weight:600;color:rgba(255,255,255,.7);background:transparent;
-    border:0;padding:5px 11px;border-radius:999px;cursor:pointer;}
-  .navseg button.on{background:#fff;color:var(--brand600);}
+    color:var(--neutral900);background:rgba(255,255,255,.85);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);
+    border:1px solid var(--neutral200);border-radius:999px;padding:7px 12px;cursor:pointer;box-shadow:0 2px 8px rgba(22,16,33,.10);}
+  .navbtn:active{background:var(--neutral100);}
+  .navseg{display:inline-flex;background:rgba(255,255,255,.85);backdrop-filter:blur(6px);border:1px solid var(--neutral200);
+    border-radius:999px;padding:3px;box-shadow:0 2px 8px rgba(22,16,33,.10);}
+  .navseg button{font-family:inherit;font-size:12px;font-weight:600;color:var(--neutral700);background:transparent;
+    border:0;padding:5px 10px;border-radius:999px;cursor:pointer;}
+  .navseg button.on{background:var(--brand600);color:#fff;}
 
-  /* ===== app screen ===== */
+  /* ===== live app screen (light StandardWidget) ===== */
   .statusbar{position:absolute;top:0;left:0;right:0;height:30px;display:flex;align-items:center;justify-content:space-between;
-    padding:0 16px;font-size:12px;color:#fff;z-index:6;}
+    padding:0 16px;font-size:12px;color:var(--neutral900);z-index:6;}
   .statusbar .r{display:flex;gap:6px;align-items:center;}
+  .appbar{position:absolute;top:30px;left:0;right:0;height:46px;display:flex;align-items:center;padding:0 10px;z-index:6;}
+  .appbar .back{width:34px;height:34px;display:flex;align-items:center;justify-content:center;color:var(--neutral900);}
 
-  .hero{position:absolute;top:0;left:0;right:0;height:40%;min-height:300px;z-index:1;}
-  .hero img{width:100%;height:100%;object-fit:cover;object-position:center top;display:block;}
-  .hero .topscrim{position:absolute;top:0;left:0;right:0;height:120px;background:linear-gradient(to bottom, rgba(22,16,33,.55), rgba(22,16,33,0));}
-  .hero .botfade{position:absolute;left:0;right:0;bottom:0;height:200px;background:linear-gradient(to top, #161021 14%, rgba(22,16,33,0));}
-  .belowfill{position:absolute;top:40%;min-height:0;left:0;right:0;bottom:0;background:var(--bgDark);z-index:1;}
-  @media(max-width:519px){.belowfill{top:max(40%,300px);}}
+  .body{position:absolute;top:76px;left:0;right:0;bottom:118px;overflow-y:auto;
+    padding:24px 16px 16px;display:flex;flex-direction:column;align-items:center;}
+  .gfx{width:240px;height:240px;flex:0 0 auto;}
+  .gfx img{width:100%;height:100%;object-fit:contain;display:block;}
+  .title{margin-top:16px;text-align:center;font-size:20px;font-weight:600;line-height:1.35;color:var(--neutral900);}
+  .subtitle{margin-top:16px;text-align:center;font-size:16px;font-weight:400;line-height:1.5;color:var(--neutral900);}
 
-  .appbar{position:absolute;top:30px;left:0;right:0;height:46px;display:flex;align-items:center;justify-content:flex-end;gap:14px;padding:0 16px;z-index:6;}
-  .appbar .ic{width:26px;height:26px;color:#fff;display:flex;align-items:center;justify-content:center;}
+  .addrcard{margin-top:16px;width:100%;display:flex;gap:8px;align-items:flex-start;background:var(--neutralWhite);
+    border:1px solid var(--neutral200);border-radius:var(--radius);padding:16px;}
+  .addrcard img{width:24px;height:24px;flex:0 0 auto;margin-top:2px;}
+  .addrcard .nm{font-size:16px;font-weight:600;color:var(--neutral900);line-height:1.3;}
+  .addrcard .ad{font-size:12px;color:var(--neutral700);line-height:1.45;margin-top:8px;}
 
-  .content{position:absolute;left:0;right:0;bottom:0;z-index:5;padding:0 0 16px;display:flex;flex-direction:column;}
-  .copyblock{padding:0 16px;text-align:center;}
-  .title{color:var(--white);font-size:23px;font-weight:700;line-height:1.3;}
-  .subtitle{color:var(--white);font-size:15px;font-weight:400;line-height:1.5;margin-top:12px;opacity:.9;}
-
-  /* ===== Wiom TV banner (whole card is the link, like the app) ===== */
-  .tvslot{margin:16px 16px 4px;}
-  .card{display:block;text-decoration:none;background:var(--white);border-radius:var(--radius);padding:14px;
-    box-shadow:0 8px 26px rgba(0,0,0,.4);}
-  .card:active{transform:scale(.992);}
-  .freepill{display:inline-flex;align-items:center;gap:5px;font-weight:700;font-size:13.5px;padding:6px 12px;border-radius:999px;line-height:1;background:var(--positive100);color:var(--positive600);}
-  .cbridge{margin-top:10px;font-size:15px;font-weight:700;line-height:1.45;color:var(--neutral900);}
-  .crow2{display:flex;gap:12px;align-items:center;margin-top:12px;}
-  .tvframe{flex:0 0 auto;width:88px;height:66px;border-radius:11px;overflow:hidden;position:relative;background:#000;box-shadow:0 2px 8px rgba(0,0,0,.3);}
+  /* ===== Wiom TV quiet card (After) — soft-brand tint, no competing CTA ===== */
+  .tvcard{margin-top:16px;width:100%;display:flex;text-decoration:none;align-items:center;gap:12px;
+    background:var(--brand100);border:1px solid var(--brand300);border-radius:var(--radius);padding:12px 14px;}
+  .tvcard:active{transform:scale(.992);}
+  .tvframe{flex:0 0 auto;width:64px;height:48px;border-radius:9px;overflow:hidden;position:relative;background:#000;box-shadow:0 2px 8px rgba(22,16,33,.25);}
   .mosaic{position:absolute;inset:0;display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr;}
   .mosaic span:nth-child(1){background:linear-gradient(135deg,#E01E00,#ff5a3c);}
   .mosaic span:nth-child(2){background:linear-gradient(135deg,#1746a2,#3b82f6);}
   .mosaic span:nth-child(3){background:linear-gradient(135deg,#7a1fa2,#c026d3);}
   .mosaic span:nth-child(4){background:linear-gradient(135deg,#b8860b,#f2c94c);}
   .tvframe .play{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;}
-  .tvframe .play b{width:26px;height:26px;border-radius:50%;background:rgba(255,255,255,.92);display:flex;align-items:center;justify-content:center;box-shadow:0 2px 6px rgba(0,0,0,.4);}
-  .playtri{width:0;height:0;border-style:solid;border-width:5px 0 5px 8px;border-color:transparent transparent transparent var(--brand600);margin-left:2px;}
-  .tvframe .live{position:absolute;top:4px;left:4px;display:flex;align-items:center;gap:3px;background:rgba(0,0,0,.55);color:#fff;font-size:8px;font-weight:700;padding:2px 5px;border-radius:5px;}
-  .tvframe .live i{width:5px;height:5px;border-radius:50%;background:var(--negative600);display:block;}
-  .cmeta{flex:1;min-width:0;}
-  .cmeta .hrow{display:flex;align-items:center;justify-content:flex-start;gap:9px;min-height:26px;flex-wrap:wrap;}
-  .cmeta .h{font-size:16px;font-weight:700;color:var(--neutral900);line-height:1.2;}
-  .cmeta .freepill{flex:0 0 auto;align-self:center;}
-  .cmeta .genres{font-size:12.5px;color:var(--neutral700);line-height:1.4;margin-top:4px;}
-  .cta{display:flex;align-items:center;justify-content:center;gap:7px;margin-top:13px;background:var(--brand600);color:#fff;
-    font-weight:700;font-size:15px;padding:13px;border-radius:12px;}
-  .cta .playtri{border-color:transparent transparent transparent #fff;}
+  .tvframe .play b{width:22px;height:22px;border-radius:50%;background:rgba(255,255,255,.92);display:flex;align-items:center;justify-content:center;box-shadow:0 2px 6px rgba(0,0,0,.35);}
+  .playtri{width:0;height:0;border-style:solid;border-width:4.5px 0 4.5px 7px;border-color:transparent transparent transparent var(--brand600);margin-left:2px;}
+  .tvframe .live{position:absolute;top:3px;left:3px;display:flex;align-items:center;gap:3px;background:rgba(0,0,0,.55);color:#fff;font-size:7px;font-weight:700;padding:2px 4px;border-radius:4px;}
+  .tvframe .live i{width:4px;height:4px;border-radius:50%;background:var(--negative600);display:block;}
+  .tvcard .qt{flex:1;min-width:0;}
+  .tvcard .qt b{display:block;font-size:14.5px;font-weight:700;color:var(--neutral900);line-height:1.35;}
+  .tvcard .qt b .fr{color:var(--positive600);}
+  .tvcard .qt span{display:block;font-size:12px;color:var(--neutral700);margin-top:3px;line-height:1.4;}
+  .tvcard .chev{color:var(--brand600);font-size:22px;line-height:1;font-weight:600;}
 
-  .btns{padding:14px 16px 0;}
-  .pribtn{display:block;width:100%;background:var(--brand600);color:var(--white);font-weight:700;font-size:16px;border:0;padding:14px 16px;border-radius:var(--radius);cursor:pointer;font-family:inherit;text-align:center;}
-  .seclink{display:flex;align-items:center;justify-content:center;gap:4px;color:var(--white);font-size:14px;font-weight:600;padding:14px 0 2px;}
+  /* ===== bottom bar (showLogin variant: white container + top shadow) ===== */
+  .bottombar{position:absolute;left:0;right:0;bottom:0;z-index:7;background:var(--neutralWhite);
+    box-shadow:0 -2px 6px rgba(22,16,33,.12);padding:16px 16px 8px;}
+  .pribtn{display:block;width:100%;background:var(--brand500);color:var(--neutral900);font-weight:600;font-size:16px;
+    border:0;padding:14px 16px;border-radius:var(--radius);cursor:pointer;font-family:inherit;text-align:center;}
+  .loginlink{display:flex;align-items:center;justify-content:center;gap:4px;color:var(--neutral900);
+    font-size:14px;font-weight:400;padding:12px 0 8px;}
+  .loginlink .arr{color:var(--brand600);font-weight:700;}
 </style>
 </head>
 <body>
@@ -98,39 +97,34 @@
 
 <script>
   const TV_URL = "https://wiom.tv";
+
+  /* copy = verbatim from live app's new_language_data.json (hi), LOCATION_UNSERVICEABLE_* */
   const COPY = {
-    area:{title:"जल्द आ रहा है व्योम!", subtitle:"हम अभी आपके एरिया में उपलब्ध नहीं हैं",
-          button:"किसी और पते पर बुकिंग करें", seclink:"पहले से व्योम लगा हुआ है"},
-    city:{title:"2-3 महीने में आ रहा है व्योम!", subtitle:"हम अभी आपके शहर में उपलब्ध नहीं हैं",
-          button:"किसी और जगह के लिए चेक करें", seclink:"पहले से व्योम लगा हुआ है"}
+    area:{ title:"हम अभी आपके इलाके में उपलब्ध नहीं हैं", addr:true,
+           button:"ये मेरे इलाके की लोकेशन नहीं है" },
+    city:{ title:"जल्दी ही व्योम आपके<br>शहर में उपलब्ध हो जाएगे",
+           subtitle:"हम हर महीने एक नए शहर मे व्योम नेट लगा रहे है<br>आपके शहर मे आते ही आपको बता दिया जाएगा",
+           button:"किसी और जगह के लिए चेक करें" },
+    searched:{ title:"जल्द आ रहा है व्योम!",
+           subtitle:"हम अभी आपके इलाके में उपलब्ध नहीं हैं",
+           button:"किसी और जगह के लिए चेक करें" }
   };
-  const TV = {
-    free:"100% फ्री",
-    bridge:"पर व्योम TV अभी उपलब्ध है! 📺",
-    h:"ढेरों लाइव चैनल",
-    genres:"न्यूज़ • मूवी • भक्ति • मनोरंजन • खेल",
-    cta:"अभी देखें"
-  };
+  const LOGIN_CTA = "पहले से व्योम लगा हुआ है";
+  const ADDR = { nm:"Rajouri Garden", ad:"Rajouri Garden, New Delhi, Delhi 110027, India" };
 
   const statusbar=()=>`<div class="statusbar"><span>4:35</span><span class="r"><span>📶</span><span>🔋50%</span></span></div>`;
-  const appbar=()=>`<div class="appbar">
-    <div class="ic"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 12a8 8 0 0116 0v4a3 3 0 01-3 3M4 12v4a3 3 0 003 3h1M4 12h3v6H6a2 2 0 01-2-2M20 12h-3v6h1a2 2 0 002-2"/></svg></div>
-    <div class="ic"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 5h7M6.5 5v2c0 3-1.5 5.5-4 7M4 9c0 2 2 4 5 5M12 20l4-9 4 9M13.5 17h5"/></svg></div></div>`;
+  const appbar=()=>`<div class="appbar"><span class="back">
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg></span></div>`;
 
-  const card=()=>`<a class="card" href="${TV_URL}">
-      <div class="cbridge">${TV.bridge}</div>
-      <div class="crow2">
-        <div class="tvframe">
-          <div class="mosaic"><span></span><span></span><span></span><span></span></div>
-          <div class="live"><i></i>LIVE</div>
-          <div class="play"><b><span class="playtri"></span></b></div>
-        </div>
-        <div class="cmeta">
-          <div class="hrow"><div class="h">${TV.h}</div><span class="freepill">🎁 ${TV.free}</span></div>
-          <div class="genres">${TV.genres}</div>
-        </div>
+  const tvcard=()=>`<a class="tvcard" href="${TV_URL}">
+      <div class="tvframe">
+        <div class="mosaic"><span></span><span></span><span></span><span></span></div>
+        <div class="live"><i></i>LIVE</div>
+        <div class="play"><b><span class="playtri"></span></b></div>
       </div>
-      <div class="cta"><span class="playtri"></span>${TV.cta}</div>
+      <div class="qt"><b>तब तक व्योम TV देखें — <span class="fr">100% फ्री</span></b>
+      <span>ढेरों लाइव चैनल • न्यूज़ • मूवी • भक्ति • खेल</span></div>
+      <span class="chev">›</span>
     </a>`;
 
   function nav(){
@@ -140,6 +134,7 @@
       <div class="navseg" id="varseg">
         <button data-v="area" class="${variant==='area'?'on':''}">एरिया</button>
         <button data-v="city" class="${variant==='city'?'on':''}">शहर</button>
+        <button data-v="searched" class="${variant==='searched'?'on':''}">सर्च</button>
       </div>
     </div>`;
   }
@@ -148,12 +143,17 @@
     const c=COPY[variant]; const withTV = view==='after';
     document.getElementById('vp').innerHTML =
       nav()+statusbar()+appbar()+
-      `<div class="hero"><img src="assets/unserviceable.jpg" alt=""><div class="topscrim"></div><div class="botfade"></div></div>
-       <div class="belowfill"></div>
-       <div class="content">
-         <div class="copyblock"><div class="title">${c.title}</div><div class="subtitle">${c.subtitle}</div></div>
-         ${withTV?`<div class="tvslot">${card()}</div>`:''}
-         <div class="btns"><button class="pribtn">${c.button}</button><div class="seclink">${c.seclink} &#8250;</div></div>
+      `<div class="body">
+         <div class="gfx"><img src="assets/location_unserviceable_graphic.svg" alt=""></div>
+         <div class="title">${c.title}</div>
+         ${c.addr
+           ? `<div class="addrcard"><img src="assets/location_pin.svg" alt=""><div><div class="nm">${ADDR.nm}</div><div class="ad">${ADDR.ad}</div></div></div>`
+           : `<div class="subtitle">${c.subtitle}</div>`}
+         ${withTV?tvcard():''}
+       </div>
+       <div class="bottombar">
+         <button class="pribtn">${c.button}</button>
+         <div class="loginlink">${LOGIN_CTA} <span class="arr">›</span></div>
        </div>`;
     document.getElementById('flip').onclick=()=>{view=(view==='after'?'before':'after');render();};
     document.getElementById('varseg').onclick=(e)=>{const v=e.target.dataset.v;if(v){variant=v;render();}};
