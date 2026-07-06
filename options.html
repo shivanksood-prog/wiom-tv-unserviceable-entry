@@ -223,6 +223,13 @@
 <div class="rail" id="rail2"></div>
 
 <div class="wrap">
+  <h2>Round 3 — fix the primary button itself</h2>
+  <p class="h2sub">Rounds 1–2 kept production's bottom bar untouched (it's the app-wide <code>StandardWidget</code> scaffold — smallest diff, easiest sell). But the real hierarchy problem may be the primary itself: brand-500 pink with dark text, pinned far from the message it answers. These options change the button's strength and/or placement — a bigger conversation with the app team, but the honest fix.</p>
+</div>
+
+<div class="rail" id="rail3"></div>
+
+<div class="wrap">
   <h2>How they compare</h2>
   <div class="tblwrap">
   <table>
@@ -236,6 +243,9 @@
     <tr><td><b>F</b> — promote TV on 2nd fail only</td><td><span class="pill g">Perfect on 1st fail</span></td><td><span class="pill g">Maximum — when it matters</span></td><td><span class="pill a">Needs a 2nd search</span></td><td><span class="pill a">Session flag</span></td></tr>
     <tr><td><b>G</b> — exit-intent takeover</td><td><span class="pill g">Perfect — screen untouched</span></td><td><span class="pill g">Full-screen moment</span></td><td><span class="pill g">Zero-tap (on exit)</span></td><td><span class="pill a">PopScope + once/session cap</span></td></tr>
     <tr><td><b>H</b> — notify-me → TV as reward</td><td><span class="pill g">Perfect + captures the lead</span></td><td><span class="pill g">Full moment post-commit</span></td><td><span class="pill a">One tap (notify)</span></td><td><span class="pill r">New feature + API</span></td></tr>
+    <tr><td><b>J</b> — strengthen primary (brand-600)</td><td><span class="pill g">Fixed at the root</span></td><td><span class="pill g">High (quiet card safe now)</span></td><td><span class="pill g">Zero-tap</span></td><td><span class="pill a">1 token + DS sign-off</span></td></tr>
+    <tr><td><b>I</b> — button moves up under address</td><td><span class="pill g">Strongest read-flow</span></td><td><span class="pill r">Footnote only</span></td><td><span class="pill g">Zero-tap</span></td><td><span class="pill a">Screen layout change</span></td></tr>
+    <tr><td><b>K</b> — strong button up + TV in freed bar</td><td><span class="pill g">Two clean zones</span></td><td><span class="pill g">High — own zone</span></td><td><span class="pill g">Zero-tap</span></td><td><span class="pill r">Biggest layout change</span></td></tr>
   </table>
   </div>
 
@@ -246,6 +256,7 @@
     <p><b>F — promote on 2nd fail</b> is the smartest targeting: first unserviceable result stays pure; if the user searches <i>another</i> address and that also fails, they've exhausted the primary job — now the TV card earns near-primary treatment with honest copy ("यहाँ भी अभी नहीं…"). Just a session counter in Flutter.</p>
     <p><b>H — notify-me → TV as reward</b> is the biggest product idea: it fixes the screen's real gap (there is no "tell me when Wiom arrives" action today — a lost lead), captures the lead, and then gifts TV on the confirmation moment when goodwill is highest and the primary job is <i>complete</i>. Needs backend, so it's a roadmap item, not this sprint.</p>
     <p>E (text footnote) remains the trivial fallback if we must ship something on-screen today. index.html still shows Round 1's A as the on-screen "After" until a direction is locked.</p>
+    <p><b>Round 3 addendum:</b> if the app team is open to touching the shared scaffold, <b>K</b> is the ideal end-state — the primary becomes unmistakable (brand-600, right under the message) and TV gets the freed bottom strip as its own zone, so neither objective borrows attention from the other. <b>J</b> is the cheapest root-cause fix (one color token) and combines with any of A/E/F/G. Realistic path: <b>J + G now, K as the north star</b>.</p>
   </div>
 </div>
 
@@ -353,6 +364,37 @@
       <div class="optcap">
         <div class="tagrow"><span class="lett">${o.lett}</span><span class="princ ${o.princ[0]}">${o.princ[1]}</span></div>
         <h3>${o.name}</h3><ul>${o.bullets.join('')}</ul>${o.bt||''}
+      </div>
+    </div>`).join('');
+
+  /* ================= ROUND 3 — fix the primary itself ================= */
+  const strongbtn=(label)=>`<div class="pribtn" style="background:var(--brand);color:#fff;font-weight:700;">${label}</div>`;
+  const inbodybtn=(label,strong)=>`<div class="pribtn" style="margin-top:16px;${strong?'background:var(--brand);color:#fff;font-weight:700;':''}">${label}</div>`;
+  const inbodylogin=`<div class="loginlink">${C.login} <span class="arr">›</span></div>`;
+
+  const OPTIONS3=[
+    {key:'j', lett:'J', name:'Strengthen the primary (1 token)', princ:['p-green','Principle: primary must look primary'],
+     bullets:[`<li>Same placement — but the button becomes <b>brand-600 with white text</b>. One token change.</li><li>Now the CTA outguns any TV card; quiet card A can coexist safely.</li><li>Caveat: deviates from the new-app booking CTA style — needs a DS conversation.</li>`],
+     body:`${gfx}${ttl}${addr}${quietcard()}`,
+     bar:`<div class="bottombar">${strongbtn(C.button)}<div class="loginlink">${C.login} <span class="arr">›</span></div></div>`},
+
+    {key:'i', lett:'I', name:'Action follows message — button moves up', princ:['p-purple','Principle: proximity — answer next to question'],
+     bullets:[`<li>The button sits <b>directly under the address</b> — message → action is one unbroken read.</li><li>No pinned bar at all; TV is a footnote at the natural end of the page.</li><li>Trade-off: gives up the thumb-zone convention.</li>`],
+     body:`${gfx}${ttl}${addr}${inbodybtn(C.button)}${inbodylogin}<div style="flex:1"></div><div class="footnote">इंतज़ार लंबा है? <a href="${TV_URL}" onclick="return false">व्योम TV फ्री देखें ›</a></div>`,
+     bar:``},
+
+    {key:'k', lett:'K', name:'Both — strong button up, TV takes the freed bar', princ:['p-brand','Principle: zones follow content, not position'],
+     bullets:[`<li>Strong brand-600 button right under the address; login link with it.</li><li>The decision zone moved up — so the <b>freed bottom bar is no longer "primary space"</b> and can host the quiet TV strip without competing.</li><li>Both objectives get a full zone each. Biggest layout change.</li>`],
+     body:`${gfx}${ttl}${addr}${inbodybtn(C.button,true)}${inbodylogin}`,
+     bar:`<div class="bottombar" style="padding-bottom:12px;"><a class="tvquiet" style="margin-top:0" href="${TV_URL}" onclick="return false">${tvframe('sm')}<div class="qt"><b>तब तक व्योम TV देखें — <span class="fr">100% फ्री</span></b><span>ढेरों लाइव चैनल • न्यूज़ • मूवी • भक्ति</span></div><span class="chev">›</span></a></div>`}
+  ];
+
+  document.getElementById('rail3').innerHTML = OPTIONS3.map(o=>`
+    <div class="opt">
+      <div class="phone" id="ph-${o.key}">${statusbar}${appbar}<div class="pbody">${o.body}</div>${o.bar}</div>
+      <div class="optcap">
+        <div class="tagrow"><span class="lett">${o.lett}</span><span class="princ ${o.princ[0]}">${o.princ[1]}</span></div>
+        <h3>${o.name}</h3><ul>${o.bullets.join('')}</ul>
       </div>
     </div>`).join('');
 
