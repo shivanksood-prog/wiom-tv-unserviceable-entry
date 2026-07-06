@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Judge the options — design + user-eye review side by side</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;600;700&family=Noto+Sans+Devanagari:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --brand:#D9008D; --brand500:#FF66C9; --brand100:#FFE5F6; --brand300:#FFB2E4;
+    --ink:#161021; --muted:#665E75; --sub:#A7A1B2; --line:#D7D3E0; --line2:#E8E4F0; --zebra:#F1EDF7;
+    --bg:#FAF9FC; --card:#FFFFFF;
+    --green:#008043; --green100:#E1FAED;
+    --red:#E01E00; --red100:#FFE9E5;
+    --amber:#b45c00; --amber100:#FFE6CC;
+    --purple:#6D17CE; --purple100:#F1E5FF;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
+  body{font-family:'Noto Sans','Noto Sans Devanagari',system-ui,sans-serif;background:var(--bg);color:var(--ink);line-height:1.55;padding-bottom:90px;}
+  a{color:inherit;}
+  .wrap{max-width:1100px;margin:0 auto;padding:0 20px;}
+  header{padding:38px 0 4px;}
+  .eyebrow{color:var(--brand);font-weight:700;font-size:13px;letter-spacing:.08em;text-transform:uppercase;}
+  h1{font-size:26px;line-height:1.25;margin-top:6px;}
+  .lede{color:var(--muted);max-width:800px;margin-top:8px;font-size:14.5px;}
+  .persona{display:flex;gap:10px;flex-wrap:wrap;margin:16px 0 4px;}
+  .persona span{background:var(--card);border:1px solid var(--line);border-radius:999px;padding:6px 13px;font-size:12px;color:var(--muted);}
+  .persona b{color:var(--ink);}
+
+  h2.round{font-size:18px;margin:38px 0 2px;padding-top:10px;border-top:2px solid var(--line2);}
+  .roundsub{color:var(--muted);font-size:13px;margin-bottom:18px;}
+
+  /* ===== option row: phone + review ===== */
+  .optrow{display:flex;gap:24px;align-items:flex-start;margin-bottom:34px;}
+  @media(max-width:760px){.optrow{flex-direction:column;align-items:center;}}
+  .review{flex:1;min-width:0;background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px 18px;}
+  .review .top{display:flex;align-items:center;gap:9px;flex-wrap:wrap;}
+  .lett{width:27px;height:27px;flex:0 0 auto;border-radius:8px;background:var(--ink);color:#fff;font-weight:700;font-size:14px;display:inline-flex;align-items:center;justify-content:center;}
+  .lett.cur{background:var(--sub);}
+  .review .top h3{font-size:15.5px;line-height:1.3;}
+  .hint{font-size:11px;font-weight:700;color:var(--purple);background:var(--purple100);border-radius:999px;padding:3px 9px;}
+  .row{display:flex;gap:8px;margin-top:10px;font-size:13px;}
+  .row .ic{flex:0 0 20px;text-align:center;}
+  .row .tx .lb{font-weight:700;font-size:10.5px;letter-spacing:.05em;text-transform:uppercase;color:var(--sub);display:block;}
+  .voice{margin-top:10px;background:var(--zebra);border-left:3px solid var(--brand300);border-radius:0 10px 10px 0;
+    padding:8px 12px;font-family:'Noto Sans Devanagari',sans-serif;font-size:13.5px;font-weight:600;}
+  .voice span{display:block;font-size:10px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--sub);margin-bottom:2px;font-family:'Noto Sans',sans-serif;}
+  .pills{display:flex;gap:6px;flex-wrap:wrap;margin-top:12px;padding-top:11px;border-top:1px solid var(--line2);}
+  .pill{font-size:10.5px;font-weight:700;padding:3px 9px;border-radius:999px;}
+  .g{background:var(--green100);color:var(--green);}
+  .r{background:var(--red100);color:var(--red);}
+  .a{background:var(--amber100);color:var(--amber);}
+  .shortlist{margin-top:13px;font-family:inherit;font-size:12.5px;font-weight:700;color:var(--brand);background:#fff;
+    border:1.5px solid var(--brand300);border-radius:999px;padding:7px 15px;cursor:pointer;}
+  .shortlist.on{background:var(--brand);border-color:var(--brand);color:#fff;}
+  .replay{margin-top:13px;margin-left:8px;font-family:inherit;font-size:12px;font-weight:700;color:var(--purple);background:var(--purple100);border:0;border-radius:999px;padding:7px 13px;cursor:pointer;}
+
+  /* ===== sticky judge bar ===== */
+  .judgebar{position:fixed;left:0;right:0;bottom:0;z-index:99;background:var(--ink);color:#fff;padding:13px 20px;
+    display:flex;align-items:center;gap:12px;flex-wrap:wrap;box-shadow:0 -6px 24px rgba(22,16,33,.25);}
+  .judgebar .t{font-size:13px;font-weight:700;}
+  .judgebar .picks{display:flex;gap:6px;flex-wrap:wrap;}
+  .judgebar .pk{background:var(--brand);border-radius:8px;font-weight:700;font-size:13px;padding:3px 10px;}
+  .judgebar .none{opacity:.55;font-size:12.5px;}
+  .judgebar .clear{margin-left:auto;font-family:inherit;background:transparent;border:1px solid rgba(255,255,255,.35);color:#fff;
+    font-size:11.5px;font-weight:700;border-radius:999px;padding:5px 12px;cursor:pointer;}
+
+  /* ===== phone mock (live new-app light screen) ===== */
+  .phone{position:relative;flex:0 0 auto;width:312px;height:660px;background:var(--bg);border-radius:30px;overflow:hidden;
+    border:1px solid #d8d4e2;box-shadow:0 16px 40px rgba(22,16,33,.18);font-family:'Noto Sans Devanagari',sans-serif;}
+  .statusbar{position:absolute;top:0;left:0;right:0;height:26px;display:flex;align-items:center;justify-content:space-between;padding:0 14px;font-size:10.5px;color:var(--ink);z-index:6;}
+  .appbar{position:absolute;top:26px;left:0;right:0;height:38px;display:flex;align-items:center;padding:0 8px;z-index:6;color:var(--ink);}
+  .appbar svg{width:19px;height:19px;}
+  .appbar .backbtn{cursor:pointer;display:flex;align-items:center;justify-content:center;width:30px;height:30px;}
+  .pbody{position:absolute;top:64px;left:0;right:0;bottom:96px;overflow:hidden;padding:14px 14px 10px;display:flex;flex-direction:column;align-items:center;}
+  .pbody.nobar{bottom:0;padding-bottom:16px;}
+  .gfx{width:170px;height:170px;flex:0 0 auto;}
+  .gfx img{width:100%;height:100%;object-fit:contain;display:block;}
+  .ttl{margin-top:12px;text-align:center;font-size:15.5px;font-weight:600;line-height:1.35;color:var(--ink);}
+  .addrcard{margin-top:12px;width:100%;display:flex;gap:7px;align-items:flex-start;background:var(--bg);
+    border:1px solid var(--line2);border-radius:13px;padding:11px 12px;}
+  .addrcard img{width:18px;height:18px;flex:0 0 auto;margin-top:1px;}
+  .addrcard .nm{font-size:12.5px;font-weight:600;color:var(--ink);line-height:1.3;}
+  .addrcard .ad{font-size:9.5px;color:var(--muted);line-height:1.45;margin-top:4px;}
+  .bottombar{position:absolute;left:0;right:0;bottom:0;z-index:7;background:var(--bg);
+    box-shadow:0 -2px 6px rgba(22,16,33,.12);padding:12px 12px 6px;}
+  .pribtn{display:block;width:100%;background:var(--brand500);color:var(--ink);font-weight:600;font-size:12.5px;
+    border:0;padding:11px 12px;border-radius:13px;font-family:inherit;text-align:center;cursor:pointer;}
+  .loginlink{display:flex;align-items:center;justify-content:center;gap:4px;color:var(--ink);font-size:11px;padding:9px 0 5px;}
+  .loginlink .arr{color:var(--brand);font-weight:700;}
+  .secbtn{display:block;width:100%;background:transparent;color:var(--ink);font-weight:600;font-size:12px;
+    border:1.5px solid var(--line);padding:10px 12px;border-radius:13px;font-family:inherit;text-align:center;margin-top:8px;cursor:pointer;}
+  .footnote{margin-top:14px;text-align:center;font-size:10.5px;color:var(--muted);}
+  .footnote a{color:var(--brand);font-weight:700;text-decoration:none;}
+
+  .tvframe{flex:0 0 auto;border-radius:8px;overflow:hidden;position:relative;background:#000;box-shadow:0 2px 8px rgba(22,16,33,.25);}
+  .tvframe.lg{width:64px;height:48px;}
+  .tvframe.sm{width:50px;height:38px;}
+  .mosaic{position:absolute;inset:0;display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr;}
+  .mosaic span:nth-child(1){background:linear-gradient(135deg,#E01E00,#ff5a3c);}
+  .mosaic span:nth-child(2){background:linear-gradient(135deg,#1746a2,#3b82f6);}
+  .mosaic span:nth-child(3){background:linear-gradient(135deg,#7a1fa2,#c026d3);}
+  .mosaic span:nth-child(4){background:linear-gradient(135deg,#b8860b,#f2c94c);}
+  .tvframe .play{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;}
+  .tvframe .play b{width:18px;height:18px;border-radius:50%;background:rgba(255,255,255,.92);display:flex;align-items:center;justify-content:center;box-shadow:0 2px 6px rgba(0,0,0,.35);}
+  .playtri{width:0;height:0;border-style:solid;border-width:3.5px 0 3.5px 5.5px;border-color:transparent transparent transparent var(--brand);margin-left:1.5px;}
+  .tvframe .live{position:absolute;top:3px;left:3px;display:flex;align-items:center;gap:2px;background:rgba(0,0,0,.55);color:#fff;font-size:6px;font-weight:700;padding:1.5px 3.5px;border-radius:3.5px;}
+  .tvframe .live i{width:3.5px;height:3.5px;border-radius:50%;background:var(--red);display:block;}
+
+  .wcard{margin-top:12px;width:100%;display:block;text-decoration:none;background:#fff;border:1px solid var(--line2);border-radius:13px;padding:10px;box-shadow:0 6px 18px rgba(22,16,33,.10);}
+  .wcard .cbridge{font-size:11.5px;font-weight:700;line-height:1.4;}
+  .wcard .crow2{display:flex;gap:9px;align-items:center;margin-top:8px;}
+  .wcard .h{font-size:11.5px;font-weight:700;}
+  .freepill{display:inline-flex;align-items:center;gap:3px;font-weight:700;font-size:9px;padding:3px 7px;border-radius:999px;line-height:1;background:var(--green100);color:var(--green);}
+  .wcard .hrow{display:flex;align-items:center;gap:6px;flex-wrap:wrap;}
+  .wcard .genres{font-size:8.5px;color:var(--muted);margin-top:2px;}
+  .wcard .cta{display:flex;align-items:center;justify-content:center;gap:5px;margin-top:9px;background:var(--brand);color:#fff;font-weight:700;font-size:11px;padding:9px;border-radius:9px;}
+  .wcard .cta .playtri{border-color:transparent transparent transparent #fff;}
+
+  .tvquiet{margin-top:12px;width:100%;display:flex;text-decoration:none;align-items:center;gap:9px;
+    background:var(--brand100);border:1px solid var(--brand300);border-radius:13px;padding:9px 11px;}
+  .tvquiet .qt{flex:1;min-width:0;}
+  .tvquiet .qt b{display:block;font-size:11px;font-weight:700;line-height:1.35;}
+  .tvquiet .qt b .fr{color:var(--green);}
+  .tvquiet .qt span{display:block;font-size:9px;color:var(--muted);margin-top:2px;}
+  .tvquiet .chev{color:var(--brand);font-size:17px;font-weight:600;}
+
+  .tvbar{display:flex;text-decoration:none;align-items:center;gap:8px;background:var(--zebra);
+    border:1px solid var(--line2);border-radius:11px;padding:7px 9px;margin-bottom:5px;}
+  .tvbar .qt b{display:block;font-size:10px;font-weight:700;}
+  .tvbar .qt span{display:block;font-size:8.5px;color:var(--muted);}
+  .tvbar .chev{margin-left:auto;color:var(--brand);font-size:15px;font-weight:600;}
+
+  .teaser{display:flex;align-items:center;justify-content:center;gap:5px;margin-top:12px;width:100%;padding:9px;border-radius:11px;
+    border:1px dashed var(--brand300);color:var(--ink);font-size:10.5px;font-weight:700;cursor:pointer;background:transparent;font-family:inherit;}
+  .teaser .chev{color:var(--brand);}
+  .sheetveil{position:absolute;inset:0;background:rgba(22,16,33,.45);z-index:20;opacity:0;pointer-events:none;transition:opacity .25s;}
+  .sheet{position:absolute;left:0;right:0;bottom:0;z-index:21;background:#fff;border-radius:18px 18px 0 0;padding:8px 12px 14px;
+    transform:translateY(105%);transition:transform .3s cubic-bezier(.2,.8,.25,1);}
+  .phone.open .sheetveil{opacity:1;pointer-events:auto;}
+  .phone.open .sheet{transform:translateY(0);}
+  .sheet .handle{width:34px;height:4px;border-radius:99px;background:var(--line);margin:0 auto 10px;}
+  .sheet .wcard{margin-top:0;box-shadow:none;border:0;padding:2px;}
+
+  .snack{position:absolute;left:8px;right:8px;bottom:100px;z-index:22;display:flex;align-items:center;gap:8px;
+    background:var(--ink);border-radius:12px;padding:8px 10px;box-shadow:0 10px 30px rgba(22,16,33,.35);
+    transform:translateY(160%);opacity:0;transition:all .45s cubic-bezier(.2,.8,.25,1);}
+  .phone.snackin .snack{transform:translateY(0);opacity:1;}
+  .snack .qt{flex:1;min-width:0;}
+  .snack .qt b{display:block;color:#FAF9FC;font-size:10.5px;font-weight:700;}
+  .snack .qt span{display:block;color:#FAF9FC;opacity:.62;font-size:8.5px;margin-top:1px;}
+  .snack .go{color:var(--brand300);font-weight:700;font-size:10.5px;white-space:nowrap;}
+  .snack .x{color:#FAF9FC;opacity:.55;font-size:12px;padding:2px 4px;cursor:pointer;}
+
+  .stepchip{position:absolute;top:70px;right:10px;z-index:9;background:var(--zebra);border:1px solid var(--line2);
+    color:var(--muted);font-size:9px;font-weight:700;border-radius:999px;padding:3px 9px;}
+  .searching{position:absolute;inset:0;z-index:25;background:rgba(250,249,252,.92);display:none;
+    align-items:center;justify-content:center;flex-direction:column;gap:8px;font-size:12px;font-weight:600;color:var(--muted);}
+  .phone.searching-on .searching{display:flex;}
+  .spin{width:26px;height:26px;border-radius:50%;border:3px solid var(--line2);border-top-color:var(--brand);animation:sp 1s linear infinite;}
+  @keyframes sp{to{transform:rotate(360deg)}}
+
+  .takeover{position:absolute;inset:0;z-index:30;background:#161021;display:flex;flex-direction:column;align-items:center;
+    justify-content:center;padding:20px 18px;opacity:0;pointer-events:none;transform:scale(1.04);transition:all .3s cubic-bezier(.2,.8,.25,1);}
+  .phone.tk .takeover{opacity:1;pointer-events:auto;transform:scale(1);}
+  .takeover .rukiye{color:#FAF9FC;font-size:19px;font-weight:700;}
+  .takeover .sub{color:#FAF9FC;opacity:.85;font-size:12px;text-align:center;margin-top:8px;line-height:1.55;}
+  .takeover .tvbig{width:150px;height:112px;margin-top:18px;border-radius:14px;}
+  .takeover .tvbig .play b{width:32px;height:32px;}
+  .takeover .tvbig .play .playtri{border-width:6px 0 6px 9.5px;}
+  .takeover .tvbig .live{font-size:8px;padding:2px 5px;top:5px;left:5px;}
+  .takeover .genres{color:#FAF9FC;opacity:.6;font-size:10px;margin-top:12px;}
+  .takeover .cta{margin-top:16px;width:100%;background:var(--brand);color:#fff;font-weight:700;font-size:13px;
+    padding:12px;border-radius:12px;text-align:center;}
+  .takeover .nope{color:#FAF9FC;opacity:.6;font-size:11px;margin-top:12px;cursor:pointer;padding:6px 10px;}
+  .backhint{position:absolute;top:30px;left:34px;z-index:8;background:var(--ink);color:#fff;font-size:8.5px;font-weight:700;
+    border-radius:7px;padding:3px 7px;opacity:.85;}
+  .backhint::before{content:"";position:absolute;left:-4px;top:50%;transform:translateY(-50%);border:4px solid transparent;border-right-color:var(--ink);border-left:0;}
+  .confetti-t{margin-top:12px;text-align:center;font-size:15.5px;font-weight:700;}
+  .giftlead{width:100%;margin-top:14px;font-size:10px;font-weight:700;color:var(--muted);display:flex;align-items:center;gap:8px;}
+  .giftlead::after{content:"";flex:1;height:1px;background:var(--line2);}
+</style>
+</head>
+<body>
+
+<header class="wrap">
+  <div class="eyebrow">Unserviceable screen · Wiom TV entry · judging room</div>
+  <h1>Design + user-eye review, side by side</h1>
+  <p class="lede">Each option: the working mock on the left, how the real user will perceive it on the right. Tap ☆ to shortlist as you go — your picks collect in the bar below (saved on this device).</p>
+  <div class="persona">
+    <span>😞 <b>Just rejected</b> — wanted internet, told no</span>
+    <span>📱 <b>Budget Android</b> — scans colour &amp; position before words</span>
+    <span>⏱ <b>~10 seconds</b> — one pass, one decision</span>
+    <span>🛡 <b>Ad-trained</b> — defensive reflexes</span>
+  </div>
+</header>
+
+<div class="wrap" id="root"></div>
+
+<div class="judgebar">
+  <span class="t">Your shortlist:</span>
+  <span class="picks" id="picks"><span class="none">nothing yet — tap ☆ Shortlist on the options you like</span></span>
+  <button class="clear" id="clearbtn">Clear</button>
+</div>
+
+<script>
+  const TV_URL="https://wiom.tv";
+  const C={title:"हम अभी आपके इलाके में उपलब्ध नहीं हैं",button:"ये मेरे इलाके की लोकेशन नहीं है",login:"पहले से व्योम लगा हुआ है"};
+  const ADDR={nm:"Rajouri Garden",ad:"Rajouri Garden, New Delhi, Delhi 110027, India"};
+  const ADDR2={nm:"Tilak Nagar",ad:"Tilak Nagar, New Delhi, Delhi 110018, India"};
+
+  const statusbar=`<div class="statusbar"><span>4:35</span><span>📶 🔋50%</span></div>`;
+  const appbar=`<div class="appbar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg></div>`;
+  const backable=`<div class="appbar"><span class="backbtn" data-back><svg viewBox="0 0 24 24" width="19" height="19" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg></span></div>`;
+  const gfx=`<div class="gfx"><img src="assets/location_unserviceable_graphic.svg" alt=""></div>`;
+  const ttl=`<div class="ttl">${C.title}</div>`;
+  const addr=`<div class="addrcard"><img src="assets/location_pin.svg" alt=""><div><div class="nm">${ADDR.nm}</div><div class="ad">${ADDR.ad}</div></div></div>`;
+  const addr2=`<div class="addrcard"><img src="assets/location_pin.svg" alt=""><div><div class="nm">${ADDR2.nm}</div><div class="ad">${ADDR2.ad}</div></div></div>`;
+  const bar=(extra='')=>`<div class="bottombar">${extra}<div class="pribtn">${C.button}</div><div class="loginlink">${C.login} <span class="arr">›</span></div></div>`;
+  const tvframe=(sz)=>`<div class="tvframe ${sz}"><div class="mosaic"><span></span><span></span><span></span><span></span></div><div class="live"><i></i>LIVE</div><div class="play"><b><span class="playtri"></span></b></div></div>`;
+  const whitecard=()=>`<a class="wcard" href="${TV_URL}" onclick="return false"><div class="cbridge">पर व्योम TV अभी उपलब्ध है! 📺</div><div class="crow2">${tvframe('lg')}<div style="flex:1;min-width:0"><div class="hrow"><div class="h">ढेरों लाइव चैनल</div><span class="freepill">🎁 100% फ्री</span></div><div class="genres">न्यूज़ • मूवी • भक्ति • मनोरंजन • खेल</div></div></div><div class="cta"><span class="playtri"></span>अभी देखें</div></a>`;
+  const quietcard=()=>`<a class="tvquiet" href="${TV_URL}" onclick="return false">${tvframe('sm')}<div class="qt"><b>तब तक व्योम TV देखें — <span class="fr">100% फ्री</span></b><span>ढेरों लाइव चैनल • न्यूज़ • मूवी • भक्ति • खेल</span></div><span class="chev">›</span></a>`;
+  const barstrip=()=>`<a class="tvbar" href="${TV_URL}" onclick="return false">${tvframe('sm')}<div class="qt"><b>तब तक व्योम TV — 100% फ्री</b><span>ढेरों लाइव चैनल</span></div><span class="chev">›</span></a>`;
+  const footnote=`<div class="footnote">इंतज़ार लंबा है? <a href="${TV_URL}" onclick="return false">व्योम TV फ्री देखें ›</a></div>`;
+  const strongbtn=(l)=>`<div class="pribtn" style="background:var(--brand);color:#fff;font-weight:700;">${l}</div>`;
+  const inbodybtn=(l,s)=>`<div class="pribtn" style="margin-top:16px;${s?'background:var(--brand);color:#fff;font-weight:700;':''}">${l}</div>`;
+  const inbodylogin=`<div class="loginlink">${C.login} <span class="arr">›</span></div>`;
+
+  const P=(t,c)=>({t,c});
+  const OPTS=[
+   {round:"Round 1 — TV on the same screen", sub:"Everything here shares the user's single 10-second pass."},
+   {key:'cur',lett:'—',cur:1,name:'Current (v5) — rich card + own pink CTA',
+    glance:`Colourful TV mosaic + the most saturated pink button on screen. The rejection message is read second, if at all.`,
+    voice:`"शायद इस TV वाले से नेट मिल जाए?" <i>*taps*</i>`,
+    risk:`Misled taps land on wiom.tv expecting internet, bounce confused. Big TV numbers, partly fake; confusion cost lands on the booking funnel.`,
+    pills:[P('Message: skipped','r'),P('Tap intent: confused','r'),P('Trust: mild cost','a'),P('Reach: high','g')],
+    body:`${gfx}${ttl}${addr}${whitecard()}`, bar:bar()},
+   {key:'a',lett:'A',name:'Quiet tinted card in content',
+    glance:`Graphic → title → address → then the soft pink strip. Reads as a related suggestion, not a step.`,
+    voice:`"अच्छा — तब तक TV फ्री है। ठीक है।"`,
+    risk:`Pink tint still whispers "brand wants attention here" — a minority of colour-led users tap it before reading anything.`,
+    pills:[P('Message: lands','g'),P('Tap intent: honest','g'),P('Trust: none','g'),P('Reach: moderate','a')],
+    body:`${gfx}${ttl}${addr}${quietcard()}`, bar:bar()},
+   {key:'b',lett:'B',name:'Strip inside the bottom bar',
+    glance:`The action zone is now a 3-item stack. Some users genuinely parse it as "step 1: TV, step 2: button."`,
+    voice:`<i>*thumb taps the strip by habit*</i> "ये क्या खुल गया?"`,
+    risk:`Fat-finger taps — the thumb already rests exactly there. Most accidental-tap-prone option of all twelve.`,
+    pills:[P('Message: OK','a'),P('Tap intent: accidental','r'),P('Trust: mild','a'),P('Reach: high','g')],
+    body:`${gfx}${ttl}${addr}`, bar:bar(barstrip())},
+   {key:'c',lett:'C',name:'Teaser → bottom sheet',hint:'tap the dashed line',
+    glance:`A dashed line of text. For this audience a dashed border is a <b>weak</b> "tap me" signal — most scroll past without realising it's interactive.`,
+    voice:`"ये लाइन क्या है… छोड़ो।" <i>(the curious few:)</i> "अरे, फ्री TV?"`,
+    risk:`Not perception risk — volume risk. Only the genuinely curious open the sheet; they convert well, but they are few.`,
+    pills:[P('Message: perfect','g'),P('Tap intent: highest','g'),P('Trust: none','g'),P('Reach: tiny','r')],
+    body:`${gfx}${ttl}${addr}<button class="teaser" data-open>📺 तब तक फ्री में TV देखें? <span class="chev">›</span></button>`, bar:bar(),
+    extra:`<div class="sheetveil" data-close></div><div class="sheet"><div class="handle"></div>${whitecard()}</div>`},
+   {key:'d',lett:'D',name:'Snackbar after 1.5s',replay:'↺ Replay entrance',
+    glance:`Message lands first (good), then motion pulls one glance to a dark toast sliding up.`,
+    voice:`"ये नीचे से क्या आया — बंद करो।" <i>(or, if they read:)</i> "फ्री TV? हम्म।"`,
+    risk:`On budget Androids a dark sliding toast pattern-matches to system notifications and ads — expect reflexive ✕ from ad-trained users.`,
+    pills:[P('Message: lands first','g'),P('Tap intent: mixed','a'),P('Trust: toast ≈ ad','a'),P('Reach: high','g')],
+    body:`${gfx}${ttl}${addr}`, bar:bar(),
+    extra:`<div class="snack">${tvframe('sm')}<div class="qt"><b>व्योम TV अभी फ्री उपलब्ध है</b><span>ढेरों लाइव चैनल • बिल्कुल फ्री</span></div><span class="go">देखें ›</span><span class="x" data-x>✕</span></div>`},
+
+   {round:"Round 2 — TV separated in flow / time", sub:"The screen stays single-objective; TV appears at a chosen moment."},
+   {key:'e',lett:'E',name:'Text footnote',
+    glance:`They don't see it. Muted grey small text under the address is exactly what a scanning eye skips.`,
+    voice:`<i>(nothing — it never entered their world)</i>`,
+    risk:`None. The few readers who catch it understand it perfectly. Near-zero volume, absolutely zero harm.`,
+    pills:[P('Message: perfect','g'),P('Tap intent: honest','g'),P('Trust: none','g'),P('Reach: near-zero','r')],
+    body:`${gfx}${ttl}${addr}${footnote}`, bar:bar()},
+   {key:'f',lett:'F',name:'Promote TV on the 2nd fail',hint:'tap the pink button',replay:'↺ Reset to 1st fail',
+    glance:`First fail: clean screen. Second fail: the app <i>responds to their frustration</i> — "yahan bhi nahi, but here's something you CAN have."`,
+    voice:`"यहाँ भी नहीं… 😮‍💨 चलो, तब तक TV ही सही।"`,
+    risk:`Feels empathetic at the exact peak of receptivity — but most rejected users leave after the FIRST fail and never see it. Converts well, fires rarely.`,
+    pills:[P('Message: perfect','g'),P('Tap intent: peak','g'),P('Trust: none','g'),P('Reach: small','r')],
+    body:``, bar:``,
+    extra:`<div class="stepchip" id="chip-f">पहला पता</div><div class="searching"><div class="spin"></div>दूसरा पता खोज रहे हैं…</div>`},
+   {key:'g',lett:'G',name:'Exit-intent takeover',hint:'tap the back arrow',
+    glance:`They pressed back to leave and got a full dark screen instead. Startle first — then, because nothing competes, the highest comprehension of "Wiom TV exists and is free" of any option.`,
+    voice:`"अरे, जाने तो दो…… रुको — फ्री TV?"`,
+    risk:`Back-press interception is a pattern they know from spammy cleaner/loan apps. Big obvious "नहीं, धन्यवाद" + once-per-session cap keeps it on the right side of the line.`,
+    pills:[P('Message: untouched','g'),P('Tap intent: interrupt-driven','a'),P('Trust: hijack pattern','r'),P('Reach: highest','g')],
+    body:`${gfx}${ttl}${addr}`, bar:bar(), useback:1,
+    extra:`<div class="backhint">← टैप करें</div><div class="takeover"><div class="rukiye">रुकिए! 📺</div><div class="sub">जाने से पहले — व्योम TV आपके फोन पर<br><b>बिल्कुल फ्री</b> है, अभी से</div><div class="tvbig tvframe"><div class="mosaic"><span></span><span></span><span></span><span></span></div><div class="live"><i></i>LIVE</div><div class="play"><b><span class="playtri"></span></b></div></div><div class="genres">न्यूज़ • मूवी • भक्ति • मनोरंजन • खेल</div><div class="cta">फ्री में देखना शुरू करें</div><div class="nope" data-nope>नहीं, धन्यवाद</div></div>`},
+   {key:'h',lett:'H',name:'Notify-me → TV as the reward',hint:'tap 🔔 button',replay:'↺ Reset',
+    glance:`The only option where the user feels <b>heard</b> — "व्योम आए तो मुझे बताएं" matches exactly what they want right now. TV then arrives as a gift after a completed action, not a sales pitch.`,
+    voice:`"हाँ, बताना जब आ जाए…… अरे वाह — तब तक फ्री TV भी?"`,
+    risk:`TV reaches only notify-tappers. And the promise must be REAL — a notification that never comes converts goodwill into a broken promise.`,
+    pills:[P('Message: perfect','g'),P('Tap intent: gift-framed','g'),P('Trust: only if promise real','r'),P('Reach: notify-tappers','a')],
+    body:``, bar:``},
+
+   {round:"Round 3 — fixing the primary button itself", sub:"The user's complaint decoded: the pink-500 button never read as \"the\" action."},
+   {key:'j',lett:'J',name:'Strengthen the primary (brand-600, white text)',
+    glance:`Finally ONE unambiguous "press this." Everything else — including the TV card — visually recedes into "optional."`,
+    voice:`"ठीक है — ये बटन दबाना है।"`,
+    risk:`None for the user. The risk is organisational: brand-500 is the app-wide booking CTA token, so this is a design-system conversation.`,
+    pills:[P('Message: fixed at root','g'),P('Tap intent: honest','g'),P('Trust: none','g'),P('Reach: high','g')],
+    body:`${gfx}${ttl}${addr}${quietcard()}`,
+    bar:`<div class="bottombar">${strongbtn(C.button)}<div class="loginlink">${C.login} <span class="arr">›</span></div></div>`},
+   {key:'i',lett:'I',name:'Button moves up under the address',
+    glance:`Perfect reading order: problem → my address → what to do. No eye travel to the bottom at all.`,
+    voice:`"अच्छा, ये करना है।" <i>*thumb reaches up, a beat of hesitation*</i>`,
+    risk:`Their thumb is trained for the bottom — a mid-screen button gets a pause. And the footnote TV link is effectively invisible.`,
+    pills:[P('Message: strongest flow','g'),P('TV: invisible','r'),P('Trust: none','g'),P('TV reach: tiny','r')],
+    body:`${gfx}${ttl}${addr}${inbodybtn(C.button)}${inbodylogin}<div style="flex:1"></div>${footnote}`, bar:``, nobar:1},
+   {key:'k',lett:'K',name:'Strong button up + TV in the freed bar',
+    glance:`Two clean zones in theory. In practice: <b>habit doesn't read zone theory</b> — eyes and thumbs still default to the pinned bottom bar, where the TV strip now lives.`,
+    voice:`<i>*thumb goes to the bottom out of habit*</i> "नीचे वाला दबाया — अरे, TV खुल गया।"`,
+    risk:`The TV strip likely collects the MOST taps of any quiet variant — partly muscle memory, not intent. Validate with wiom.tv bounce rate before trusting it.`,
+    pills:[P('Message: two zones','g'),P('Tap intent: habit-driven','a'),P('Trust: none','g'),P('Reach: highest taps','g')],
+    body:`${gfx}${ttl}${addr}${inbodybtn(C.button,1)}${inbodylogin}`,
+    bar:`<div class="bottombar" style="padding-bottom:12px;"><a class="tvquiet" style="margin-top:0" href="${TV_URL}" onclick="return false">${tvframe('sm')}<div class="qt"><b>तब तक व्योम TV देखें — <span class="fr">100% फ्री</span></b><span>ढेरों लाइव चैनल • न्यूज़ • मूवी • भक्ति</span></div><span class="chev">›</span></a></div>`}
+  ];
+
+  const root=document.getElementById('root');
+  root.innerHTML=OPTS.map(o=>{
+    if(o.round) return `<h2 class="round">${o.round}</h2><p class="roundsub">${o.sub}</p>`;
+    return `<div class="optrow" id="row-${o.key}">
+      <div class="phone" id="ph-${o.key}">${statusbar}${o.useback?backable:appbar}<div class="pbody ${o.nobar?'nobar':''}" id="body-${o.key}">${o.body}</div><div id="bar-${o.key}">${o.bar||''}</div>${o.extra||''}</div>
+      <div class="review">
+        <div class="top"><span class="lett ${o.cur?'cur':''}">${o.lett}</span><h3>${o.name}</h3>${o.hint?`<span class="hint">▶ ${o.hint}</span>`:''}</div>
+        <div class="row"><div class="ic">👁</div><div class="tx"><span class="lb">First glance</span>${o.glance}</div></div>
+        <div class="voice"><span>Inner voice</span>${o.voice}</div>
+        <div class="row"><div class="ic">⚠</div><div class="tx"><span class="lb">Risk</span>${o.risk}</div></div>
+        <div class="pills">${o.pills.map(p=>`<span class="pill ${p.c}">${p.t}</span>`).join('')}</div>
+        <button class="shortlist" data-sl="${o.lett}">☆ Shortlist</button>${o.replay?`<button class="replay" data-replay="${o.key}">${o.replay}</button>`:''}
+      </div>
+    </div>`;
+  }).join('');
+
+  /* C: sheet */
+  const phC=document.getElementById('ph-c');
+  phC.querySelector('[data-open]').onclick=()=>phC.classList.add('open');
+  phC.querySelector('[data-close]').onclick=()=>phC.classList.remove('open');
+
+  /* D: snackbar */
+  const phD=document.getElementById('ph-d');
+  const playD=()=>{phD.classList.remove('snackin');setTimeout(()=>phD.classList.add('snackin'),1500);};
+  phD.querySelector('[data-x]').onclick=()=>phD.classList.remove('snackin');
+  playD();
+
+  /* F: 2nd-fail flow */
+  const phF=document.getElementById('ph-f');
+  function renderF(stage){
+    document.getElementById('chip-f').textContent = stage===1 ? 'पहला पता' : 'दूसरा पता';
+    document.getElementById('body-f').innerHTML = stage===1 ? `${gfx}${ttl}${addr}` : `${gfx}<div class="ttl">यह इलाका भी अभी उपलब्ध नहीं है</div>${addr2}${whitecard()}`;
+    document.getElementById('bar-f').innerHTML = bar();
+    phF.querySelector('.pribtn').onclick = stage===1 ? ()=>{
+      phF.classList.add('searching-on');
+      setTimeout(()=>{phF.classList.remove('searching-on');renderF(2);},1200);
+    } : null;
+  }
+  renderF(1);
+
+  /* G: takeover */
+  const phG=document.getElementById('ph-g');
+  phG.querySelector('[data-back]').onclick=()=>phG.classList.add('tk');
+  phG.querySelector('[data-nope]').onclick=()=>phG.classList.remove('tk');
+
+  /* H: notify flow */
+  const phH=document.getElementById('ph-h');
+  function renderH(stage){
+    if(stage===1){
+      document.getElementById('body-h').innerHTML=`${gfx}${ttl}${addr}`;
+      document.getElementById('bar-h').innerHTML=`<div class="bottombar"><div class="pribtn">${C.button}</div><button class="secbtn" data-notify>🔔 व्योम आए तो मुझे बताएं</button><div class="loginlink">${C.login} <span class="arr">›</span></div></div>`;
+      phH.querySelector('[data-notify]').onclick=()=>renderH(2);
+    } else {
+      document.getElementById('body-h').innerHTML=`${gfx}<div class="confetti-t">धन्यवाद! व्योम आते ही<br>आपको बता देंगे 🎉</div><div class="giftlead">तब तक के लिए, हमारी तरफ़ से</div>${whitecard()}`;
+      document.getElementById('bar-h').innerHTML=`<div class="bottombar"><div class="pribtn">ठीक है</div></div>`;
+    }
+  }
+  renderH(1);
+
+  /* replays */
+  document.querySelectorAll('[data-replay]').forEach(b=>{
+    b.onclick=()=>{const k=b.dataset.replay; if(k==='d')playD(); if(k==='f')renderF(1); if(k==='h')renderH(1);};
+  });
+
+  /* shortlist */
+  const KEY='judge_shortlist';
+  let picks=JSON.parse(localStorage.getItem(KEY)||'[]');
+  function paint(){
+    document.querySelectorAll('[data-sl]').forEach(b=>{
+      const on=picks.includes(b.dataset.sl);
+      b.classList.toggle('on',on);
+      b.textContent=(on?'★ Shortlisted':'☆ Shortlist');
+    });
+    document.getElementById('picks').innerHTML = picks.length
+      ? picks.map(p=>`<span class="pk">${p}</span>`).join('')
+      : `<span class="none">nothing yet — tap ☆ Shortlist on the options you like</span>`;
+    localStorage.setItem(KEY,JSON.stringify(picks));
+  }
+  document.querySelectorAll('[data-sl]').forEach(b=>{
+    b.onclick=()=>{const l=b.dataset.sl; picks=picks.includes(l)?picks.filter(x=>x!==l):[...picks,l]; paint();};
+  });
+  document.getElementById('clearbtn').onclick=()=>{picks=[];paint();};
+  paint();
+</script>
+</body>
+</html>
