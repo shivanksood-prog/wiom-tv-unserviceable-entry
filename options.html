@@ -143,6 +143,42 @@
   .snack .go{color:var(--brand300);font-weight:700;font-size:10.5px;white-space:nowrap;}
   .snack .x{color:#FAF9FC;opacity:.55;font-size:12px;padding:2px 4px;cursor:pointer;}
 
+  /* ===== Round 2: flow-level mocks ===== */
+  .footnote{margin-top:14px;text-align:center;font-size:10.5px;color:var(--muted);}
+  .footnote a{color:var(--brand);font-weight:700;text-decoration:none;}
+  .stepchip{position:absolute;top:70px;right:10px;z-index:9;background:var(--zebra);border:1px solid var(--line2);
+    color:var(--muted);font-size:9px;font-weight:700;border-radius:999px;padding:3px 9px;}
+  .searching{position:absolute;inset:0;z-index:25;background:rgba(250,249,252,.92);display:none;
+    align-items:center;justify-content:center;flex-direction:column;gap:8px;font-size:12px;font-weight:600;color:var(--muted);}
+  .phone.searching-on .searching{display:flex;}
+  .spin{width:26px;height:26px;border-radius:50%;border:3px solid var(--line2);border-top-color:var(--brand);animation:sp 1s linear infinite;}
+  @keyframes sp{to{transform:rotate(360deg)}}
+
+  .takeover{position:absolute;inset:0;z-index:30;background:#161021;display:flex;flex-direction:column;align-items:center;
+    justify-content:center;padding:20px 18px;opacity:0;pointer-events:none;transform:scale(1.04);transition:all .3s cubic-bezier(.2,.8,.25,1);}
+  .phone.tk .takeover{opacity:1;pointer-events:auto;transform:scale(1);}
+  .takeover .rukiye{color:#FAF9FC;font-size:19px;font-weight:700;}
+  .takeover .sub{color:#FAF9FC;opacity:.85;font-size:12px;text-align:center;margin-top:8px;line-height:1.55;}
+  .takeover .tvbig{width:150px;height:112px;margin-top:18px;border-radius:14px;overflow:hidden;position:relative;background:#000;box-shadow:0 14px 40px rgba(0,0,0,.6);}
+  .takeover .tvbig .play b{width:32px;height:32px;}
+  .takeover .tvbig .play .playtri{border-width:6px 0 6px 9.5px;}
+  .takeover .tvbig .live{font-size:8px;padding:2px 5px;top:5px;left:5px;}
+  .takeover .genres{color:#FAF9FC;opacity:.6;font-size:10px;margin-top:12px;}
+  .takeover .cta{margin-top:16px;width:100%;background:var(--brand);color:#fff;font-weight:700;font-size:13px;
+    padding:12px;border-radius:12px;text-align:center;}
+  .takeover .nope{color:#FAF9FC;opacity:.6;font-size:11px;margin-top:12px;cursor:pointer;padding:6px 10px;}
+  .backhint{position:absolute;top:30px;left:34px;z-index:8;background:var(--ink);color:#fff;font-size:8.5px;font-weight:700;
+    border-radius:7px;padding:3px 7px;opacity:.85;}
+  .backhint::before{content:"";position:absolute;left:-4px;top:50%;transform:translateY(-50%);border:4px solid transparent;border-right-color:var(--ink);border-left:0;}
+  .appbar .backbtn{cursor:pointer;display:flex;align-items:center;justify-content:center;width:30px;height:30px;}
+
+  .secbtn{display:block;width:100%;background:transparent;color:var(--ink);font-weight:600;font-size:12px;
+    border:1.5px solid var(--line);padding:10px 12px;border-radius:13px;font-family:inherit;text-align:center;margin-top:8px;cursor:pointer;}
+  .confetti-t{margin-top:12px;text-align:center;font-size:15.5px;font-weight:700;color:var(--ink);}
+  .giftlead{width:100%;margin-top:14px;font-size:10px;font-weight:700;color:var(--muted);letter-spacing:.03em;text-transform:none;
+    display:flex;align-items:center;gap:8px;}
+  .giftlead::after{content:"";flex:1;height:1px;background:var(--line2);}
+
   /* ===== verdict table ===== */
   table{width:100%;border-collapse:collapse;background:var(--card);border:1px solid var(--line);border-radius:14px;overflow:hidden;font-size:13.5px;}
   th,td{padding:11px 14px;text-align:left;border-bottom:1px solid var(--line);}
@@ -180,6 +216,13 @@
 <div class="rail" id="rail"></div>
 
 <div class="wrap">
+  <h2>Round 2 — separate the objectives in time, not space</h2>
+  <p class="h2sub">Round 1 keeps both objectives on one screen — they will always compete, especially since the screen's own CTA (light pink, dark text) is a weak anchor. These alternatives give TV its moment only when the primary job is <b>done, failed again, or abandoned</b> — so this screen stays 100% single-objective. E is static; F, G, H are interactive.</p>
+</div>
+
+<div class="rail" id="rail2"></div>
+
+<div class="wrap">
   <h2>How they compare</h2>
   <div class="tblwrap">
   <table>
@@ -189,14 +232,20 @@
     <tr><td><b>B</b> — strip inside the bottom bar</td><td><span class="pill a">OK — but clutters decision zone</span></td><td><span class="pill g">High</span></td><td><span class="pill g">Zero-tap</span></td><td><span class="pill g">Trivial</span></td></tr>
     <tr><td><b>C</b> — teaser → bottom sheet</td><td><span class="pill g">Excellent</span></td><td><span class="pill a">Low until tapped</span></td><td><span class="pill a">One tap</span></td><td><span class="pill a">Bottom sheet (native pattern)</span></td></tr>
     <tr><td><b>D</b> — snackbar after delay</td><td><span class="pill g">Excellent at first paint</span></td><td><span class="pill a">High, but dismissible</span></td><td><span class="pill g">Zero-tap</span></td><td><span class="pill a">Timer + animation</span></td></tr>
+    <tr><td><b>E</b> — one-line text footnote</td><td><span class="pill g">Perfect — reads as a footnote</span></td><td><span class="pill r">Minimal</span></td><td><span class="pill g">Zero-tap</span></td><td><span class="pill g">Trivial</span></td></tr>
+    <tr><td><b>F</b> — promote TV on 2nd fail only</td><td><span class="pill g">Perfect on 1st fail</span></td><td><span class="pill g">Maximum — when it matters</span></td><td><span class="pill a">Needs a 2nd search</span></td><td><span class="pill a">Session flag</span></td></tr>
+    <tr><td><b>G</b> — exit-intent takeover</td><td><span class="pill g">Perfect — screen untouched</span></td><td><span class="pill g">Full-screen moment</span></td><td><span class="pill g">Zero-tap (on exit)</span></td><td><span class="pill a">PopScope + once/session cap</span></td></tr>
+    <tr><td><b>H</b> — notify-me → TV as reward</td><td><span class="pill g">Perfect + captures the lead</span></td><td><span class="pill g">Full moment post-commit</span></td><td><span class="pill a">One tap (notify)</span></td><td><span class="pill r">New feature + API</span></td></tr>
   </table>
   </div>
 
   <div class="rec">
-    <h2>Recommendation: A — quiet card in the content zone</h2>
-    <p>On the dark screen the recommendation was "move the card after the actions." On the live light screen that flips: the bottom bar is a small, pinned <b>decision zone</b> — putting the promo there (B) crowds the thumb area and mixes objectives. Meanwhile the content zone has free whitespace right under the address card, and a white/tinted card no longer overpowers a light screen.</p>
-    <p><b>A</b> puts a soft brand-tinted card there: message → address → "तब तक व्योम TV देखें — 100% फ्री" with the live-TV mini frame, a chevron instead of a button, and no saturated pink. The eye reads unavailability first, the offer second, and the only real CTA on screen stays the booking button. <b>D's entrance</b> (slide in ~1.5s after first paint) layers on cleanly if we want sequenced attention as polish.</p>
-    <p>This A design is now the default "After" state in the main prototype (index.html).</p>
+    <h2>Updated recommendation: G now, F next, H as the big swing</h2>
+    <p><b>Why Round 1 can't fully win:</b> every same-screen option — even the quietest card — adds a second interactive element next to a primary CTA that is already visually weak (brand-500 pink with dark text). Two objectives on one static screen will always share the user's ~10 seconds. The fix is sequencing, not styling.</p>
+    <p><b>G — exit-intent takeover</b> is the cleanest quick win: this screen stays byte-identical to production (zero risk to the booking funnel, an easy sell to the app team), and TV gets a <i>full-screen, zero-competition</i> moment at the exact point the user is a lost lead anyway — on back-press. Must be frequency-capped (once per session) so it never feels naggy.</p>
+    <p><b>F — promote on 2nd fail</b> is the smartest targeting: first unserviceable result stays pure; if the user searches <i>another</i> address and that also fails, they've exhausted the primary job — now the TV card earns near-primary treatment with honest copy ("यहाँ भी अभी नहीं…"). Just a session counter in Flutter.</p>
+    <p><b>H — notify-me → TV as reward</b> is the biggest product idea: it fixes the screen's real gap (there is no "tell me when Wiom arrives" action today — a lost lead), captures the lead, and then gifts TV on the confirmation moment when goodwill is highest and the primary job is <i>complete</i>. Needs backend, so it's a roadmap item, not this sprint.</p>
+    <p>E (text footnote) remains the trivial fallback if we must ship something on-screen today. index.html still shows Round 1's A as the on-screen "After" until a direction is locked.</p>
   </div>
 </div>
 
@@ -272,6 +321,77 @@
         <h3>${o.name}</h3><ul>${o.bullets.join('')}</ul>${o.bt||''}
       </div>
     </div>`).join('');
+
+  /* ================= ROUND 2 — flow-level separation ================= */
+  const backable=`<div class="appbar"><span class="backbtn" data-back><svg viewBox="0 0 24 24" width="19" height="19" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg></span></div>`;
+  const ADDR2={nm:"Tilak Nagar",ad:"Tilak Nagar, New Delhi, Delhi 110018, India"};
+  const addr2=`<div class="addrcard"><img src="assets/location_pin.svg" alt=""><div><div class="nm">${ADDR2.nm}</div><div class="ad">${ADDR2.ad}</div></div></div>`;
+
+  const OPTIONS2=[
+    {key:'e', lett:'E', name:'Text footnote — the true minimum', princ:['p-green','Principle: typographic hierarchy only'],
+     bullets:[`<li>One muted line under the address — <b>no card, no media, no button</b>.</li><li>Reads as a footnote; impossible to confuse with the primary action.</li><li>Trade-off: lowest TV visibility of all options.</li>`],
+     body:`${gfx}${ttl}${addr}<div class="footnote">इंतज़ार लंबा है? <a href="${TV_URL}" onclick="return false">व्योम TV फ्री देखें ›</a></div>`, bar:bar()},
+
+    {key:'f', lett:'F', name:'Promote TV on the 2nd fail only', princ:['p-brand','Principle: intent-based targeting'],
+     bullets:[`<li>1st unserviceable address → <b>screen stays 100% pure</b>.</li><li><b>Tap the button</b> — user tries another address, that fails too → NOW the rich TV card appears; primary job is exhausted, so it may be loud.</li><li>Flutter: just a session counter.</li>`],
+     bt:`<button class="replay" data-reset-f>↺ Reset to 1st fail</button>`,
+     body:``, bar:``},
+
+    {key:'g', lett:'G', name:'Exit-intent takeover', princ:['p-purple','Principle: right message, right moment'],
+     bullets:[`<li>This screen ships <b>completely untouched</b> — zero booking-funnel risk.</li><li><b>Tap the back arrow</b> — leaving = lead lost anyway → TV gets a full-screen, zero-competition pitch.</li><li>Cap: once per session, easy dismiss.</li>`],
+     body:``, bar:bar()},
+
+    {key:'h', lett:'H', name:'Notify-me → TV as the reward', princ:['p-amber','Principle: finish the job, then gift'],
+     bullets:[`<li>Adds the action this screen is missing: <b>"व्योम आए तो मुझे बताएं"</b> — captures the lead.</li><li><b>Tap it</b> — on the thank-you moment, TV appears as a gift, with the primary job complete.</li><li>Biggest build (needs backend) — roadmap item.</li>`],
+     bt:`<button class="replay" data-reset-h>↺ Reset</button>`,
+     body:``, bar:``}
+  ];
+
+  document.getElementById('rail2').innerHTML = OPTIONS2.map(o=>`
+    <div class="opt">
+      <div class="phone" id="ph-${o.key}">${statusbar}${o.key==='g'?backable:appbar}<div class="pbody" id="body-${o.key}">${o.body}</div>${o.bar?`<div id="bar-${o.key}">${o.bar}</div>`:`<div id="bar-${o.key}"></div>`}${o.key==='f'?`<div class="stepchip" id="chip-f">पहला पता</div><div class="searching"><div class="spin"></div>दूसरा पता खोज रहे हैं…</div>`:''}${o.key==='g'?`<div class="backhint">← टैप करें</div><div class="takeover"><div class="rukiye">रुकिए! 📺</div><div class="sub">जाने से पहले — व्योम TV आपके फोन पर<br><b>बिल्कुल फ्री</b> है, अभी से</div><div class="tvbig tvframe"><div class="mosaic"><span></span><span></span><span></span><span></span></div><div class="live"><i></i>LIVE</div><div class="play"><b><span class="playtri"></span></b></div></div><div class="genres">न्यूज़ • मूवी • भक्ति • मनोरंजन • खेल</div><div class="cta">फ्री में देखना शुरू करें</div><div class="nope" data-nope>नहीं, धन्यवाद</div></div>`:''}</div>
+      <div class="optcap">
+        <div class="tagrow"><span class="lett">${o.lett}</span><span class="princ ${o.princ[0]}">${o.princ[1]}</span></div>
+        <h3>${o.name}</h3><ul>${o.bullets.join('')}</ul>${o.bt||''}
+      </div>
+    </div>`).join('');
+
+  /* F: 1st fail pure → tap button → searching → 2nd fail with rich TV card */
+  const phF=document.getElementById('ph-f');
+  function renderF(stage){
+    document.getElementById('chip-f').textContent = stage===1 ? 'पहला पता' : 'दूसरा पता';
+    document.getElementById('body-f').innerHTML = stage===1
+      ? `${gfx}${ttl}${addr}`
+      : `${gfx}<div class="ttl">यह इलाका भी अभी उपलब्ध नहीं है</div>${addr2}${whitecard()}`;
+    document.getElementById('bar-f').innerHTML = bar();
+    phF.querySelector('.pribtn').onclick = stage===1 ? ()=>{
+      phF.classList.add('searching-on');
+      setTimeout(()=>{phF.classList.remove('searching-on');renderF(2);},1200);
+    } : null;
+  }
+  renderF(1);
+  document.querySelector('[data-reset-f]').onclick=()=>renderF(1);
+
+  /* G: back arrow → takeover */
+  const phG=document.getElementById('ph-g');
+  document.getElementById('body-g').innerHTML=`${gfx}${ttl}${addr}`;
+  phG.querySelector('[data-back]').onclick=()=>phG.classList.add('tk');
+  phG.querySelector('[data-nope]').onclick=()=>phG.classList.remove('tk');
+
+  /* H: notify-me → confirmation + TV gift */
+  const phH=document.getElementById('ph-h');
+  function renderH(stage){
+    if(stage===1){
+      document.getElementById('body-h').innerHTML=`${gfx}${ttl}${addr}`;
+      document.getElementById('bar-h').innerHTML=`<div class="bottombar"><div class="pribtn">${C.button}</div><button class="secbtn" data-notify>🔔 व्योम आए तो मुझे बताएं</button><div class="loginlink">${C.login} <span class="arr">›</span></div></div>`;
+      phH.querySelector('[data-notify]').onclick=()=>renderH(2);
+    } else {
+      document.getElementById('body-h').innerHTML=`${gfx}<div class="confetti-t">धन्यवाद! व्योम आते ही<br>आपको बता देंगे 🎉</div><div class="giftlead">तब तक के लिए, हमारी तरफ़ से</div>${whitecard()}`;
+      document.getElementById('bar-h').innerHTML=`<div class="bottombar"><div class="pribtn">ठीक है</div></div>`;
+    }
+  }
+  renderH(1);
+  document.querySelector('[data-reset-h]').onclick=()=>renderH(1);
 
   const phC=document.getElementById('ph-c');
   phC.querySelector('[data-open]').onclick=()=>phC.classList.add('open');
