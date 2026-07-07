@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-<title>Wiom TV · इलाके में उपलब्ध नहीं (live new-app design)</title>
+<title>Wiom TV · unserviceable screen — FINAL: D + K2</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@400;600;700&display=swap" rel="stylesheet">
@@ -11,7 +11,7 @@
   :root{
     /* new_app tokens (verified from release/sprint-18 BaseColors/WiomColors) */
     --brand600:#D9008D; --brand500:#FF66C9; --brand300:#FFB2E4; --brand100:#FFE5F6;
-    --neutral900:#161021; --neutral700:#665E75; --neutral200:#E8E4F0; --neutral100:#F1EDF7;
+    --neutral900:#161021; --neutral700:#665E75; --neutral500:#A7A1B2; --neutral200:#E8E4F0; --neutral100:#F1EDF7;
     --neutralWhite:#FAF9FC; --baseWhite:#FFFFFF;
     --positive600:#008043; --positive100:#E1FAED; --negative600:#E01E00;
     --radius:16px;
@@ -30,12 +30,8 @@
   }
 
   /* ===== prototype navigation (floating, light) ===== */
-  .nav{position:absolute;top:34px;right:10px;z-index:30;display:flex;gap:7px;align-items:center;}
-  .navbtn{display:inline-flex;align-items:center;gap:6px;font-family:inherit;font-size:12px;font-weight:600;
-    color:var(--neutral900);background:rgba(255,255,255,.85);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);
-    border:1px solid var(--neutral200);border-radius:999px;padding:7px 12px;cursor:pointer;box-shadow:0 2px 8px rgba(22,16,33,.10);}
-  .navbtn:active{background:var(--neutral100);}
-  .navseg{display:inline-flex;background:rgba(255,255,255,.85);backdrop-filter:blur(6px);border:1px solid var(--neutral200);
+  .nav{position:absolute;top:34px;right:10px;z-index:30;display:flex;gap:7px;align-items:center;flex-wrap:wrap;justify-content:flex-end;}
+  .navseg{display:inline-flex;background:rgba(255,255,255,.88);backdrop-filter:blur(6px);border:1px solid var(--neutral200);
     border-radius:999px;padding:3px;box-shadow:0 2px 8px rgba(22,16,33,.10);}
   .navseg button{font-family:inherit;font-size:12px;font-weight:600;color:var(--neutral700);background:transparent;
     border:0;padding:5px 10px;border-radius:999px;cursor:pointer;}
@@ -50,7 +46,9 @@
 
   .body{position:absolute;top:76px;left:0;right:0;bottom:118px;overflow-y:auto;
     padding:24px 16px 16px;display:flex;flex-direction:column;align-items:center;}
+  .body.k2mode{bottom:96px;}
   .gfx{width:240px;height:240px;flex:0 0 auto;}
+  @media(max-height:640px){.gfx{width:150px;height:150px;}} /* flex graphic: small phones */
   .gfx img{width:100%;height:100%;object-fit:contain;display:block;}
   .title{margin-top:16px;text-align:center;font-size:20px;font-weight:600;line-height:1.35;color:var(--neutral900);}
   .subtitle{margin-top:16px;text-align:center;font-size:16px;font-weight:400;line-height:1.5;color:var(--neutral900);}
@@ -61,10 +59,20 @@
   .addrcard .nm{font-size:16px;font-weight:600;color:var(--neutral900);line-height:1.3;}
   .addrcard .ad{font-size:12px;color:var(--neutral700);line-height:1.45;margin-top:8px;}
 
-  /* ===== Wiom TV quiet card (After) — soft-brand tint, no competing CTA ===== */
-  .tvcard{margin-top:16px;width:100%;display:flex;text-decoration:none;align-items:center;gap:12px;
-    background:var(--brand100);border:1px solid var(--brand300);border-radius:var(--radius);padding:12px 14px;}
-  .tvcard:active{transform:scale(.992);}
+  /* buttons */
+  .pribtn{display:block;width:100%;background:var(--brand500);color:var(--neutral900);font-weight:600;font-size:16px;
+    border:0;padding:14px 16px;border-radius:var(--radius);cursor:pointer;font-family:inherit;text-align:center;}
+  .pribtn.strong{background:var(--brand600);color:var(--neutralWhite);font-weight:700;}
+  .inbody{margin-top:20px;}
+  .loginlink{display:flex;align-items:center;justify-content:center;gap:4px;color:var(--neutral900);
+    font-size:14px;font-weight:400;padding:12px 0 8px;}
+  .loginlink .arr{color:var(--brand600);font-weight:700;}
+
+  /* production pinned bar (Before + D) */
+  .bottombar{position:absolute;left:0;right:0;bottom:0;z-index:7;background:var(--neutralWhite);
+    box-shadow:0 -2px 6px rgba(22,16,33,.12);padding:16px 16px 8px;}
+
+  /* mini TV frame */
   .tvframe{flex:0 0 auto;width:64px;height:48px;border-radius:9px;overflow:hidden;position:relative;background:#000;box-shadow:0 2px 8px rgba(22,16,33,.25);}
   .mosaic{position:absolute;inset:0;display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr;}
   .mosaic span:nth-child(1){background:linear-gradient(135deg,#E01E00,#ff5a3c);}
@@ -76,20 +84,31 @@
   .playtri{width:0;height:0;border-style:solid;border-width:4.5px 0 4.5px 7px;border-color:transparent transparent transparent var(--brand600);margin-left:2px;}
   .tvframe .live{position:absolute;top:3px;left:3px;display:flex;align-items:center;gap:3px;background:rgba(0,0,0,.55);color:#fff;font-size:7px;font-weight:700;padding:2px 4px;border-radius:4px;}
   .tvframe .live i{width:4px;height:4px;border-radius:50%;background:var(--negative600);display:block;}
-  .tvcard .qt{flex:1;min-width:0;}
-  .tvcard .qt b{display:block;font-size:14.5px;font-weight:700;color:var(--neutral900);line-height:1.35;}
-  .tvcard .qt b .fr{color:var(--positive600);}
-  .tvcard .qt span{display:block;font-size:12px;color:var(--neutral700);margin-top:3px;line-height:1.4;}
-  .tvcard .chev{color:var(--brand600);font-size:22px;line-height:1;font-weight:600;}
 
-  /* ===== bottom bar (showLogin variant: white container + top shadow) ===== */
-  .bottombar{position:absolute;left:0;right:0;bottom:0;z-index:7;background:var(--neutralWhite);
-    box-shadow:0 -2px 6px rgba(22,16,33,.12);padding:16px 16px 8px;}
-  .pribtn{display:block;width:100%;background:var(--brand500);color:var(--neutral900);font-weight:600;font-size:16px;
-    border:0;padding:14px 16px;border-radius:var(--radius);cursor:pointer;font-family:inherit;text-align:center;}
-  .loginlink{display:flex;align-items:center;justify-content:center;gap:4px;color:var(--neutral900);
-    font-size:14px;font-weight:400;padding:12px 0 8px;}
-  .loginlink .arr{color:var(--brand600);font-weight:700;}
+  /* ===== FINAL D — snackbar (1s, "तब तक के लिए", whole toast tappable) ===== */
+  .snack{position:absolute;left:12px;right:12px;bottom:130px;z-index:22;display:flex;align-items:center;gap:11px;
+    background:var(--neutral900);border-radius:15px;padding:11px 13px;box-shadow:0 12px 34px rgba(22,16,33,.4);
+    text-decoration:none;transform:translateY(180%);opacity:0;transition:all .5s cubic-bezier(.2,.8,.25,1);}
+  .snackin .snack{transform:translateY(0);opacity:1;}
+  .snack .qt{flex:1;min-width:0;}
+  .snack .slbl{display:block;font-size:10px;font-weight:700;color:var(--brand300);margin-bottom:2px;}
+  .snack .qt b{display:block;color:var(--neutralWhite);font-size:14px;font-weight:700;line-height:1.3;}
+  .snack .qt span{display:block;color:var(--neutralWhite);opacity:.62;font-size:11px;margin-top:2px;}
+  .snack .go{color:var(--brand300);font-weight:700;font-size:13.5px;white-space:nowrap;}
+  .snack .x{color:var(--neutralWhite);opacity:.55;font-size:15px;padding:4px 6px;cursor:pointer;}
+
+  /* ===== FINAL K2 — strong button up + delayed footer, WHOLE footer tappable ===== */
+  .k2bar{position:absolute;left:0;right:0;bottom:0;z-index:7;display:block;background:var(--neutral100);
+    border-top:1px solid var(--neutral200);padding:11px 16px 14px;text-decoration:none;cursor:pointer;
+    transform:translateY(110%);transition:transform .55s cubic-bezier(.2,.8,.25,1);}
+  .k2in .k2bar{transform:none;}
+  .k2bar:active{background:var(--neutral200);}
+  .k2bar .lbl{font-size:11px;font-weight:700;color:var(--neutral500);margin-bottom:7px;}
+  .k2row{display:flex;align-items:center;gap:12px;}
+  .k2row .k2t{flex:1;min-width:0;}
+  .k2row .k2t b{display:block;font-size:14.5px;font-weight:700;color:var(--neutral900);line-height:1.3;}
+  .k2row .k2t span{display:block;font-size:11.5px;color:var(--neutral700);margin-top:2px;}
+  .k2row .see{color:var(--brand600);font-weight:700;font-size:14px;white-space:nowrap;}
 </style>
 </head>
 <body>
@@ -111,26 +130,31 @@
   };
   const LOGIN_CTA = "पहले से व्योम लगा हुआ है";
   const ADDR = { nm:"Rajouri Garden", ad:"Rajouri Garden, New Delhi, Delhi 110027, India" };
+  const TV = { lbl:"तब तक के लिए", h:"व्योम TV — 100% फ्री", sub:"ढेरों लाइव चैनल • न्यूज़ • मूवी • भक्ति", see:"देखें ›" };
 
   const statusbar=()=>`<div class="statusbar"><span>4:35</span><span class="r"><span>📶</span><span>🔋50%</span></span></div>`;
   const appbar=()=>`<div class="appbar"><span class="back">
     <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg></span></div>`;
+  const tvframe=()=>`<div class="tvframe">
+      <div class="mosaic"><span></span><span></span><span></span><span></span></div>
+      <div class="live"><i></i>LIVE</div>
+      <div class="play"><b><span class="playtri"></span></b></div>
+    </div>`;
 
-  const tvcard=()=>`<a class="tvcard" href="${TV_URL}">
-      <div class="tvframe">
-        <div class="mosaic"><span></span><span></span><span></span><span></span></div>
-        <div class="live"><i></i>LIVE</div>
-        <div class="play"><b><span class="playtri"></span></b></div>
-      </div>
-      <div class="qt"><b>तब तक व्योम TV देखें — <span class="fr">100% फ्री</span></b>
-      <span>ढेरों लाइव चैनल • न्यूज़ • मूवी • भक्ति • खेल</span></div>
-      <span class="chev">›</span>
-    </a>`;
+  const contentFor=(c)=>`
+     <div class="gfx"><img src="assets/location_unserviceable_graphic.svg" alt=""></div>
+     <div class="title">${c.title}</div>
+     ${c.addr
+       ? `<div class="addrcard"><img src="assets/location_pin.svg" alt=""><div><div class="nm">${ADDR.nm}</div><div class="ad">${ADDR.ad}</div></div></div>`
+       : `<div class="subtitle">${c.subtitle}</div>`}`;
 
   function nav(){
-    const other = view==='after' ? 'Before' : 'After';
     return `<div class="nav">
-      <button class="navbtn" id="flip">↺ ${other}</button>
+      <div class="navseg" id="viewseg">
+        <button data-w="before" class="${view==='before'?'on':''}">Before</button>
+        <button data-w="d" class="${view==='d'?'on':''}">D</button>
+        <button data-w="k2" class="${view==='k2'?'on':''}">K2</button>
+      </div>
       <div class="navseg" id="varseg">
         <button data-v="area" class="${variant==='area'?'on':''}">एरिया</button>
         <button data-v="city" class="${variant==='city'?'on':''}">शहर</button>
@@ -139,26 +163,45 @@
     </div>`;
   }
 
+  let variant='area', view='d', timer=null;
+
   function render(){
-    const c=COPY[variant]; const withTV = view==='after';
-    document.getElementById('vp').innerHTML =
-      nav()+statusbar()+appbar()+
-      `<div class="body">
-         <div class="gfx"><img src="assets/location_unserviceable_graphic.svg" alt=""></div>
-         <div class="title">${c.title}</div>
-         ${c.addr
-           ? `<div class="addrcard"><img src="assets/location_pin.svg" alt=""><div><div class="nm">${ADDR.nm}</div><div class="ad">${ADDR.ad}</div></div></div>`
-           : `<div class="subtitle">${c.subtitle}</div>`}
-         ${withTV?tvcard():''}
-       </div>
-       <div class="bottombar">
-         <button class="pribtn">${c.button}</button>
-         <div class="loginlink">${LOGIN_CTA} <span class="arr">›</span></div>
-       </div>`;
-    document.getElementById('flip').onclick=()=>{view=(view==='after'?'before':'after');render();};
+    const c=COPY[variant];
+    const vp=document.getElementById('vp');
+    vp.classList.remove('snackin','k2in');
+    if(timer){clearTimeout(timer);timer=null;}
+
+    if(view==='k2'){
+      /* FINAL K2: strong button under the message; whole footer = one button, arrives at 2s */
+      vp.innerHTML = nav()+statusbar()+appbar()+
+        `<div class="body k2mode">${contentFor(c)}
+           <button class="pribtn strong inbody">${c.button}</button>
+           <div class="loginlink">${LOGIN_CTA} <span class="arr">›</span></div>
+         </div>
+         <a class="k2bar" href="${TV_URL}">
+           <div class="lbl">${TV.lbl}</div>
+           <div class="k2row">${tvframe()}<div class="k2t"><b>${TV.h}</b><span>${TV.sub}</span></div><span class="see">${TV.see}</span></div>
+         </a>`;
+      timer=setTimeout(()=>vp.classList.add('k2in'),2000);
+    } else {
+      /* Before + FINAL D: production screen (pinned bar); D adds the 1s "तब तक के लिए" toast */
+      vp.innerHTML = nav()+statusbar()+appbar()+
+        `<div class="body">${contentFor(c)}</div>
+         <div class="bottombar">
+           <button class="pribtn">${c.button}</button>
+           <div class="loginlink">${LOGIN_CTA} <span class="arr">›</span></div>
+         </div>
+         ${view==='d'?`<a class="snack" href="${TV_URL}" id="snack">${tvframe()}
+             <div class="qt"><span class="slbl">${TV.lbl}</span><b>${TV.h}</b><span>${TV.sub}</span></div>
+             <span class="go">${TV.see}</span><span class="x" id="snackx">✕</span></a>`:''}`;
+      if(view==='d') timer=setTimeout(()=>vp.classList.add('snackin'),1000);
+      const x=document.getElementById('snackx');
+      if(x) x.onclick=(e)=>{e.preventDefault();e.stopPropagation();vp.classList.remove('snackin');};
+    }
+
+    document.getElementById('viewseg').onclick=(e)=>{const w=e.target.dataset.w;if(w){view=w;render();}};
     document.getElementById('varseg').onclick=(e)=>{const v=e.target.dataset.v;if(v){variant=v;render();}};
   }
-  let variant='area', view='after';
   render();
 </script>
 </body>

@@ -228,7 +228,10 @@
   .backhint::before{content:"";position:absolute;left:-4px;top:50%;transform:translateY(-50%);border:4px solid transparent;border-right-color:var(--ink);border-left:0;}
   /* K2: ambient footer strip, delayed entrance */
   .k2bar{position:absolute;left:0;right:0;bottom:0;z-index:7;background:var(--zebra);border-top:1px solid var(--line2);
-    padding:9px 14px 11px;transform:translateY(110%);transition:transform .55s cubic-bezier(.2,.8,.25,1);}
+    padding:9px 14px 11px;transform:translateY(110%);transition:transform .55s cubic-bezier(.2,.8,.25,1);
+    display:block;text-decoration:none;cursor:pointer;}
+  .k2bar:active{background:var(--line2);}
+  .snack .slbl{display:block;font-style:normal;font-size:7.5px;font-weight:700;color:var(--brand300);margin-bottom:2px;letter-spacing:.03em;}
   .phone.k2in .k2bar{transform:none;}
   .k2bar .lbl{font-size:9px;font-weight:700;letter-spacing:.04em;color:var(--sub);margin-bottom:6px;}
   .k2row{display:flex;align-items:center;gap:9px;text-decoration:none;}
@@ -355,13 +358,13 @@
     pills:[P('Message: perfect','g'),P('Tap intent: highest','g'),P('Trust: none','g'),P('Reach: tiny','r')],
     body:`${gfx}${ttl}${addr}<button class="teaser" data-open>📺 तब तक फ्री में TV देखें? <span class="chev">›</span></button>`, bar:bar(),
     extra:`<div class="sheetveil" data-close></div><div class="sheet"><div class="handle"></div>${whitecard()}</div>`},
-   {key:'d',lett:'D',name:'Snackbar after 1.5s',replay:'↺ Replay entrance',
-    glance:`Message lands first (good), then motion pulls one glance to a dark toast sliding up.`,
+   {key:'d',lett:'D',name:'✓ FINAL · Snackbar after 1s — "तब तक के लिए"',replay:'↺ Replay entrance',
+    glance:`Message lands first (good), then motion pulls one glance to a dark toast sliding up after 1 second, led by the "तब तक के लिए" bridge line. Whole toast is one tap target.`,
     voice:`"ये नीचे से क्या आया — बंद करो।" <i>(or, if they read:)</i> "फ्री TV? हम्म।"`,
     risk:`On budget Androids a dark sliding toast pattern-matches to system notifications and ads — expect reflexive ✕ from ad-trained users.`,
     pills:[P('Message: lands first','g'),P('Tap intent: mixed','a'),P('Trust: toast ≈ ad','a'),P('Reach: high','g')],
     body:`${gfx}${ttl}${addr}`, bar:bar(),
-    extra:`<div class="snack">${tvframe('sm')}<div class="qt"><b>व्योम TV अभी फ्री उपलब्ध है</b><span>ढेरों लाइव चैनल • बिल्कुल फ्री</span></div><span class="go">देखें ›</span><span class="x" data-x>✕</span></div>`},
+    extra:`<a class="snack" href="${TV_URL}" onclick="return false">${tvframe('sm')}<div class="qt"><i class="slbl">तब तक के लिए</i><b>व्योम TV — 100% फ्री</b><span>ढेरों लाइव चैनल • न्यूज़ • मूवी • भक्ति</span></div><span class="go">देखें ›</span><span class="x" data-x>✕</span></a>`},
 
    {key:'e',lett:'E',name:'Text footnote',
     glance:`They don't see it. Muted grey small text under the address is exactly what a scanning eye skips.`,
@@ -390,13 +393,13 @@
     pills:[P('Message: two zones','g'),P('Tap intent: habit-driven','a'),P('Trust: none','g'),P('Reach: highest taps','g')],
     body:`${gfx}${ttl}${addr}${inbodybtn(C.button,1)}${inbodylogin}`,
     bar:`<div class="bottombar" style="padding-bottom:12px;"><a class="tvquiet" style="margin-top:0" href="${TV_URL}" onclick="return false">${tvframe('sm')}<div class="qt"><b>तब तक व्योम TV देखें — <span class="fr">100% फ्री</span></b><span>ढेरों लाइव चैनल • न्यूज़ • मूवी • भक्ति</span></div><span class="chev">›</span></a></div>`},
-   {key:'k2',lett:'K2',name:'K refined — subordinate the TV on all four axes',hint:'watch the footer arrive',replay:'↺ Replay entrance',
+   {key:'k2',lett:'K2',name:'✓ FINAL · K refined — whole footer is one button',hint:'watch the footer arrive',replay:'↺ Replay entrance',
     glance:`First paint is <b>single-objective</b> — message, address, one strong button. ~2s later a quiet footer fades in, labelled <b>"तब तक के लिए"</b> — footer grammar (no card, no border), so it reads as the epilogue of the same story, not a second pitch.`,
     voice:`"नेट नहीं है… ठीक है, ये बटन। — अरे, तब तक फ्री TV भी है।"`,
     risk:`Habit taps drop (nothing button-like at the bottom) but aren't zero. Fast leavers who exit within 2s never see TV. Small phones: the graphic must be the FLEX element — it shrinks so message→address→button always fit above the fold (see the 5-inch toggle: K2 adapts, K clips). Needs timer + animation + LayoutBuilder in Flutter.`,
     pills:[P('Message: single at first paint','g'),P('Tap intent: honest','g'),P('Trust: none','g'),P('Reach: good, not max','a')],
     body:`${gfx}${ttl}${addr}${inbodybtn(C.button,1)}${inbodylogin}`, bar:``,
-    extra:`<div class="k2bar"><div class="lbl">तब तक के लिए</div><a class="k2row" href="${TV_URL}" onclick="return false">${tvframe('sm')}<div class="k2t"><b>व्योम TV — 100% फ्री</b><span>ढेरों लाइव चैनल • न्यूज़ • मूवी • भक्ति</span></div><span class="see">देखें ›</span></a></div>`},
+    extra:`<a class="k2bar" href="${TV_URL}" onclick="return false"><div class="lbl">तब तक के लिए</div><div class="k2row">${tvframe('sm')}<div class="k2t"><b>व्योम TV — 100% फ्री</b><span>ढेरों लाइव चैनल • न्यूज़ • मूवी • भक्ति</span></div><span class="see">देखें ›</span></div></a>`},
 
    {round:"Round 3 — NEW: O2 as availability information, not promo", sub:"Same screen, zero flow tricks. Instead of a promo block competing for attention, Wiom TV surfaces inside the answer the user is already reading: \"what can I get here?\""},
    {key:'l',lett:'L',name:'Badge on the illustration',
@@ -482,8 +485,8 @@
 
   /* D: snackbar */
   const phD=document.getElementById('ph-d');
-  const playD=()=>{phD.classList.remove('snackin');setTimeout(()=>phD.classList.add('snackin'),1500);};
-  phD.querySelector('[data-x]').onclick=()=>phD.classList.remove('snackin');
+  const playD=()=>{phD.classList.remove('snackin');setTimeout(()=>phD.classList.add('snackin'),1000);};
+  phD.querySelector('[data-x]').onclick=(e)=>{e.preventDefault();e.stopPropagation();phD.classList.remove('snackin');};
   playD();
 
   /* K2: delayed footer entrance */
