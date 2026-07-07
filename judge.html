@@ -235,6 +235,11 @@
   .k2row .k2t span{display:block;font-size:9px;color:var(--muted);margin-top:1px;}
   .k2row .see{margin-left:auto;color:var(--brand);font-weight:700;font-size:11px;white-space:nowrap;}
 
+  /* P: delayed strip inside the pinned bar */
+  .pstrip{max-height:0;opacity:0;overflow:hidden;border-top:1px solid transparent;transition:all .55s cubic-bezier(.2,.8,.25,1);}
+  .phone.pin .pstrip{max-height:74px;opacity:1;border-top-color:var(--line2);padding-top:7px;margin-top:2px;}
+  .pstrip .lbl{font-size:9px;font-weight:700;letter-spacing:.04em;color:var(--sub);margin-bottom:6px;}
+
   /* Round 3: availability-info components */
   .gfxwrap{position:relative;}
   .gfxbadge{position:absolute;left:50%;bottom:0;transform:translateX(-50%);white-space:nowrap;background:var(--brand100);
@@ -416,7 +421,16 @@
     risk:`Shares the row with the login link — mis-taps between the two, and both are tertiary. The strip stays visually clean but discovery is modest and partly habit-driven (it sits in the thumb zone).`,
     pills:[P('Message: OK','g'),P('Tap intent: partly habit','a'),P('Trust: none','g'),P('Reach: moderate','a')],
     body:`${gfx}${ttl}${addr}`,
-    bar:`<div class="bottombar"><div class="pribtn">${C.button}</div><div class="barlinks"><span class="ll">${C.login} <span class="arr">›</span></span><a class="tvl" href="${TV_URL}" onclick="return false">📺 फ्री TV ›</a></div></div>`}
+    bar:`<div class="bottombar"><div class="pribtn">${C.button}</div><div class="barlinks"><span class="ll">${C.login} <span class="arr">›</span></span><a class="tvl" href="${TV_URL}" onclick="return false">📺 फ्री TV ›</a></div></div>`},
+
+   {round:"Synthesis — your shortlist (B + D + K + K2) as one design", sub:"All four picks agree: TV belongs in the bar zone, arriving after the message. P keeps the production pinned bar (no fold risk), strengthens the button (K/K2), and slides the TV strip in below the links after ~1.8s (D's sequencing) — in footer grammar, below the button, fixing B's accidental-tap flaw."},
+   {key:'p',lett:'P',name:'P — pinned strong button + delayed bar strip',hint:'watch the strip arrive',replay:'↺ Replay entrance',
+    glance:`First paint: pure screen, one strong pinned button — O1 alone, at every viewport height. ~1.8s later the "तब तक के लिए" strip unfolds at the very bottom of the bar, <b>below</b> the button and login link, so the thumb meets the button first.`,
+    voice:`"नेट नहीं… ये बटन। — अरे, नीचे फ्री TV भी आ गया।"`,
+    risk:`Bar grows taller when the strip arrives (content nudges up — animate gently). Bottom-edge slot still collects some habit taps, fewer than B/K since the strip sits under both actions. Fast leavers (<2s) never see TV.`,
+    pills:[P('Message: pinned + strong','g'),P('Tap intent: mostly honest','g'),P('Trust: none','g'),P('Reach: good','g')],
+    body:`${gfx}${ttl}${addr}`,
+    bar:`<div class="bottombar">${strongbtn(C.button)}<div class="loginlink">${C.login} <span class="arr">›</span></div><div class="pstrip"><div class="lbl">तब तक के लिए</div><a class="k2row" href="${TV_URL}" onclick="return false">${tvframe('sm')}<div class="k2t"><b>व्योम TV — 100% फ्री</b><span>ढेरों लाइव चैनल • न्यूज़ • मूवी • भक्ति</span></div><span class="see">देखें ›</span></a></div></div>`}
   ];
 
   /* ===== dual-objective scores (assessed 0-10) ===== */
@@ -435,7 +449,8 @@
     l:  {o1:[8.5,'message column gains no new block'],                o2:[5.5,'seen while viewing the art; small target'], round:'Info-merge'},
     m:  {o1:[8.5,'text-grade, read as part of the message'],          o2:[5,'read by all readers, pulls few taps'], round:'Info-merge'},
     n:  {o1:[9,'strengthens the answer — ✗ नेट first, structured'],   o2:[7,'TV read as availability info, honest interest'], round:'Info-merge'},
-    o:  {o1:[8,'bar keeps one button; links stay tertiary'],          o2:[4.5,'modest, partly habit (thumb zone)'], round:'Info-merge'}
+    o:  {o1:[8,'bar keeps one button; links stay tertiary'],          o2:[4.5,'modest, partly habit (thumb zone)'], round:'Info-merge'},
+    p:  {o1:[9,'pinned + strong button; pure first paint'],           o2:[6.5,'bar-zone visibility + motion glance; misses fast leavers'], round:'Synthesis'}
   };
   const meters=(k)=>{const s=SCORES[k];if(!s)return '';
     const m=(lb,c,v)=>`<div class="meter"><span class="mlb"><span class="dotp" style="background:${c}"></span>${lb}</span><span class="track"><span class="fill" style="width:${v[0]*10}%;background:${c}"></span></span><span class="val">${v[0]}</span></div><div class="mwhy">${v[1]}</div>`;
@@ -474,9 +489,14 @@
   const playK2=()=>{phK2.classList.remove('k2in');setTimeout(()=>phK2.classList.add('k2in'),2000);};
   playK2();
 
+  /* P: delayed strip inside pinned bar */
+  const phP=document.getElementById('ph-p');
+  const playP=()=>{phP.classList.remove('pin');setTimeout(()=>phP.classList.add('pin'),1800);};
+  playP();
+
   /* replays */
   document.querySelectorAll('[data-replay]').forEach(b=>{
-    b.onclick=()=>{const k=b.dataset.replay; if(k==='d')playD(); if(k==='k2')playK2();};
+    b.onclick=()=>{const k=b.dataset.replay; if(k==='d')playD(); if(k==='k2')playK2(); if(k==='p')playP();};
   });
 
   /* ===== scatter map ===== */
@@ -485,7 +505,7 @@
     const px=v=>ml+(v/10)*(W-ml-mr), py=v=>H-mb-(v/10)*(H-mt-mb);
     const NAMES={};OPTS.forEach(o=>{if(o.key)NAMES[o.key]=o.name;});
     /* label anchor per point to avoid collisions */
-    const LPOS={cur:'r',a:'r',b:'r',c:'r',d:'l',e:'l',j:'t',i:'r',k:'l',k2:'r',l:'r',m:'l',n:'r',o:'r'};
+    const LPOS={cur:'r',a:'r',b:'r',c:'r',d:'l',e:'l',j:'t',i:'r',k:'l',k2:'r',l:'r',m:'l',n:'r',o:'r',p:'b'};
     let s='';
     /* grid + ticks */
     for(let v=0;v<=10;v+=2){
