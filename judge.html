@@ -57,6 +57,44 @@
   .shortlist.on{background:var(--brand);border-color:var(--brand);color:#fff;}
   .replay{margin-top:13px;margin-left:8px;font-family:inherit;font-size:12px;font-weight:700;color:var(--purple);background:var(--purple100);border:0;border-radius:999px;padding:7px 13px;cursor:pointer;}
 
+  /* ===== dual-objective meters ===== */
+  .meters{margin-top:12px;padding-top:11px;border-top:1px solid var(--line2);display:flex;flex-direction:column;gap:7px;}
+  .meter{display:flex;align-items:center;gap:9px;font-size:11px;}
+  .meter .mlb{flex:0 0 148px;font-weight:700;color:var(--muted);display:flex;align-items:center;gap:6px;}
+  .meter .dotp{width:9px;height:9px;border-radius:3px;flex:0 0 auto;}
+  .meter .track{flex:1;height:8px;background:var(--zebra);border-radius:4px;overflow:hidden;}
+  .meter .fill{height:100%;border-radius:0 4px 4px 0;}
+  .meter .val{flex:0 0 30px;text-align:right;font-weight:700;color:var(--ink);font-size:12px;}
+  .mwhy{font-size:10.5px;color:var(--sub);margin-top:-3px;padding-left:157px;}
+  @media(max-width:560px){.meter .mlb{flex-basis:110px;}.mwhy{padding-left:119px;}}
+
+  /* ===== scatter map ===== */
+  .mapsec{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:18px 20px 10px;margin:26px 0 6px;}
+  .mapsec h2{font-size:17px;margin:0 0 2px;}
+  .mapsec .msub{color:var(--muted);font-size:12.5px;margin-bottom:8px;}
+  .mapwrap{position:relative;max-width:720px;margin:0 auto;}
+  .mapwrap svg{width:100%;height:auto;display:block;}
+  .qlab{font-size:10px;font-weight:700;fill:var(--sub);}
+  .axlab{font-size:11px;font-weight:700;fill:var(--muted);}
+  .ticklab{font-size:9.5px;fill:var(--sub);}
+  .ptlab{font-size:11px;font-weight:700;fill:var(--ink);}
+  .grid{stroke:var(--line2);stroke-width:1;}
+  .qline{stroke:var(--line);stroke-width:1.5;stroke-dasharray:5 4;}
+  .pt{fill:var(--ink);stroke:#fff;stroke-width:2;}
+  .pt.hot{fill:var(--brand);}
+  .hit{fill:transparent;cursor:pointer;}
+  .maptip{position:absolute;pointer-events:none;background:var(--ink);color:#fff;border-radius:10px;padding:9px 12px;font-size:11.5px;
+    max-width:240px;opacity:0;transition:opacity .12s;z-index:50;box-shadow:0 8px 24px rgba(22,16,33,.3);}
+  .maptip b{display:block;font-size:12px;margin-bottom:3px;}
+  .maptip .tr{display:flex;gap:6px;align-items:center;margin-top:3px;}
+  .maptip .td{width:8px;height:8px;border-radius:2px;flex:0 0 auto;}
+  .mapnote{font-size:11px;color:var(--sub);max-width:720px;margin:8px auto 6px;}
+  details.tbl{max-width:720px;margin:0 auto 8px;font-size:12.5px;}
+  details.tbl summary{cursor:pointer;font-weight:700;color:var(--muted);font-size:12px;padding:4px 0;}
+  details.tbl table{width:100%;border-collapse:collapse;margin-top:6px;}
+  details.tbl th,details.tbl td{padding:6px 9px;text-align:left;border-bottom:1px solid var(--line2);font-size:12px;}
+  details.tbl th{background:var(--zebra);color:var(--muted);font-size:10.5px;text-transform:uppercase;letter-spacing:.04em;}
+
   /* ===== sticky judge bar ===== */
   .judgebar{position:fixed;left:0;right:0;bottom:0;z-index:99;background:var(--ink);color:#fff;padding:13px 20px;
     display:flex;align-items:center;gap:12px;flex-wrap:wrap;box-shadow:0 -6px 24px rgba(22,16,33,.25);}
@@ -207,6 +245,16 @@
   </div>
 </header>
 
+<div class="wrap">
+  <div class="mapsec">
+    <h2>The dual-objective map</h2>
+    <p class="msub"><b style="color:#6D17CE">Objective 1</b> — user understands "Wiom isn't here" and takes the routing action &nbsp;·&nbsp; <b style="color:#D9008D">Objective 2</b> — user discovers Wiom TV with honest intent. Hover any point.</p>
+    <div class="mapwrap" id="mapwrap"></div>
+    <p class="mapnote">Scores are assessed judgments (0–10), not measurements — reach × intent for O2, comprehension × action-clarity for O1. The wiom.tv bounce-rate instrumentation is what will measure O2 for real. Points toward the top-right dominate: they give up nothing on either objective.</p>
+    <details class="tbl"><summary>View as table</summary><div id="scoretable"></div></details>
+  </div>
+</div>
+
 <div class="wrap" id="root"></div>
 
 <div class="judgebar">
@@ -332,6 +380,27 @@
     extra:`<div class="k2bar"><div class="lbl">तब तक के लिए</div><a class="k2row" href="${TV_URL}" onclick="return false">${tvframe('sm')}<div class="k2t"><b>व्योम TV — 100% फ्री</b><span>ढेरों लाइव चैनल • न्यूज़ • मूवी • भक्ति</span></div><span class="see">देखें ›</span></a></div>`}
   ];
 
+  /* ===== dual-objective scores (assessed 0-10) ===== */
+  const O1C='#6D17CE', O2C='#D9008D';
+  const SCORES={
+    cur:{o1:[3,'message skipped; promo reads as the primary action'], o2:[5,'max taps, but much of it is confusion'], round:'R1'},
+    a:  {o1:[6.5,'message lands; button still visually weak'],        o2:[6,'honest interest, moderate volume'], round:'R1'},
+    b:  {o1:[5,'action zone cluttered, parsed as 2 steps'],           o2:[4,'taps largely accidental'], round:'R1'},
+    c:  {o1:[8,'screen stays pure'],                                  o2:[3,'few realise the teaser is tappable'], round:'R1'},
+    d:  {o1:[7.5,'pure first paint; toast can annoy'],                o2:[5,'high reach, ad-reflex dismissals'], round:'R1'},
+    e:  {o1:[8,'screen stays pure'],                                  o2:[1.5,'footnote is effectively invisible'], round:'R2'},
+    f:  {o1:[8.5,'pure until the primary job is exhausted'],          o2:[4.5,'peak intent, but fires rarely'], round:'R2'},
+    g:  {o1:[9,'screen ships untouched'],                             o2:[8,'full-screen comprehension; small trust tax'], round:'R2'},
+    h:  {o1:[9,'adds the action the screen was missing'],             o2:[7,'gift framing; reaches notify-tappers only'], round:'R2'},
+    j:  {o1:[8.5,'primary finally reads as primary'],                 o2:[6,'honest, moderate — same as A'], round:'R3'},
+    i:  {o1:[9,'strongest top-to-bottom reading flow'],               o2:[1.5,'footnote invisible'], round:'R3'},
+    k:  {o1:[8.5,'primary dominant; bar still leaks attention'],      o2:[7,'most taps, partly habit-driven'], round:'R3'},
+    k2: {o1:[9.5,'single-objective first paint + strong primary'],    o2:[6.5,'honest but misses fast leavers'], round:'R3'}
+  };
+  const meters=(k)=>{const s=SCORES[k];if(!s)return '';
+    const m=(lb,c,v)=>`<div class="meter"><span class="mlb"><span class="dotp" style="background:${c}"></span>${lb}</span><span class="track"><span class="fill" style="width:${v[0]*10}%;background:${c}"></span></span><span class="val">${v[0]}</span></div><div class="mwhy">${v[1]}</div>`;
+    return `<div class="meters">${m('O1 · message + action',O1C,s.o1)}${m('O2 · TV discovery',O2C,s.o2)}</div>`;};
+
   const root=document.getElementById('root');
   root.innerHTML=OPTS.map(o=>{
     if(o.round) return `<h2 class="round">${o.round}</h2><p class="roundsub">${o.sub}</p>`;
@@ -343,6 +412,7 @@
         <div class="voice"><span>Inner voice</span>${o.voice}</div>
         <div class="row"><div class="ic">⚠</div><div class="tx"><span class="lb">Risk</span>${o.risk}</div></div>
         <div class="pills">${o.pills.map(p=>`<span class="pill ${p.c}">${p.t}</span>`).join('')}</div>
+        ${meters(o.key)}
         <button class="shortlist" data-sl="${o.lett}">☆ Shortlist</button>${o.replay?`<button class="replay" data-replay="${o.key}">${o.replay}</button>`:''}
       </div>
     </div>`;
@@ -400,6 +470,64 @@
   document.querySelectorAll('[data-replay]').forEach(b=>{
     b.onclick=()=>{const k=b.dataset.replay; if(k==='d')playD(); if(k==='f')renderF(1); if(k==='h')renderH(1); if(k==='k2')playK2();};
   });
+
+  /* ===== scatter map ===== */
+  (function(){
+    const W=700,H=440,ml=46,mr=18,mt=16,mb=42;
+    const px=v=>ml+(v/10)*(W-ml-mr), py=v=>H-mb-(v/10)*(H-mt-mb);
+    const NAMES={};OPTS.forEach(o=>{if(o.key)NAMES[o.key]=o.name;});
+    /* label anchor per point to avoid collisions */
+    const LPOS={cur:'r',a:'r',b:'r',c:'r',d:'l',e:'l',f:'r',g:'r',h:'r',j:'b',i:'r',k:'l',k2:'r'};
+    let s='';
+    /* grid + ticks */
+    for(let v=0;v<=10;v+=2){
+      s+=`<line class="grid" x1="${px(v)}" y1="${mt}" x2="${px(v)}" y2="${H-mb}"/>`;
+      s+=`<line class="grid" x1="${ml}" y1="${py(v)}" x2="${W-mr}" y2="${py(v)}"/>`;
+      s+=`<text class="ticklab" x="${px(v)}" y="${H-mb+14}" text-anchor="middle">${v}</text>`;
+      s+=`<text class="ticklab" x="${ml-8}" y="${py(v)+3}" text-anchor="end">${v}</text>`;
+    }
+    /* quadrant guides at 5,5 */
+    s+=`<line class="qline" x1="${px(5)}" y1="${mt}" x2="${px(5)}" y2="${H-mb}"/>`;
+    s+=`<line class="qline" x1="${ml}" y1="${py(5)}" x2="${W-mr}" y2="${py(5)}"/>`;
+    s+=`<text class="qlab" x="${px(9.9)}" y="${py(9.6)}" text-anchor="end">BOTH OBJECTIVES SERVED ↗</text>`;
+    s+=`<text class="qlab" x="${px(0.2)}" y="${py(9.6)}">TV WINS, MESSAGE LOSES</text>`;
+    s+=`<text class="qlab" x="${px(9.9)}" y="${py(0.4)}" text-anchor="end">MESSAGE PURE, TV STARVED</text>`;
+    s+=`<text class="qlab" x="${px(0.2)}" y="${py(0.4)}">NEITHER</text>`;
+    /* axes labels — text tokens, colored key only in subtitle */
+    s+=`<text class="axlab" x="${(ml+W-mr)/2}" y="${H-6}" text-anchor="middle">Objective 1 — message understood + action taken →</text>`;
+    s+=`<text class="axlab" x="12" y="${(mt+H-mb)/2}" transform="rotate(-90 12 ${(mt+H-mb)/2})" text-anchor="middle">Objective 2 — honest TV discovery →</text>`;
+    /* points */
+    Object.keys(SCORES).forEach(k=>{
+      const sc=SCORES[k],x=px(sc.o1[0]),y=py(sc.o2[0]),lett=(k==='cur'?'—':k.toUpperCase());
+      const lp=LPOS[k]||'r';
+      const lx=lp==='r'?x+10:(lp==='l'?x-10:x), ly=lp==='b'?y+18:(lp==='t'?y-11:y+4);
+      const anch=lp==='r'?'start':(lp==='l'?'end':'middle');
+      s+=`<circle class="pt" cx="${x}" cy="${y}" r="6"/>`;
+      s+=`<text class="ptlab" x="${lx}" y="${ly}" text-anchor="${anch}">${lett}</text>`;
+      s+=`<circle class="hit" cx="${x}" cy="${y}" r="15" data-k="${k}"/>`;
+    });
+    document.getElementById('mapwrap').innerHTML=
+      `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Scatter of options: objective 1 vs objective 2">${s}</svg><div class="maptip" id="maptip"></div>`;
+    const tip=document.getElementById('maptip');
+    document.querySelectorAll('.hit').forEach(c=>{
+      c.addEventListener('mouseenter',e=>{
+        const k=c.dataset.k, sc=SCORES[k];
+        tip.innerHTML=`<b>${(k==='cur'?'—':k.toUpperCase())} · ${NAMES[k]||''}</b>
+          <div class="tr"><span class="td" style="background:${O1C}"></span>O1 ${sc.o1[0]} — ${sc.o1[1]}</div>
+          <div class="tr"><span class="td" style="background:${O2C}"></span>O2 ${sc.o2[0]} — ${sc.o2[1]}</div>`;
+        const wrap=document.getElementById('mapwrap'),r=wrap.getBoundingClientRect();
+        const scale=r.width/W;
+        let tx=parseFloat(c.getAttribute('cx'))*scale+14, ty=parseFloat(c.getAttribute('cy'))*(r.height/H)-10;
+        if(tx>r.width-250)tx-=270;
+        tip.style.left=tx+'px';tip.style.top=Math.max(0,ty)+'px';tip.style.opacity=1;
+        c.previousElementSibling.previousElementSibling.classList.add('hot');
+      });
+      c.addEventListener('mouseleave',()=>{tip.style.opacity=0;document.querySelectorAll('.pt').forEach(p=>p.classList.remove('hot'));});
+    });
+    /* table view */
+    document.getElementById('scoretable').innerHTML=`<table><tr><th></th><th>Option</th><th>Round</th><th>O1</th><th>O2</th></tr>`+
+      Object.keys(SCORES).map(k=>`<tr><td><b>${k==='cur'?'—':k.toUpperCase()}</b></td><td>${NAMES[k]||''}</td><td>${SCORES[k].round}</td><td>${SCORES[k].o1[0]}</td><td>${SCORES[k].o2[0]}</td></tr>`).join('')+`</table>`;
+  })();
 
   /* shortlist */
   const KEY='judge_shortlist';
