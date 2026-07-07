@@ -81,6 +81,7 @@
   .grid{stroke:var(--line2);stroke-width:1;}
   .qline{stroke:var(--line);stroke-width:1.5;stroke-dasharray:5 4;}
   .pt{fill:var(--ink);stroke:#fff;stroke-width:2;}
+  .dimpt{opacity:.14;}
   .pt.hot{fill:var(--brand);}
   .hit{fill:transparent;cursor:pointer;}
   .maptip{position:absolute;pointer-events:none;background:var(--ink);color:#fff;border-radius:10px;padding:9px 12px;font-size:11.5px;
@@ -297,6 +298,7 @@
 
 <div class="judgebar">
   <button class="szbtn" id="szbtn">📱 5-inch phone</button>
+  <button class="szbtn" id="fltbtn">★ Shortlist + P</button>
   <span class="t">Your shortlist:</span>
   <span class="picks" id="picks"><span class="none">nothing yet — tap ☆ Shortlist on the options you like</span></span>
   <button class="clear" id="clearbtn">Clear</button>
@@ -530,8 +532,8 @@
       const lp=LPOS[k]||'r';
       const lx=lp==='r'?x+10:(lp==='l'?x-10:x), ly=lp==='b'?y+18:(lp==='t'?y-11:y+4);
       const anch=lp==='r'?'start':(lp==='l'?'end':'middle');
-      s+=`<circle class="pt" cx="${x}" cy="${y}" r="6"/>`;
-      s+=`<text class="ptlab" x="${lx}" y="${ly}" text-anchor="${anch}">${lett}</text>`;
+      s+=`<circle class="pt" data-k="${k}" cx="${x}" cy="${y}" r="6"/>`;
+      s+=`<text class="ptlab" data-k="${k}" x="${lx}" y="${ly}" text-anchor="${anch}">${lett}</text>`;
       s+=`<circle class="hit" cx="${x}" cy="${y}" r="15" data-k="${k}"/>`;
     });
     document.getElementById('mapwrap').innerHTML=
@@ -572,10 +574,40 @@
     localStorage.setItem(KEY,JSON.stringify(picks));
   }
   document.querySelectorAll('[data-sl]').forEach(b=>{
-    b.onclick=()=>{const l=b.dataset.sl; picks=picks.includes(l)?picks.filter(x=>x!==l):[...picks,l]; paint();};
+    b.onclick=()=>{const l=b.dataset.sl; picks=picks.includes(l)?picks.filter(x=>x!==l):[...picks,l]; paint(); applyFilter();};
   });
-  document.getElementById('clearbtn').onclick=()=>{picks=[];paint();};
+  document.getElementById('clearbtn').onclick=()=>{picks=[];paint();applyFilter();};
   paint();
+
+  /* shortlist-only filter (always includes P, the synthesis) */
+  const fltbtn=document.getElementById('fltbtn');
+  let flt=true;
+  function applyFilter(){
+    const keep=new Set([...picks,'P']);
+    document.querySelectorAll('.optrow').forEach(r=>{
+      const lett=r.querySelector('.lett').textContent.trim();
+      r.style.display=(!flt||keep.has(lett))?'':'none';
+    });
+    const kids=[...document.getElementById('root').children];
+    for(let i=0;i<kids.length;i++){
+      if(kids[i].classList.contains('round')){
+        let any=false;
+        for(let j=i+1;j<kids.length&&!kids[j].classList.contains('round');j++){
+          if(kids[j].classList.contains('optrow')&&kids[j].style.display!=='none')any=true;
+        }
+        kids[i].style.display=any?'':'none';
+        if(kids[i+1]&&kids[i+1].classList.contains('roundsub'))kids[i+1].style.display=any?'':'none';
+      }
+    }
+    document.querySelectorAll('.pt[data-k],.ptlab[data-k],.hit[data-k]').forEach(el=>{
+      const k=el.dataset.k, lett=(k==='cur'?'—':k.toUpperCase());
+      el.classList.toggle('dimpt', flt&&!keep.has(lett));
+    });
+    fltbtn.classList.toggle('on',flt);
+    fltbtn.textContent=flt?'★ Showing shortlist + P':'★ Shortlist + P';
+  }
+  fltbtn.onclick=()=>{flt=!flt;applyFilter();};
+  applyFilter();
 
   /* small-phone simulation toggle */
   const szbtn=document.getElementById('szbtn');
