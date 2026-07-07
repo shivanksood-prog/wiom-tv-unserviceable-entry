@@ -178,6 +178,16 @@
   .backhint{position:absolute;top:30px;left:34px;z-index:8;background:var(--ink);color:#fff;font-size:8.5px;font-weight:700;
     border-radius:7px;padding:3px 7px;opacity:.85;}
   .backhint::before{content:"";position:absolute;left:-4px;top:50%;transform:translateY(-50%);border:4px solid transparent;border-right-color:var(--ink);border-left:0;}
+  /* K2: ambient footer strip, delayed entrance */
+  .k2bar{position:absolute;left:0;right:0;bottom:0;z-index:7;background:var(--zebra);border-top:1px solid var(--line2);
+    padding:9px 14px 11px;transform:translateY(110%);transition:transform .55s cubic-bezier(.2,.8,.25,1);}
+  .phone.k2in .k2bar{transform:none;}
+  .k2bar .lbl{font-size:9px;font-weight:700;letter-spacing:.04em;color:var(--sub);margin-bottom:6px;}
+  .k2row{display:flex;align-items:center;gap:9px;text-decoration:none;}
+  .k2row .k2t b{display:block;font-size:11px;font-weight:700;color:var(--ink);line-height:1.3;}
+  .k2row .k2t span{display:block;font-size:9px;color:var(--muted);margin-top:1px;}
+  .k2row .see{margin-left:auto;color:var(--brand);font-weight:700;font-size:11px;white-space:nowrap;}
+
   .confetti-t{margin-top:12px;text-align:center;font-size:15.5px;font-weight:700;}
   .giftlead{width:100%;margin-top:14px;font-size:10px;font-weight:700;color:var(--muted);display:flex;align-items:center;gap:8px;}
   .giftlead::after{content:"";flex:1;height:1px;background:var(--line2);}
@@ -312,7 +322,14 @@
     risk:`The TV strip likely collects the MOST taps of any quiet variant — partly muscle memory, not intent. Validate with wiom.tv bounce rate before trusting it.`,
     pills:[P('Message: two zones','g'),P('Tap intent: habit-driven','a'),P('Trust: none','g'),P('Reach: highest taps','g')],
     body:`${gfx}${ttl}${addr}${inbodybtn(C.button,1)}${inbodylogin}`,
-    bar:`<div class="bottombar" style="padding-bottom:12px;"><a class="tvquiet" style="margin-top:0" href="${TV_URL}" onclick="return false">${tvframe('sm')}<div class="qt"><b>तब तक व्योम TV देखें — <span class="fr">100% फ्री</span></b><span>ढेरों लाइव चैनल • न्यूज़ • मूवी • भक्ति</span></div><span class="chev">›</span></a></div>`}
+    bar:`<div class="bottombar" style="padding-bottom:12px;"><a class="tvquiet" style="margin-top:0" href="${TV_URL}" onclick="return false">${tvframe('sm')}<div class="qt"><b>तब तक व्योम TV देखें — <span class="fr">100% फ्री</span></b><span>ढेरों लाइव चैनल • न्यूज़ • मूवी • भक्ति</span></div><span class="chev">›</span></a></div>`},
+   {key:'k2',lett:'K2',name:'K refined — subordinate the TV on all four axes',hint:'watch the footer arrive',replay:'↺ Replay entrance',
+    glance:`First paint is <b>single-objective</b> — message, address, one strong button. ~2s later a quiet footer fades in, labelled <b>"तब तक के लिए"</b> — footer grammar (no card, no border), so it reads as the epilogue of the same story, not a second pitch.`,
+    voice:`"नेट नहीं है… ठीक है, ये बटन। — अरे, तब तक फ्री TV भी है।"`,
+    risk:`Habit taps drop (nothing button-like at the bottom) but aren't zero — the slot still attracts thumbs. Fast leavers who exit within 2s never see TV at all. Needs timer + animation in Flutter.`,
+    pills:[P('Message: single at first paint','g'),P('Tap intent: honest','g'),P('Trust: none','g'),P('Reach: good, not max','a')],
+    body:`${gfx}${ttl}${addr}${inbodybtn(C.button,1)}${inbodylogin}`, bar:``,
+    extra:`<div class="k2bar"><div class="lbl">तब तक के लिए</div><a class="k2row" href="${TV_URL}" onclick="return false">${tvframe('sm')}<div class="k2t"><b>व्योम TV — 100% फ्री</b><span>ढेरों लाइव चैनल • न्यूज़ • मूवी • भक्ति</span></div><span class="see">देखें ›</span></a></div>`}
   ];
 
   const root=document.getElementById('root');
@@ -374,9 +391,14 @@
   }
   renderH(1);
 
+  /* K2: delayed footer entrance */
+  const phK2=document.getElementById('ph-k2');
+  const playK2=()=>{phK2.classList.remove('k2in');setTimeout(()=>phK2.classList.add('k2in'),2000);};
+  playK2();
+
   /* replays */
   document.querySelectorAll('[data-replay]').forEach(b=>{
-    b.onclick=()=>{const k=b.dataset.replay; if(k==='d')playD(); if(k==='f')renderF(1); if(k==='h')renderH(1);};
+    b.onclick=()=>{const k=b.dataset.replay; if(k==='d')playD(); if(k==='f')renderF(1); if(k==='h')renderH(1); if(k==='k2')playK2();};
   });
 
   /* shortlist */
