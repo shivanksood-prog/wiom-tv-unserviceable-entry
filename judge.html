@@ -235,6 +235,29 @@
   .k2row .k2t span{display:block;font-size:9px;color:var(--muted);margin-top:1px;}
   .k2row .see{margin-left:auto;color:var(--brand);font-weight:700;font-size:11px;white-space:nowrap;}
 
+  /* Round 3: availability-info components */
+  .gfxwrap{position:relative;}
+  .gfxbadge{position:absolute;left:50%;bottom:0;transform:translateX(-50%);white-space:nowrap;background:var(--brand100);
+    border:1px solid var(--brand300);border-radius:999px;padding:5px 11px;font-size:10px;font-weight:700;color:var(--ink);
+    text-decoration:none;box-shadow:0 3px 10px rgba(22,16,33,.14);}
+  .gfxbadge .see{color:var(--brand);}
+  .msent{margin-top:14px;text-align:center;font-size:12.5px;color:var(--ink);line-height:1.55;}
+  .msent a{color:var(--brand);font-weight:700;text-decoration:none;white-space:nowrap;}
+  .availcard{margin-top:12px;width:100%;border:1px solid var(--line2);border-radius:13px;overflow:hidden;background:#fff;}
+  .availcard .ahead{font-size:9.5px;font-weight:700;color:var(--sub);padding:9px 12px 5px;}
+  .availrow{display:flex;align-items:center;gap:9px;padding:9px 12px;font-size:11.5px;text-decoration:none;color:var(--ink);}
+  .availrow+.availrow{border-top:1px solid var(--line2);}
+  .availrow .st{width:18px;height:18px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;flex:0 0 auto;}
+  .availrow .st.no{background:var(--red100);color:var(--red);}
+  .availrow .st.yes{background:var(--green100);color:var(--green);}
+  .availrow b{font-size:11.5px;}
+  .availrow .sub2{color:var(--muted);font-size:9px;display:block;margin-top:1px;}
+  .availrow .see{margin-left:auto;color:var(--brand);font-weight:700;font-size:10.5px;white-space:nowrap;}
+  .barlinks{display:flex;align-items:center;justify-content:space-between;padding:9px 4px 5px;}
+  .barlinks .ll{font-size:11px;color:var(--ink);}
+  .barlinks .arr{color:var(--brand);font-weight:700;}
+  .barlinks .tvl{font-size:11px;font-weight:700;color:var(--brand);text-decoration:none;}
+
   .confetti-t{margin-top:12px;text-align:center;font-size:15.5px;font-weight:700;}
   .giftlead{width:100%;margin-top:14px;font-size:10px;font-weight:700;color:var(--muted);display:flex;align-items:center;gap:8px;}
   .giftlead::after{content:"";flex:1;height:1px;background:var(--line2);}
@@ -333,35 +356,13 @@
     body:`${gfx}${ttl}${addr}`, bar:bar(),
     extra:`<div class="snack">${tvframe('sm')}<div class="qt"><b>व्योम TV अभी फ्री उपलब्ध है</b><span>ढेरों लाइव चैनल • बिल्कुल फ्री</span></div><span class="go">देखें ›</span><span class="x" data-x>✕</span></div>`},
 
-   {round:"Round 2 — TV separated in flow / time", sub:"The screen stays single-objective; TV appears at a chosen moment."},
    {key:'e',lett:'E',name:'Text footnote',
     glance:`They don't see it. Muted grey small text under the address is exactly what a scanning eye skips.`,
     voice:`<i>(nothing — it never entered their world)</i>`,
     risk:`None. The few readers who catch it understand it perfectly. Near-zero volume, absolutely zero harm.`,
     pills:[P('Message: perfect','g'),P('Tap intent: honest','g'),P('Trust: none','g'),P('Reach: near-zero','r')],
     body:`${gfx}${ttl}${addr}${footnote}`, bar:bar()},
-   {key:'f',lett:'F',name:'Promote TV on the 2nd fail',hint:'tap the pink button',replay:'↺ Reset to 1st fail',
-    glance:`First fail: clean screen. Second fail: the app <i>responds to their frustration</i> — "yahan bhi nahi, but here's something you CAN have."`,
-    voice:`"यहाँ भी नहीं… 😮‍💨 चलो, तब तक TV ही सही।"`,
-    risk:`Feels empathetic at the exact peak of receptivity — but most rejected users leave after the FIRST fail and never see it. Converts well, fires rarely.`,
-    pills:[P('Message: perfect','g'),P('Tap intent: peak','g'),P('Trust: none','g'),P('Reach: small','r')],
-    body:``, bar:``,
-    extra:`<div class="stepchip" id="chip-f">पहला पता</div><div class="searching"><div class="spin"></div>दूसरा पता खोज रहे हैं…</div>`},
-   {key:'g',lett:'G',name:'Exit-intent takeover',hint:'tap the back arrow',
-    glance:`They pressed back to leave and got a full dark screen instead. Startle first — then, because nothing competes, the highest comprehension of "Wiom TV exists and is free" of any option.`,
-    voice:`"अरे, जाने तो दो…… रुको — फ्री TV?"`,
-    risk:`Back-press interception is a pattern they know from spammy cleaner/loan apps. Big obvious "नहीं, धन्यवाद" + once-per-session cap keeps it on the right side of the line.`,
-    pills:[P('Message: untouched','g'),P('Tap intent: interrupt-driven','a'),P('Trust: hijack pattern','r'),P('Reach: highest','g')],
-    body:`${gfx}${ttl}${addr}`, bar:bar(), useback:1,
-    extra:`<div class="backhint">← टैप करें</div><div class="takeover"><div class="rukiye">रुकिए! 📺</div><div class="sub">जाने से पहले — व्योम TV आपके फोन पर<br><b>बिल्कुल फ्री</b> है, अभी से</div><div class="tvbig tvframe"><div class="mosaic"><span></span><span></span><span></span><span></span></div><div class="live"><i></i>LIVE</div><div class="play"><b><span class="playtri"></span></b></div></div><div class="genres">न्यूज़ • मूवी • भक्ति • मनोरंजन • खेल</div><div class="cta">फ्री में देखना शुरू करें</div><div class="nope" data-nope>नहीं, धन्यवाद</div></div>`},
-   {key:'h',lett:'H',name:'Notify-me → TV as the reward',hint:'tap 🔔 button',replay:'↺ Reset',
-    glance:`The only option where the user feels <b>heard</b> — "व्योम आए तो मुझे बताएं" matches exactly what they want right now. TV then arrives as a gift after a completed action, not a sales pitch.`,
-    voice:`"हाँ, बताना जब आ जाए…… अरे वाह — तब तक फ्री TV भी?"`,
-    risk:`TV reaches only notify-tappers. And the promise must be REAL — a notification that never comes converts goodwill into a broken promise.`,
-    pills:[P('Message: perfect','g'),P('Tap intent: gift-framed','g'),P('Trust: only if promise real','r'),P('Reach: notify-tappers','a')],
-    body:``, bar:``},
-
-   {round:"Round 3 — fixing the primary button itself", sub:"The user's complaint decoded: the pink-500 button never read as \"the\" action."},
+   {round:"Round 2 — fixing the primary button itself", sub:"The user's complaint decoded: the pink-500 button never read as \"the\" action."},
    {key:'j',lett:'J',name:'Strengthen the primary (brand-600, white text)',
     glance:`Finally ONE unambiguous "press this." Everything else — including the TV card — visually recedes into "optional."`,
     voice:`"ठीक है — ये बटन दबाना है।"`,
@@ -388,25 +389,53 @@
     risk:`Habit taps drop (nothing button-like at the bottom) but aren't zero. Fast leavers who exit within 2s never see TV. Small phones: the graphic must be the FLEX element — it shrinks so message→address→button always fit above the fold (see the 5-inch toggle: K2 adapts, K clips). Needs timer + animation + LayoutBuilder in Flutter.`,
     pills:[P('Message: single at first paint','g'),P('Tap intent: honest','g'),P('Trust: none','g'),P('Reach: good, not max','a')],
     body:`${gfx}${ttl}${addr}${inbodybtn(C.button,1)}${inbodylogin}`, bar:``,
-    extra:`<div class="k2bar"><div class="lbl">तब तक के लिए</div><a class="k2row" href="${TV_URL}" onclick="return false">${tvframe('sm')}<div class="k2t"><b>व्योम TV — 100% फ्री</b><span>ढेरों लाइव चैनल • न्यूज़ • मूवी • भक्ति</span></div><span class="see">देखें ›</span></a></div>`}
+    extra:`<div class="k2bar"><div class="lbl">तब तक के लिए</div><a class="k2row" href="${TV_URL}" onclick="return false">${tvframe('sm')}<div class="k2t"><b>व्योम TV — 100% फ्री</b><span>ढेरों लाइव चैनल • न्यूज़ • मूवी • भक्ति</span></div><span class="see">देखें ›</span></a></div>`},
+
+   {round:"Round 3 — NEW: O2 as availability information, not promo", sub:"Same screen, zero flow tricks. Instead of a promo block competing for attention, Wiom TV surfaces inside the answer the user is already reading: \"what can I get here?\""},
+   {key:'l',lett:'L',name:'Badge on the illustration',
+    glance:`The offer lives inside the illustration's own 240px of decorative space — a small pill pinned to the artwork. The message column gains no new block at all; the eye meets it while already looking at the picture.`,
+    voice:`"अरे — फोटो के नीचे, फ्री TV?"`,
+    risk:`Small tap target; some users read badges-on-art as decoration and skip. Pill must not cover key artwork, and needs a real hit area in Flutter (Stack + InkWell).`,
+    pills:[P('Message: untouched','g'),P('Tap intent: honest','g'),P('Trust: none','g'),P('Reach: modest','a')],
+    body:`<div class="gfxwrap">${gfx}<a class="gfxbadge" href="${TV_URL}" onclick="return false">📺 व्योम TV <b>फ्री</b> <span class="see">देखें ›</span></a></div>${ttl}${addr}`, bar:bar()},
+   {key:'m',lett:'M',name:'One sentence inside the message',
+    glance:`O2 becomes the message's own second sentence — same type size as the subtitle, plain text, one pink "अभी देखें ›". Everyone who reads the message reads it; it grabs nobody who doesn't.`,
+    voice:`"उपलब्ध नहीं… पर TV फ्री मिल रहा है।"`,
+    risk:`Low visual pull = modest taps. Purely copy-level, so it's the easiest possible Flutter change after E — one Text.rich with a tap recognizer.`,
+    pills:[P('Message: intact','g'),P('Tap intent: honest','g'),P('Trust: none','g'),P('Reach: modest','a')],
+    body:`${gfx}${ttl}${addr}<div class="msent">पर व्योम TV आज से <b>फ्री</b> देख सकते हैं — <a href="${TV_URL}" onclick="return false">अभी देखें ›</a></div>`, bar:bar()},
+   {key:'n',lett:'N',name:'Availability list — ✗ नेट, ✓ TV',
+    glance:`The screen answers the user's actual question — "what CAN I get here?" — as a two-row status list: red ✗ व्योम नेट (अभी नहीं), green ✓ व्योम TV (फ्री, अभी). TV stops being a promo and becomes information, read in O1's own grammar.`,
+    voice:`"नेट नहीं है… पर TV है। चलो, देखते हैं।"`,
+    risk:`The green ✓ row naturally draws the eye after the ✗ — that's by design, but the ✗ must stay first and the button must stay the only button. Slightly more reading load than a plain subtitle.`,
+    pills:[P('Message: strengthened','g'),P('Tap intent: info-framed','g'),P('Trust: none','g'),P('Reach: good','g')],
+    body:`${gfx}${ttl}${addr}<div class="availcard"><div class="ahead">इस इलाके में अभी</div><div class="availrow"><span class="st no">✗</span><div><b>व्योम नेट</b><span class="sub2">जल्द आ रहा है</span></div></div><a class="availrow" href="${TV_URL}" onclick="return false"><span class="st yes">✓</span><div><b>व्योम TV</b><span class="sub2">ढेरों लाइव चैनल • 100% फ्री</span></div><span class="see">देखें ›</span></a></div>`, bar:bar()},
+   {key:'o',lett:'O',name:'Text link beside the login link',
+    glance:`The bar keeps exactly one button; beneath it, login link on the left and a small "📺 फ्री TV ›" on the right — link grammar, thumb-reachable, no card anywhere.`,
+    voice:`"बटन… और ये छोटा-सा TV लिंक भी है।"`,
+    risk:`Shares the row with the login link — mis-taps between the two, and both are tertiary. The strip stays visually clean but discovery is modest and partly habit-driven (it sits in the thumb zone).`,
+    pills:[P('Message: OK','g'),P('Tap intent: partly habit','a'),P('Trust: none','g'),P('Reach: moderate','a')],
+    body:`${gfx}${ttl}${addr}`,
+    bar:`<div class="bottombar"><div class="pribtn">${C.button}</div><div class="barlinks"><span class="ll">${C.login} <span class="arr">›</span></span><a class="tvl" href="${TV_URL}" onclick="return false">📺 फ्री TV ›</a></div></div>`}
   ];
 
   /* ===== dual-objective scores (assessed 0-10) ===== */
   const O1C='#6D17CE', O2C='#D9008D';
   const SCORES={
-    cur:{o1:[3,'message skipped; promo reads as the primary action'], o2:[5,'max taps, but much of it is confusion'], round:'R1'},
-    a:  {o1:[6.5,'message lands; button still visually weak'],        o2:[6,'honest interest, moderate volume'], round:'R1'},
-    b:  {o1:[5,'action zone cluttered, parsed as 2 steps'],           o2:[4,'taps largely accidental'], round:'R1'},
-    c:  {o1:[8,'screen stays pure'],                                  o2:[3,'few realise the teaser is tappable'], round:'R1'},
-    d:  {o1:[7.5,'pure first paint; toast can annoy'],                o2:[5,'high reach, ad-reflex dismissals'], round:'R1'},
-    e:  {o1:[8,'screen stays pure'],                                  o2:[1.5,'footnote is effectively invisible'], round:'R2'},
-    f:  {o1:[8.5,'pure until the primary job is exhausted'],          o2:[4.5,'peak intent, but fires rarely'], round:'R2'},
-    g:  {o1:[9,'screen ships untouched'],                             o2:[8,'full-screen comprehension; small trust tax'], round:'R2'},
-    h:  {o1:[9,'adds the action the screen was missing'],             o2:[7,'gift framing; reaches notify-tappers only'], round:'R2'},
-    j:  {o1:[8.5,'primary finally reads as primary'],                 o2:[6,'honest, moderate — same as A'], round:'R3'},
-    i:  {o1:[9,'strongest top-to-bottom reading flow'],               o2:[1.5,'footnote invisible'], round:'R3'},
-    k:  {o1:[8.5,'primary dominant; bar still leaks attention'],      o2:[7,'most taps, partly habit-driven'], round:'R3'},
-    k2: {o1:[9.5,'single-objective first paint + strong primary'],    o2:[6.5,'honest but misses fast leavers'], round:'R3'}
+    cur:{o1:[3,'message skipped; promo reads as the primary action'], o2:[5,'max taps, but much of it is confusion'], round:'Placement'},
+    a:  {o1:[6.5,'message lands; button still visually weak'],        o2:[6,'honest interest, moderate volume'], round:'Placement'},
+    b:  {o1:[5,'action zone cluttered, parsed as 2 steps'],           o2:[4,'taps largely accidental'], round:'Placement'},
+    c:  {o1:[8,'screen stays pure'],                                  o2:[3,'few realise the teaser is tappable'], round:'Placement'},
+    d:  {o1:[7.5,'pure first paint; toast can annoy'],                o2:[5,'high reach, ad-reflex dismissals'], round:'Placement'},
+    e:  {o1:[8,'screen stays pure'],                                  o2:[1.5,'footnote is effectively invisible'], round:'Placement'},
+    j:  {o1:[8.5,'primary finally reads as primary'],                 o2:[6,'honest, moderate — same as A'], round:'Primary fix'},
+    i:  {o1:[9,'strongest top-to-bottom reading flow'],               o2:[1.5,'footnote invisible'], round:'Primary fix'},
+    k:  {o1:[8.5,'primary dominant; bar still leaks attention'],      o2:[7,'most taps, partly habit-driven'], round:'Primary fix'},
+    k2: {o1:[9.5,'single-objective first paint + strong primary'],    o2:[6.5,'honest but misses fast leavers'], round:'Primary fix'},
+    l:  {o1:[8.5,'message column gains no new block'],                o2:[5.5,'seen while viewing the art; small target'], round:'Info-merge'},
+    m:  {o1:[8.5,'text-grade, read as part of the message'],          o2:[5,'read by all readers, pulls few taps'], round:'Info-merge'},
+    n:  {o1:[9,'strengthens the answer — ✗ नेट first, structured'],   o2:[7,'TV read as availability info, honest interest'], round:'Info-merge'},
+    o:  {o1:[8,'bar keeps one button; links stay tertiary'],          o2:[4.5,'modest, partly habit (thumb zone)'], round:'Info-merge'}
   };
   const meters=(k)=>{const s=SCORES[k];if(!s)return '';
     const m=(lb,c,v)=>`<div class="meter"><span class="mlb"><span class="dotp" style="background:${c}"></span>${lb}</span><span class="track"><span class="fill" style="width:${v[0]*10}%;background:${c}"></span></span><span class="val">${v[0]}</span></div><div class="mwhy">${v[1]}</div>`;
@@ -440,38 +469,6 @@
   phD.querySelector('[data-x]').onclick=()=>phD.classList.remove('snackin');
   playD();
 
-  /* F: 2nd-fail flow */
-  const phF=document.getElementById('ph-f');
-  function renderF(stage){
-    document.getElementById('chip-f').textContent = stage===1 ? 'पहला पता' : 'दूसरा पता';
-    document.getElementById('body-f').innerHTML = stage===1 ? `${gfx}${ttl}${addr}` : `${gfx}<div class="ttl">यह इलाका भी अभी उपलब्ध नहीं है</div>${addr2}${whitecard()}`;
-    document.getElementById('bar-f').innerHTML = bar();
-    phF.querySelector('.pribtn').onclick = stage===1 ? ()=>{
-      phF.classList.add('searching-on');
-      setTimeout(()=>{phF.classList.remove('searching-on');renderF(2);},1200);
-    } : null;
-  }
-  renderF(1);
-
-  /* G: takeover */
-  const phG=document.getElementById('ph-g');
-  phG.querySelector('[data-back]').onclick=()=>phG.classList.add('tk');
-  phG.querySelector('[data-nope]').onclick=()=>phG.classList.remove('tk');
-
-  /* H: notify flow */
-  const phH=document.getElementById('ph-h');
-  function renderH(stage){
-    if(stage===1){
-      document.getElementById('body-h').innerHTML=`${gfx}${ttl}${addr}`;
-      document.getElementById('bar-h').innerHTML=`<div class="bottombar"><div class="pribtn">${C.button}</div><button class="secbtn" data-notify>🔔 व्योम आए तो मुझे बताएं</button><div class="loginlink">${C.login} <span class="arr">›</span></div></div>`;
-      phH.querySelector('[data-notify]').onclick=()=>renderH(2);
-    } else {
-      document.getElementById('body-h').innerHTML=`${gfx}<div class="confetti-t">धन्यवाद! व्योम आते ही<br>आपको बता देंगे 🎉</div><div class="giftlead">तब तक के लिए, हमारी तरफ़ से</div>${whitecard()}`;
-      document.getElementById('bar-h').innerHTML=`<div class="bottombar"><div class="pribtn">ठीक है</div></div>`;
-    }
-  }
-  renderH(1);
-
   /* K2: delayed footer entrance */
   const phK2=document.getElementById('ph-k2');
   const playK2=()=>{phK2.classList.remove('k2in');setTimeout(()=>phK2.classList.add('k2in'),2000);};
@@ -479,7 +476,7 @@
 
   /* replays */
   document.querySelectorAll('[data-replay]').forEach(b=>{
-    b.onclick=()=>{const k=b.dataset.replay; if(k==='d')playD(); if(k==='f')renderF(1); if(k==='h')renderH(1); if(k==='k2')playK2();};
+    b.onclick=()=>{const k=b.dataset.replay; if(k==='d')playD(); if(k==='k2')playK2();};
   });
 
   /* ===== scatter map ===== */
@@ -488,7 +485,7 @@
     const px=v=>ml+(v/10)*(W-ml-mr), py=v=>H-mb-(v/10)*(H-mt-mb);
     const NAMES={};OPTS.forEach(o=>{if(o.key)NAMES[o.key]=o.name;});
     /* label anchor per point to avoid collisions */
-    const LPOS={cur:'r',a:'r',b:'r',c:'r',d:'l',e:'l',f:'r',g:'r',h:'r',j:'b',i:'r',k:'l',k2:'r'};
+    const LPOS={cur:'r',a:'r',b:'r',c:'r',d:'l',e:'l',j:'t',i:'r',k:'l',k2:'r',l:'r',m:'l',n:'r',o:'r'};
     let s='';
     /* grid + ticks */
     for(let v=0;v<=10;v+=2){
