@@ -173,14 +173,14 @@
   const ADDR = { nm:"Rajouri Garden", ad:"Rajouri Garden, New Delhi, Delhi 110027, India" };
   const TV = { lbl:"तब तक के लिए", h:"व्योम TV — 100% फ्री", sub:"ढेरों लाइव चैनल • न्यूज़ • मूवी • भक्ति", see:"देखें ›" };
 
-  /* renamed options (old codenames kept as trace chips) */
+  /* options — selection screen is English; the mock itself stays Hindi (real app copy) */
   const OPTIONS = [
-    { key:'toast', name:'टोस्ट', was:'D', final:true,
-      desc:'स्क्रीन बिल्कुल वैसी ही रहती है। 1 सेकंड बाद नीचे से "तब तक के लिए" टोस्ट स्लाइड करता है — पूरा टोस्ट टैप होता है, ✕ से हटता है।' },
-    { key:'footer', name:'फ़ुटर बटन', was:'K2', final:true,
-      desc:'गहरा पिंक बटन मैसेज के ठीक नीचे आ जाता है (एक ही नज़र में मैसेज → एक्शन)। 2 सेकंड बाद पूरा फ़ुटर एक बटन की तरह स्लाइड-इन होता है।' },
-    { key:'before', name:'अभी का ऐप', was:null, final:false,
-      desc:'आज की प्रोडक्शन स्क्रीन, तुलना के लिए — कोई Wiom TV एंट्री नहीं।' }
+    { key:'toast', name:'Option 1 · Toast', final:true,
+      desc:'The screen stays exactly as it is. After 1 second a "तब तक के लिए" toast slides up from the bottom — the whole toast is tappable, ✕ dismisses it.' },
+    { key:'footer', name:'Option 2 · Footer Button', final:true,
+      desc:'The strong pink button moves up right under the message (message → action in one glance). After 2 seconds the whole footer slides in as one big button.' },
+    { key:'before', name:'Current App', final:false,
+      desc:'Today\'s production screen, for comparison — no Wiom TV entry.' }
   ];
 
   const statusbar=()=>`<div class="statusbar"><span>4:35</span><span class="r"><span>📶</span><span>🔋50%</span></span></div>`;
@@ -217,24 +217,23 @@
     const allDone=OPTIONS.every(o=>viewed.has(o.key));
 
     vp.innerHTML=`<div class="menu">
-      <div class="kick">Wiom TV एंट्री · फ़ाइनल प्रोटोटाइप</div>
-      <h1>एक विकल्प चुनें,<br>पूरी स्क्रीन पर देखें</h1>
-      <div class="sub">अनसर्विसेबल स्क्रीन पर Wiom TV की एंट्री के दो फ़ाइनल डिज़ाइन। टैप करते ही स्क्रीन उसी विकल्प में बदल जाएगी — देखने के बाद बाकी विकल्प फिर दिखेंगे।</div>
+      <div class="kick">Wiom TV Entry · Final Prototype</div>
+      <h1>Pick an option,<br>see it full-screen</h1>
+      <div class="sub">Two final designs for the Wiom TV entry on the unserviceable screen. Tap an option and the screen becomes that design — when you're done, the other options are shown again.</div>
       <div class="cards">
         ${OPTIONS.map(o=>`
           <button class="card ${viewed.has(o.key)?'viewed':''} ${(!viewed.has(o.key)&&o.key===nextKey&&viewed.size>0)?'next':''}" data-k="${o.key}">
             <div class="row1">
               <span class="nm">${o.name}</span>
-              ${o.final?`<span class="badge final">फ़ाइनल</span>`:`<span class="badge base">तुलना</span>`}
-              ${o.was?`<span class="badge was">पहले: ${o.was}</span>`:''}
-              ${viewed.has(o.key)?`<span class="badge done">✓ देख लिया</span>`:''}
+              ${o.final?`<span class="badge final">FINAL</span>`:`<span class="badge base">Baseline</span>`}
+              ${viewed.has(o.key)?`<span class="badge done">✓ Viewed</span>`:''}
             </div>
             <div class="desc">${o.desc}</div>
-            <div class="go">${viewed.has(o.key)?'फिर से देखें':'देखें'} ›</div>
+            <div class="go">${viewed.has(o.key)?'View again':'View'} ›</div>
           </button>`).join('')}
       </div>
-      ${allDone?`<div class="alldone">✓ सभी विकल्प देख लिए — फ़ाइनल दो: टोस्ट + फ़ुटर बटन</div>`
-               :`<div class="hint">हर विकल्प के अंदर एरिया / शहर / सर्च वेरिएंट भी बदल सकते हैं</div>`}
+      ${allDone?`<div class="alldone">✓ All options viewed — the final two: Option 1 (Toast) + Option 2 (Footer Button)</div>`
+               :`<div class="hint">Inside each option you can also switch the एरिया / शहर / सर्च variants</div>`}
     </div>`;
 
     vp.querySelectorAll('.card').forEach(el=>{
@@ -244,13 +243,13 @@
 
   /* ===== option experience ===== */
   const viewChrome=(o)=>`
-    <button class="exit" id="exit"><span class="b">‹</span> सभी विकल्प</button>
+    <button class="exit" id="exit"><span class="b">‹</span> All options</button>
     <div class="nav"><div class="navseg" id="varseg">
       <button data-v="area" class="${variant==='area'?'on':''}">एरिया</button>
       <button data-v="city" class="${variant==='city'?'on':''}">शहर</button>
       <button data-v="searched" class="${variant==='searched'?'on':''}">सर्च</button>
     </div></div>
-    <button class="nextprompt" id="nextprompt">✓ ${o.name} देख लिया — <span class="b">बाकी विकल्प ›</span></button>`;
+    <button class="nextprompt" id="nextprompt">✓ Seen ${o.name.split(' · ')[0]} — <span class="b">other options ›</span></button>`;
 
   function renderView(){
     clearTimers();
