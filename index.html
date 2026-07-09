@@ -243,7 +243,7 @@
   }
 
   /* ===== option experience ===== */
-  const chrome=(o)=>`
+  const viewChrome=(o)=>`
     <button class="exit" id="exit"><span class="b">‹</span> सभी विकल्प</button>
     <div class="nav"><div class="navseg" id="varseg">
       <button data-v="area" class="${variant==='area'?'on':''}">एरिया</button>
@@ -261,7 +261,7 @@
 
     if(view==='footer'){
       /* FINAL फ़ुटर बटन (K2): strong button under the message; whole footer = one button, arrives at 2s */
-      vp.innerHTML = chrome(o)+statusbar()+appbar()+
+      vp.innerHTML = viewChrome(o)+statusbar()+appbar()+
         `<div class="body k2mode">${contentFor(c)}
            <button class="pribtn strong inbody">${c.button}</button>
            <div class="loginlink">${LOGIN_CTA} <span class="arr">›</span></div>
@@ -273,7 +273,7 @@
       timer=setTimeout(()=>vp.classList.add('k2in'),2000);
     } else {
       /* अभी का ऐप + FINAL टोस्ट (D): production screen (pinned bar); toast adds the 1s "तब तक के लिए" snackbar */
-      vp.innerHTML = chrome(o)+statusbar()+appbar()+
+      vp.innerHTML = viewChrome(o)+statusbar()+appbar()+
         `<div class="body">${contentFor(c)}</div>
          <div class="bottombar">
            <button class="pribtn">${c.button}</button>
