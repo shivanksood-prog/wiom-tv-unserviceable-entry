@@ -235,11 +235,14 @@
 <script>
   const TV_URL = "https://wiom.tv";
 
-  /* real wiom.tv channel streams (from wiom.tv homepage; CORS-open, verified) — fallback chain */
+  /* real wiom.tv channel streams — fallback chain ordered by STABILITY:
+     ranked on 14d live analytics (playback_start/error/stall rates per channel, wiom.tv analytics.db)
+     + probed from this origin (CORS, manifest→variant→segment chain, latency). Dangal TV = most-watched
+     AND most stable (71% start rate, Akamai, fastest fetch chain). */
   const STREAMS = [
-    { n:"9XM",          u:"https://9xjio.wiseplayout.com/9XM/master.m3u8" },
-    { n:"YRF Music",    u:"https://cdn-uw2-prod.tsv2.amagi.tv/linear/amg01412-xiaomiasia-yrfmusic-xiaomi/playlist.m3u8" },
-    { n:"B4U भोजपुरी",  u:"https://cdnb4u.wiseplayout.com/B4U_Bhojpuri/master.m3u8" }
+    { n:"Dangal TV",   u:"https://live-dangal.akamaized.net/liveabr/playlist.m3u8" },
+    { n:"Dangal 2",    u:"https://live-dangal2.akamaized.net/liveabr/playlist.m3u8" },
+    { n:"NDTV India",  u:"https://ndtvindiaelemarchana.akamaized.net/hls/live/2003679/ndtvindia/master.m3u8" }
   ];
 
   /* copy = verbatim from live app's new_language_data.json (hi), LOCATION_UNSERVICEABLE_* */
