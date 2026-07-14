@@ -154,15 +154,17 @@
   .k2row .k2t span{display:block;font-size:11.5px;color:var(--neutral700);margin-top:2px;}
   .k2row .see{color:var(--brand600);font-weight:700;font-size:14px;white-space:nowrap;}
 
-  /* ===== OPTION 3 "लाइव एम्बेड" — condensed screen + real wiom.tv playing in a theatre band ===== */
-  .body.tmode{bottom:334px;padding-top:14px;align-items:stretch;}
-  @media(max-height:640px){.body.tmode{bottom:286px;}}
-  .compacthero{display:flex;align-items:center;gap:12px;width:100%;}
-  .gfx.sm{width:104px;height:104px;}
-  @media(max-height:640px){.gfx.sm{width:84px;height:84px;}}
-  .compacthero .ht{flex:1;min-width:0;}
-  .compacthero .title{margin-top:0;text-align:left;font-size:18px;}
-  .compacthero .subtitle{margin-top:8px;text-align:left;font-size:13px;color:var(--neutral700);}
+  /* ===== OPTION 3 "लाइव एम्बेड" — condensed screen (same centered grammar as production, just smaller) + theatre band ===== */
+  .body.tmode{bottom:334px;padding-top:0;justify-content:center;}
+  .gfx.md{width:118px;height:118px;}
+  .title.compact{font-size:18px;margin-top:12px;}
+  .subtitle.compact{font-size:13.5px;margin-top:10px;color:var(--neutral700);}
+  .body.tmode .addrcard{margin-top:14px;padding:12px 16px;}
+  .body.tmode .inbody{margin-top:16px;}
+  @media(max-height:640px){
+    .body.tmode{bottom:286px;justify-content:flex-start;padding-top:10px;}
+    .gfx.md{width:88px;height:88px;}
+  }
   .theatre{position:absolute;left:0;right:0;bottom:0;z-index:8;display:block;background:var(--neutral900);
     border-radius:22px 22px 0 0;padding:13px 16px 16px;text-decoration:none;cursor:pointer;
     box-shadow:0 -12px 34px rgba(22,16,33,.35);
@@ -185,9 +187,13 @@
     color:var(--neutral500);font-size:12px;}
   .tcta{margin-top:12px;}
 
-  /* ===== OPTION 4 "व्योम साथी" — conversational character narrates the page ===== */
-  .chatwrap{position:absolute;top:76px;left:0;right:0;bottom:158px;overflow-y:auto;padding:14px 16px 10px;}
+  /* ===== OPTION 4 "व्योम साथी" — conversational character narrates the page (with voice) ===== */
+  .chatwrap{position:absolute;top:76px;left:0;right:0;bottom:0;overflow-y:auto;padding:14px 16px 24px;}
   .chathead{display:flex;align-items:center;gap:12px;padding-bottom:12px;border-bottom:1px solid var(--neutral200);}
+  .soundpill{margin-left:auto;flex:0 0 auto;display:inline-flex;align-items:center;gap:5px;font-family:inherit;
+    background:var(--baseWhite);border:1px solid var(--neutral200);border-radius:999px;padding:7px 12px;
+    font-size:12px;font-weight:700;color:var(--neutral900);cursor:pointer;}
+  .soundpill.off{color:var(--neutral500);font-weight:600;}
   .avatar{width:60px;height:60px;flex:0 0 auto;animation:bob 3.2s ease-in-out infinite;}
   @keyframes bob{0%,100%{transform:translateY(0);}50%{transform:translateY(-3px);}}
   .avatar .eye{transform-origin:center;transform-box:fill-box;animation:blink 4.6s infinite;}
@@ -202,8 +208,17 @@
   .bubble.in{opacity:1;transform:none;}
   .bubble b{font-weight:700;}
   .bubble.tv{background:var(--brand100);border-color:var(--brand300);}
-  .bubble .tvrow{display:flex;align-items:center;gap:10px;margin-top:9px;}
-  .bubble .tvrow .tt{flex:1;min-width:0;font-size:12px;color:var(--neutral700);line-height:1.45;}
+  .bubble.prev{max-width:100%;width:100%;background:var(--brand100);border-color:var(--brand300);}
+  .prevlink{display:block;text-decoration:none;margin-top:9px;}
+  .bubble.prev .screenwrap{margin-top:0;}
+  .bubble.prev .tcta{margin-top:10px;}
+  /* quick replies attached to a bubble (user-reply side = right) */
+  .replies{display:none;flex-direction:column;align-items:flex-end;gap:8px;margin-top:10px;}
+  .replies.show{display:flex;}
+  .rchip{font-family:inherit;cursor:pointer;border-radius:999px;padding:10px 16px;font-size:13.5px;
+    background:var(--baseWhite);}
+  .rchip.main{border:1.5px solid var(--brand600);color:var(--brand600);font-weight:700;}
+  .rchip.ghost{border:1px solid var(--neutral200);color:var(--neutral700);font-weight:400;}
   .typing{display:none;width:64px;background:var(--baseWhite);border:1px solid var(--neutral200);
     border-radius:4px 16px 16px 16px;padding:12px 0;margin-top:10px;text-align:center;}
   .typing.show{display:block;}
@@ -212,17 +227,6 @@
   .typing i:nth-child(2){animation-delay:.18s;}
   .typing i:nth-child(3){animation-delay:.36s;}
   @keyframes tdot{0%,60%,100%{transform:translateY(0);opacity:.5;}30%{transform:translateY(-4px);opacity:1;}}
-  .chips{position:absolute;left:0;right:0;bottom:0;z-index:7;background:var(--neutralWhite);
-    box-shadow:0 -2px 6px rgba(22,16,33,.12);padding:12px 16px 12px;
-    transform:translateY(110%);transition:transform .5s cubic-bezier(.2,.8,.25,1);}
-  .chipsin .chips{transform:none;}
-  .chips .clbl{font-size:11px;font-weight:700;color:var(--neutral500);margin-bottom:8px;}
-  .chip{display:block;width:100%;text-align:center;font-family:inherit;font-size:14.5px;font-weight:700;
-    border-radius:var(--radius);padding:12px 14px;cursor:pointer;text-decoration:none;margin-top:8px;}
-  .chip.primary{background:var(--brand600);color:var(--neutralWhite);border:0;margin-top:0;}
-  .chip.line{background:var(--baseWhite);color:var(--neutral900);border:1.5px solid var(--neutral200);font-weight:600;}
-  .chip.ghost{background:transparent;color:var(--neutral900);border:0;font-weight:400;font-size:13.5px;padding:8px 14px 2px;}
-  .chip.ghost .arr{color:var(--brand600);font-weight:700;}
 </style>
 </head>
 <body>
@@ -263,6 +267,7 @@
            `जैसे ही व्योम नेट यहाँ आएगा, हम आपको खुद बता देंगे` ]
   };
   const CHAT_TV = `पर तब तक बोर क्यों होना? <b>व्योम TV</b> पर ढेरों लाइव चैनल — बिल्कुल <b>फ्री</b> 📺`;
+  const CHAT_PREV = `ये देखिए — अभी <b>लाइव</b> चल रहा है 👇`;
 
   /* options — selection screen is English; the mock itself stays Hindi (real app copy) */
   const OPTIONS = [
@@ -271,9 +276,9 @@
     { key:'footer', name:'Option 2 · Footer Button', badge:'final',
       desc:'The strong pink button moves up right under the message (message → action in one glance). After 2 seconds the whole footer slides in as one big button.' },
     { key:'theatre', name:'Option 3 · Live Embed', badge:'newc',
-      desc:'The screen condenses (message stays #1) and a "तब तक के लिए" theatre opens below — with REAL wiom.tv live TV actually playing in it, muted. Toggle inside: Delayed vs Instant.' },
+      desc:'The screen condenses but keeps its own centered layout (message stays #1) — and a "तब तक के लिए" theatre opens below with REAL wiom.tv live TV actually playing, muted. Toggle inside: Delayed vs Instant.' },
     { key:'saathi', name:'Option 4 · Wiom Saathi', badge:'newc',
-      desc:'A friendly Wiom character narrates the page as a chat — the news, what happens next, then Wiom TV. All actions become reply chips. Tap the chat to skip ahead.' },
+      desc:'A friendly Wiom character narrates the page as a chat — WITH VOICE (🔊 toggle). The news comes first with its own reply chip, then a live playing Wiom TV preview right inside the chat. Tap the chat to skip ahead.' },
     { key:'before', name:'Current App', badge:'base',
       desc:'Today\'s production screen, for comparison — no Wiom TV entry.' }
   ];
@@ -319,6 +324,27 @@
   function clearTimers(){ timers.forEach(clearTimeout); timers=[]; }
   function stopTv(){ if(hlsPlayer){ try{hlsPlayer.destroy();}catch(e){} hlsPlayer=null; } }
 
+  /* ===== voice narration (Option 4): device TTS, hi-IN, synced to the typing ===== */
+  let speechOn=true, voiceHi=null;
+  function pickVoice(){ if(!window.speechSynthesis) return;
+    const vs=speechSynthesis.getVoices();
+    voiceHi=vs.find(v=>/^hi[-_]/i.test(v.lang))||vs.find(v=>/hindi/i.test(v.name))||null; }
+  if(window.speechSynthesis){ pickVoice(); speechSynthesis.onvoiceschanged=pickVoice; }
+  function stopSpeech(){ if(window.speechSynthesis){ try{speechSynthesis.cancel();}catch(e){} } }
+  const plainText=h=>h.replace(/<[^>]+>/g,'').replace(/[\u{1F000}-\u{1FAFF}\u{2190}-\u{27BF}\u{FE0F}\u{200D}]/gu,'').trim();
+  function speak(text,onDone){
+    let fired=false; const done=()=>{ if(!fired){fired=true; onDone&&onDone();} };
+    if(!speechOn||!window.speechSynthesis||!text){ later(done,1400); return; }
+    try{
+      speechSynthesis.cancel();
+      const u=new SpeechSynthesisUtterance(text);
+      u.lang='hi-IN'; if(voiceHi) u.voice=voiceHi; u.rate=1.02;
+      u.onend=done; u.onerror=done;
+      speechSynthesis.speak(u);
+      later(done, Math.min(1800+text.length*95, 9000)); /* safety: some engines never fire onend */
+    }catch(e){ done(); }
+  }
+
   /* ===== live wiom.tv player (Option 3): try real channel streams in order ===== */
   function startTv(){
     const v=document.getElementById('tvvid'); if(!v) return;
@@ -347,7 +373,7 @@
 
   /* ===== selection screen ===== */
   function renderMenu(){
-    clearTimers(); stopTv();
+    clearTimers(); stopTv(); stopSpeech();
     const vp=document.getElementById('vp');
     vp.className='viewport';
     const nextKey=OPTIONS.find(o=>!viewed.has(o.key))?.key;
@@ -394,7 +420,7 @@
     </div>`;
 
   function renderView(){
-    clearTimers(); stopTv();
+    clearTimers(); stopTv(); stopSpeech();
     const c=COPY[variant];
     const o=OPTIONS.find(x=>x.key===view);
     const vp=document.getElementById('vp');
@@ -418,12 +444,9 @@
       vp.classList.add('vtheatre');
       vp.innerHTML = viewChrome(o,timingSeg())+statusbar()+appbar()+
         `<div class="body tmode">
-           <div class="compacthero">
-             <div class="gfx sm"><img src="assets/location_unserviceable_graphic.svg" alt=""></div>
-             <div class="ht"><div class="title">${c.title}</div>
-               ${c.addr?'':`<div class="subtitle">${c.subtitle}</div>`}</div>
-           </div>
-           ${c.addr?addrcard():''}
+           <div class="gfx md"><img src="assets/location_unserviceable_graphic.svg" alt=""></div>
+           <div class="title compact">${c.title}</div>
+           ${c.addr?addrcard():`<div class="subtitle compact">${c.subtitle}</div>`}
            <button class="pribtn strong inbody">${c.button}</button>
            <div class="loginlink">${LOGIN_CTA} <span class="arr">›</span></div>
          </div>
@@ -445,43 +468,71 @@
       if(ts) ts.onclick=(e)=>{const t=e.target.dataset.t;if(t){timing=t;renderView();}};
 
     } else if(view==='saathi'){
-      /* OPTION 4 व्योम साथी: character narrates as chat; actions = reply chips; tap chat to skip */
-      const beats=[...CHAT[variant], CHAT_TV];
+      /* OPTION 4 व्योम साथी: character narrates as chat WITH VOICE; objective-1 action rides beat 1; live TV preview in chat */
+      const beats=[...CHAT[variant], CHAT_TV, CHAT_PREV];
       vp.innerHTML = viewChrome(o)+statusbar()+appbar()+
         `<div class="chatwrap" id="chatwrap">
-           <div class="chathead">${avatar()}<div class="who"><b>व्योम साथी</b><span><i></i>ऑनलाइन</span></div></div>
+           <div class="chathead">${avatar()}<div class="who"><b>व्योम साथी</b><span><i></i>ऑनलाइन</span></div>
+             <button class="soundpill ${speechOn?'':'off'}" id="soundpill">${speechOn?'🔊 आवाज़':'🔇 आवाज़'}</button></div>
            <div class="bubble" id="b0">${beats[0]}</div>
+           <div class="replies" id="r0">
+             <button class="rchip main">${c.button}</button>
+             <button class="rchip ghost">${LOGIN_CTA} ›</button>
+           </div>
            <div class="bubble" id="b1">${beats[1]}</div>
-           <div class="bubble tv" id="b2">${beats[2]}
-             <div class="tvrow">${tvframe()}<div class="tt">${TV.sub}</div></div>
+           <div class="bubble tv" id="b2">${beats[2]}</div>
+           <div class="bubble prev" id="b3">${beats[3]}
+             <a class="prevlink" href="${TV_URL}">
+               <div class="screenwrap">
+                 <video id="tvvid" muted autoplay playsinline></video>
+                 <div class="loadhint" id="loadhint">चैनल लोड हो रहा है…</div>
+                 <div class="live2"><i></i>LIVE</div>
+                 <div class="chname" id="chname"></div>
+               </div>
+               <span class="pribtn strong tcta">फ्री में देखना शुरू करें</span>
+             </a>
            </div>
            <div class="typing" id="typing"><i></i><i></i><i></i></div>
-         </div>
-         <div class="chips">
-           <div class="clbl">आपका जवाब</div>
-           <a class="chip primary" href="${TV_URL}">फ्री में व्योम TV देखें ›</a>
-           <button class="chip line">${c.button}</button>
-           <button class="chip ghost">${LOGIN_CTA} <span class="arr">›</span></button>
          </div>`;
 
       const typing=document.getElementById('typing');
       const wrap=document.getElementById('chatwrap');
-      const showBubble=(i)=>{ typing.classList.remove('show');
-        const b=document.getElementById('b'+i); b.classList.add('show');
+      const showTyping=()=>{ typing.classList.add('show'); wrap.scrollTop=wrap.scrollHeight; };
+      const reveal=(id)=>{ typing.classList.remove('show');
+        const b=document.getElementById(id); b.classList.add('show');
         requestAnimationFrame(()=>requestAnimationFrame(()=>b.classList.add('in')));
         wrap.appendChild(typing); wrap.scrollTop=wrap.scrollHeight; };
-      const showTyping=()=>{ typing.classList.add('show'); wrap.scrollTop=wrap.scrollHeight; };
 
-      later(showTyping,350);   later(()=>showBubble(0),1150);
-      later(showTyping,1600);  later(()=>showBubble(1),2550);
-      later(showTyping,3000);  later(()=>showBubble(2),4050);
-      later(()=>vp.classList.add('chipsin'),4650);
+      /* beat plan: reveal → narrate → next. Beat 1 carries the objective-1 reply chips. Final beat starts the live stream. */
+      const SEQ=[
+        { id:'b0', say:beats[0], after:()=>document.getElementById('r0').classList.add('show') },
+        { id:'b1', say:beats[1] },
+        { id:'b2', say:beats[2] },
+        { id:'b3', say:beats[3], after:()=>startTv() }
+      ];
+      let done=false;
+      const step=(i)=>{ if(done) return;
+        if(i>=SEQ.length){ later(()=>vp.classList.add('promptin'),2500); return; }
+        showTyping();
+        later(()=>{ if(done) return;
+          const s=SEQ[i]; reveal(s.id); if(s.after) s.after();
+          wrap.scrollTop=wrap.scrollHeight;
+          speak(plainText(s.say), ()=>step(i+1));
+        },700);
+      };
+      later(()=>step(0),350);
 
-      /* tap the chat → skip ahead: reveal everything instantly */
-      wrap.onclick=()=>{ clearTimers(); typing.classList.remove('show');
-        [0,1,2].forEach(i=>{const b=document.getElementById('b'+i);b.classList.add('show','in');});
-        vp.classList.add('chipsin');
+      /* tap the chat (not a button/link) → skip ahead: reveal everything instantly */
+      wrap.onclick=(e)=>{ if(e.target.closest('a,button')) return;
+        done=true; clearTimers(); stopSpeech(); typing.classList.remove('show');
+        SEQ.forEach(s=>{ const b=document.getElementById(s.id); b.classList.add('show','in'); });
+        document.getElementById('r0').classList.add('show');
+        startTv(); wrap.scrollTop=wrap.scrollHeight;
         later(()=>vp.classList.add('promptin'),1500); };
+
+      const sp=document.getElementById('soundpill');
+      sp.onclick=()=>{ speechOn=!speechOn; if(!speechOn) stopSpeech();
+        sp.textContent=speechOn?'🔊 आवाज़':'🔇 आवाज़'; sp.classList.toggle('off',!speechOn); };
 
     } else {
       /* अभी का ऐप + FINAL टोस्ट (D): production screen (pinned bar); toast adds the 1s "तब तक के लिए" snackbar */
@@ -499,9 +550,12 @@
       if(x) x.onclick=(e)=>{e.preventDefault();e.stopPropagation();vp.classList.remove('snackin');};
     }
 
-    /* view "ends": after the animation has played + reading time, offer the other options */
-    const promptDelay = view==='footer'?7000 : view==='theatre'?8000 : view==='saathi'?9000 : 6000;
-    later(()=>vp.classList.add('promptin'), promptDelay);
+    /* view "ends": after the animation has played + reading time, offer the other options.
+       saathi paces itself off the narration — its chain adds the prompt when the story finishes. */
+    if(view!=='saathi'){
+      const promptDelay = view==='footer'?7000 : view==='theatre'?8000 : 6000;
+      later(()=>vp.classList.add('promptin'), promptDelay);
+    }
 
     const back=()=>{ viewed.add(view); screen='menu'; render(); };
     document.getElementById('exit').onclick=back;
