@@ -213,8 +213,7 @@
   .chathead .who span i{width:7px;height:7px;border-radius:50%;background:var(--positive600);display:block;}
   .bubble{max-width:86%;background:var(--baseWhite);border:1px solid var(--neutral200);
     border-radius:4px 16px 16px 16px;padding:11px 14px;margin-top:10px;font-size:14.5px;line-height:1.55;color:var(--neutral900);
-    opacity:0;transform:translateY(8px);transition:all .35s ease;display:none;}
-  .bubble.show{display:block;}
+    opacity:0;transform:translateY(8px);transition:opacity .3s ease,transform .3s ease;}
   .bubble.in{opacity:1;transform:none;}
   .bubble b{font-weight:700;}
   .bubble.tv{background:var(--brand100);border-color:var(--brand300);}
@@ -223,20 +222,13 @@
   .bubble.prev .screenwrap{margin-top:0;}
   .bubble.prev .tcta{margin-top:10px;}
   /* quick replies attached to a bubble (user-reply side = right) */
-  .replies{display:none;flex-direction:column;align-items:flex-end;gap:8px;margin-top:10px;}
-  .replies.show{display:flex;}
+  .replies{display:flex;flex-direction:column;align-items:flex-end;gap:8px;margin-top:10px;
+    opacity:0;transform:translateY(8px);transition:opacity .3s ease,transform .3s ease;}
+  .replies.in{opacity:1;transform:none;}
   .rchip{font-family:inherit;cursor:pointer;border-radius:999px;padding:10px 16px;font-size:13.5px;
     background:var(--baseWhite);}
   .rchip.main{border:1.5px solid var(--brand600);color:var(--brand600);font-weight:700;}
   .rchip.ghost{border:1px solid var(--neutral200);color:var(--neutral700);font-weight:400;}
-  .typing{display:none;width:64px;background:var(--baseWhite);border:1px solid var(--neutral200);
-    border-radius:4px 16px 16px 16px;padding:12px 0;margin-top:10px;text-align:center;}
-  .typing.show{display:block;}
-  .typing i{display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--neutral500);margin:0 2.5px;
-    animation:tdot 1.1s infinite;}
-  .typing i:nth-child(2){animation-delay:.18s;}
-  .typing i:nth-child(3){animation-delay:.36s;}
-  @keyframes tdot{0%,60%,100%{transform:translateY(0);opacity:.5;}30%{transform:translateY(-4px);opacity:1;}}
 </style>
 </head>
 <body>
@@ -291,7 +283,7 @@
     { key:'theatre', name:'Option 3 · Live Embed', badge:'newc',
       desc:'The screen condenses but keeps its own centered layout (message stays #1) — and a "तब तक के लिए" theatre opens below with REAL wiom.tv live TV actually playing, muted. Toggle inside: Delayed vs Instant.' },
     { key:'saathi', name:'Option 4 · Wiom Saathi', badge:'newc',
-      desc:'A friendly Wiom character narrates the page as a chat — WITH VOICE (🔊 toggle). The news comes first with its own reply chip, then a live playing Wiom TV preview right inside the chat. Tap the chat to skip ahead.' },
+      desc:'A friendly Wiom character presents the page as a chat — the whole story lands in one go, and the character narrates it ALOUD (🔊 toggle). The news comes first with its own reply chip, then a live playing Wiom TV preview right inside the chat.' },
     { key:'before', name:'Current App', badge:'base',
       desc:'Today\'s production screen, for comparison — no Wiom TV entry.' }
   ];
@@ -345,17 +337,18 @@
   if(window.speechSynthesis){ pickVoice(); speechSynthesis.onvoiceschanged=pickVoice; }
   function stopSpeech(){ if(window.speechSynthesis){ try{speechSynthesis.cancel();}catch(e){} } }
   const plainText=h=>h.replace(/<[^>]+>/g,'').replace(/[\u{1F000}-\u{1FAFF}\u{2190}-\u{27BF}\u{FE0F}\u{200D}]/gu,'').trim();
-  function speak(text,onDone){
-    let fired=false; const done=()=>{ if(!fired){fired=true; onDone&&onDone();} };
-    if(!speechOn||!window.speechSynthesis||!text){ later(done,1400); return; }
+  /* Queue the whole story as one utterance sequence, SYNCHRONOUSLY inside the tap's call stack —
+     iOS WebKit blocks speech started later from timers (why v1 audio was silent on iPhone). */
+  function narrate(texts){
+    if(!speechOn||!window.speechSynthesis) return;
     try{
-      speechSynthesis.cancel();
-      const u=new SpeechSynthesisUtterance(text);
-      u.lang='hi-IN'; if(voiceHi) u.voice=voiceHi; u.rate=1.02;
-      u.onend=done; u.onerror=done;
-      speechSynthesis.speak(u);
-      later(done, Math.min(1800+text.length*95, 9000)); /* safety: some engines never fire onend */
-    }catch(e){ done(); }
+      if(speechSynthesis.speaking||speechSynthesis.pending) speechSynthesis.cancel();
+      texts.forEach(t=>{
+        const u=new SpeechSynthesisUtterance(plainText(t));
+        u.lang='hi-IN'; if(voiceHi) u.voice=voiceHi; u.rate=1.03;
+        speechSynthesis.speak(u);
+      });
+    }catch(e){}
   }
 
   /* ===== live wiom.tv player (Option 3): try real channel streams in order ===== */
@@ -481,20 +474,22 @@
       if(ts) ts.onclick=(e)=>{const t=e.target.dataset.t;if(t){timing=t;renderView();}};
 
     } else if(view==='saathi'){
-      /* OPTION 4 व्योम साथी: character narrates as chat WITH VOICE; objective-1 action rides beat 1; live TV preview in chat */
+      /* OPTION 4 व्योम साथी: whole chat lands in one go (0.3s cascade); voice narrates over it.
+         narrate() runs HERE, synchronously in the tap's call stack — required for iOS audio. */
       const beats=[...CHAT[variant], CHAT_TV, CHAT_PREV];
+      const dly=i=>`style="transition-delay:${i*80}ms"`;
       vp.innerHTML = viewChrome(o)+statusbar()+appbar()+
         `<div class="chatwrap" id="chatwrap">
            <div class="chathead">${avatar()}<div class="who"><b>व्योम साथी</b><span><i></i>ऑनलाइन</span></div>
              <button class="soundpill ${speechOn?'':'off'}" id="soundpill">${speechOn?'🔊 आवाज़':'🔇 आवाज़'}</button></div>
-           <div class="bubble" id="b0">${beats[0]}</div>
-           <div class="replies" id="r0">
+           <div class="bubble" id="b0" ${dly(0)}>${beats[0]}</div>
+           <div class="replies" id="r0" ${dly(1)}>
              <button class="rchip main">${c.button}</button>
              <button class="rchip ghost">${LOGIN_CTA} ›</button>
            </div>
-           <div class="bubble" id="b1">${beats[1]}</div>
-           <div class="bubble tv" id="b2">${beats[2]}</div>
-           <div class="bubble prev" id="b3">${beats[3]}
+           <div class="bubble" id="b1" ${dly(2)}>${beats[1]}</div>
+           <div class="bubble tv" id="b2" ${dly(3)}>${beats[2]}</div>
+           <div class="bubble prev" id="b3" ${dly(4)}>${beats[3]}
              <a class="prevlink" href="${TV_URL}">
                <div class="screenwrap">
                  <video id="tvvid" muted autoplay playsinline></video>
@@ -505,46 +500,18 @@
                <span class="pribtn strong tcta">फ्री में देखना शुरू करें</span>
              </a>
            </div>
-           <div class="typing" id="typing"><i></i><i></i><i></i></div>
          </div>`;
 
-      const typing=document.getElementById('typing');
-      const wrap=document.getElementById('chatwrap');
-      const showTyping=()=>{ typing.classList.add('show'); wrap.scrollTop=wrap.scrollHeight; };
-      const reveal=(id)=>{ typing.classList.remove('show');
-        const b=document.getElementById(id); b.classList.add('show');
-        requestAnimationFrame(()=>requestAnimationFrame(()=>b.classList.add('in')));
-        wrap.appendChild(typing); wrap.scrollTop=wrap.scrollHeight; };
-
-      /* beat plan: reveal → narrate → next. Beat 1 carries the objective-1 reply chips. Final beat starts the live stream. */
-      const SEQ=[
-        { id:'b0', say:beats[0], after:()=>document.getElementById('r0').classList.add('show') },
-        { id:'b1', say:beats[1] },
-        { id:'b2', say:beats[2] },
-        { id:'b3', say:beats[3], after:()=>startTv() }
-      ];
-      let done=false;
-      const step=(i)=>{ if(done) return;
-        if(i>=SEQ.length){ later(()=>vp.classList.add('promptin'),2500); return; }
-        showTyping();
-        later(()=>{ if(done) return;
-          const s=SEQ[i]; reveal(s.id); if(s.after) s.after();
-          wrap.scrollTop=wrap.scrollHeight;
-          speak(plainText(s.say), ()=>step(i+1));
-        },700);
-      };
-      later(()=>step(0),350);
-
-      /* tap the chat (not a button/link) → skip ahead: reveal everything instantly */
-      wrap.onclick=(e)=>{ if(e.target.closest('a,button')) return;
-        done=true; clearTimers(); stopSpeech(); typing.classList.remove('show');
-        SEQ.forEach(s=>{ const b=document.getElementById(s.id); b.classList.add('show','in'); });
-        document.getElementById('r0').classList.add('show');
-        startTv(); wrap.scrollTop=wrap.scrollHeight;
-        later(()=>vp.classList.add('promptin'),1500); };
+      requestAnimationFrame(()=>requestAnimationFrame(()=>{
+        ['b0','r0','b1','b2','b3'].forEach(id=>document.getElementById(id).classList.add('in'));
+      }));
+      startTv();
+      narrate(beats);
+      later(()=>vp.classList.add('promptin'),5000);
 
       const sp=document.getElementById('soundpill');
-      sp.onclick=()=>{ speechOn=!speechOn; if(!speechOn) stopSpeech();
+      sp.onclick=()=>{ speechOn=!speechOn;
+        if(!speechOn) stopSpeech(); else narrate(beats); /* click = fresh gesture, restarts narration */
         sp.textContent=speechOn?'🔊 आवाज़':'🔇 आवाज़'; sp.classList.toggle('off',!speechOn); };
 
     } else {
