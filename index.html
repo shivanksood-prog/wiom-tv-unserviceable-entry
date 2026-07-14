@@ -3,10 +3,11 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-<title>Wiom TV · unserviceable screen — फ़ाइनल विकल्प</title>
+<title>Wiom TV · unserviceable screen — विकल्प</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@400;600;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/hls.js@1.5.7" defer></script>
 <style>
   :root{
     /* new_app tokens (verified from release/sprint-18 BaseColors/WiomColors) */
@@ -14,6 +15,7 @@
     --neutral900:#161021; --neutral700:#665E75; --neutral500:#A7A1B2; --neutral200:#E8E4F0; --neutral100:#F1EDF7;
     --neutralWhite:#FAF9FC; --baseWhite:#FFFFFF;
     --positive600:#008043; --positive100:#E1FAED; --negative600:#E01E00;
+    --info600:#6D17CE; --info100:#F1E5FF;
     --radius:16px;
   }
   *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
@@ -43,8 +45,8 @@
   .card .nm{font-size:17px;font-weight:700;color:var(--neutral900);}
   .badge{font-size:10px;font-weight:700;padding:3px 8px;border-radius:999px;}
   .badge.final{background:var(--brand100);color:var(--brand600);}
+  .badge.newc{background:var(--info100);color:var(--info600);}
   .badge.base{background:var(--neutral100);color:var(--neutral700);}
-  .badge.was{background:transparent;color:var(--neutral500);border:1px solid var(--neutral200);}
   .badge.done{background:var(--positive100);color:var(--positive600);}
   .card .desc{font-size:13px;color:var(--neutral700);line-height:1.55;margin-top:8px;}
   .card .go{display:flex;align-items:center;justify-content:flex-end;gap:4px;margin-top:10px;
@@ -63,7 +65,7 @@
     padding:7px 13px;font-family:inherit;font-size:12.5px;font-weight:700;color:var(--neutral900);cursor:pointer;
     box-shadow:0 2px 8px rgba(22,16,33,.10);}
   .exit .b{color:var(--brand600);}
-  .nav{position:absolute;top:34px;right:10px;z-index:30;}
+  .nav{position:absolute;top:34px;right:10px;z-index:30;display:flex;flex-direction:column;gap:6px;align-items:flex-end;}
   .navseg{display:inline-flex;background:rgba(255,255,255,.88);backdrop-filter:blur(6px);border:1px solid var(--neutral200);
     border-radius:999px;padding:3px;box-shadow:0 2px 8px rgba(22,16,33,.10);}
   .navseg button{font-family:inherit;font-size:12px;font-weight:600;color:var(--neutral700);background:transparent;
@@ -77,6 +79,7 @@
     box-shadow:0 10px 26px rgba(22,16,33,.35);transition:all .5s cubic-bezier(.2,.8,.25,1);pointer-events:none;white-space:nowrap;}
   .promptin .nextprompt{opacity:1;transform:translate(-50%,0);pointer-events:auto;}
   .nextprompt .b{color:var(--brand300);}
+  .vtheatre .nextprompt{top:134px;} /* theatre has a 2-row nav + top-aligned title — keep the prompt clear of both */
 
   /* ===== live app screen (light StandardWidget) ===== */
   .statusbar{position:absolute;top:0;left:0;right:0;height:30px;display:flex;align-items:center;justify-content:space-between;
@@ -150,6 +153,76 @@
   .k2row .k2t b{display:block;font-size:14.5px;font-weight:700;color:var(--neutral900);line-height:1.3;}
   .k2row .k2t span{display:block;font-size:11.5px;color:var(--neutral700);margin-top:2px;}
   .k2row .see{color:var(--brand600);font-weight:700;font-size:14px;white-space:nowrap;}
+
+  /* ===== OPTION 3 "लाइव एम्बेड" — condensed screen + real wiom.tv playing in a theatre band ===== */
+  .body.tmode{bottom:334px;padding-top:14px;align-items:stretch;}
+  @media(max-height:640px){.body.tmode{bottom:286px;}}
+  .compacthero{display:flex;align-items:center;gap:12px;width:100%;}
+  .gfx.sm{width:104px;height:104px;}
+  @media(max-height:640px){.gfx.sm{width:84px;height:84px;}}
+  .compacthero .ht{flex:1;min-width:0;}
+  .compacthero .title{margin-top:0;text-align:left;font-size:18px;}
+  .compacthero .subtitle{margin-top:8px;text-align:left;font-size:13px;color:var(--neutral700);}
+  .theatre{position:absolute;left:0;right:0;bottom:0;z-index:8;display:block;background:var(--neutral900);
+    border-radius:22px 22px 0 0;padding:13px 16px 16px;text-decoration:none;cursor:pointer;
+    box-shadow:0 -12px 34px rgba(22,16,33,.35);
+    transform:translateY(110%);transition:transform .6s cubic-bezier(.2,.8,.25,1);}
+  .tin .theatre{transform:none;}
+  .theatre .tlabel{font-size:11px;font-weight:700;color:var(--brand300);}
+  .theatre .thead{display:flex;align-items:center;gap:8px;margin-top:3px;}
+  .theatre .thead b{color:var(--neutralWhite);font-size:16px;font-weight:700;}
+  .freepill{font-size:10.5px;font-weight:700;background:var(--brand100);color:var(--brand600);padding:3px 8px;border-radius:999px;}
+  .screenwrap{position:relative;width:100%;aspect-ratio:16/9;background:#000;border-radius:12px;overflow:hidden;margin-top:10px;}
+  @media(max-height:640px){.screenwrap{aspect-ratio:auto;height:132px;}}
+  .screenwrap video{width:100%;height:100%;object-fit:cover;display:block;pointer-events:none;}
+  .screenwrap .live2{position:absolute;top:8px;left:8px;display:flex;align-items:center;gap:4px;
+    background:rgba(0,0,0,.6);color:#fff;font-size:10px;font-weight:700;padding:3px 7px;border-radius:6px;}
+  .screenwrap .live2 i{width:6px;height:6px;border-radius:50%;background:var(--negative600);display:block;animation:blinklive 1.4s infinite;}
+  @keyframes blinklive{0%,100%{opacity:1;}50%{opacity:.35;}}
+  .screenwrap .chname{position:absolute;bottom:8px;left:8px;background:rgba(0,0,0,.55);color:#fff;
+    font-size:10px;font-weight:600;padding:3px 7px;border-radius:6px;}
+  .screenwrap .loadhint{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+    color:var(--neutral500);font-size:12px;}
+  .tcta{margin-top:12px;}
+
+  /* ===== OPTION 4 "व्योम साथी" — conversational character narrates the page ===== */
+  .chatwrap{position:absolute;top:76px;left:0;right:0;bottom:158px;overflow-y:auto;padding:14px 16px 10px;}
+  .chathead{display:flex;align-items:center;gap:12px;padding-bottom:12px;border-bottom:1px solid var(--neutral200);}
+  .avatar{width:60px;height:60px;flex:0 0 auto;animation:bob 3.2s ease-in-out infinite;}
+  @keyframes bob{0%,100%{transform:translateY(0);}50%{transform:translateY(-3px);}}
+  .avatar .eye{transform-origin:center;transform-box:fill-box;animation:blink 4.6s infinite;}
+  @keyframes blink{0%,92%,100%{transform:scaleY(1);}95%{transform:scaleY(.12);}}
+  .chathead .who b{display:block;font-size:16px;font-weight:700;color:var(--neutral900);}
+  .chathead .who span{display:inline-flex;align-items:center;gap:5px;font-size:12px;color:var(--positive600);font-weight:600;margin-top:2px;}
+  .chathead .who span i{width:7px;height:7px;border-radius:50%;background:var(--positive600);display:block;}
+  .bubble{max-width:86%;background:var(--baseWhite);border:1px solid var(--neutral200);
+    border-radius:4px 16px 16px 16px;padding:11px 14px;margin-top:10px;font-size:14.5px;line-height:1.55;color:var(--neutral900);
+    opacity:0;transform:translateY(8px);transition:all .35s ease;display:none;}
+  .bubble.show{display:block;}
+  .bubble.in{opacity:1;transform:none;}
+  .bubble b{font-weight:700;}
+  .bubble.tv{background:var(--brand100);border-color:var(--brand300);}
+  .bubble .tvrow{display:flex;align-items:center;gap:10px;margin-top:9px;}
+  .bubble .tvrow .tt{flex:1;min-width:0;font-size:12px;color:var(--neutral700);line-height:1.45;}
+  .typing{display:none;width:64px;background:var(--baseWhite);border:1px solid var(--neutral200);
+    border-radius:4px 16px 16px 16px;padding:12px 0;margin-top:10px;text-align:center;}
+  .typing.show{display:block;}
+  .typing i{display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--neutral500);margin:0 2.5px;
+    animation:tdot 1.1s infinite;}
+  .typing i:nth-child(2){animation-delay:.18s;}
+  .typing i:nth-child(3){animation-delay:.36s;}
+  @keyframes tdot{0%,60%,100%{transform:translateY(0);opacity:.5;}30%{transform:translateY(-4px);opacity:1;}}
+  .chips{position:absolute;left:0;right:0;bottom:0;z-index:7;background:var(--neutralWhite);
+    box-shadow:0 -2px 6px rgba(22,16,33,.12);padding:12px 16px 12px;
+    transform:translateY(110%);transition:transform .5s cubic-bezier(.2,.8,.25,1);}
+  .chipsin .chips{transform:none;}
+  .chips .clbl{font-size:11px;font-weight:700;color:var(--neutral500);margin-bottom:8px;}
+  .chip{display:block;width:100%;text-align:center;font-family:inherit;font-size:14.5px;font-weight:700;
+    border-radius:var(--radius);padding:12px 14px;cursor:pointer;text-decoration:none;margin-top:8px;}
+  .chip.primary{background:var(--brand600);color:var(--neutralWhite);border:0;margin-top:0;}
+  .chip.line{background:var(--baseWhite);color:var(--neutral900);border:1.5px solid var(--neutral200);font-weight:600;}
+  .chip.ghost{background:transparent;color:var(--neutral900);border:0;font-weight:400;font-size:13.5px;padding:8px 14px 2px;}
+  .chip.ghost .arr{color:var(--brand600);font-weight:700;}
 </style>
 </head>
 <body>
@@ -157,6 +230,13 @@
 
 <script>
   const TV_URL = "https://wiom.tv";
+
+  /* real wiom.tv channel streams (from wiom.tv homepage; CORS-open, verified) — fallback chain */
+  const STREAMS = [
+    { n:"9XM",          u:"https://9xjio.wiseplayout.com/9XM/master.m3u8" },
+    { n:"YRF Music",    u:"https://cdn-uw2-prod.tsv2.amagi.tv/linear/amg01412-xiaomiasia-yrfmusic-xiaomi/playlist.m3u8" },
+    { n:"B4U भोजपुरी",  u:"https://cdnb4u.wiseplayout.com/B4U_Bhojpuri/master.m3u8" }
+  ];
 
   /* copy = verbatim from live app's new_language_data.json (hi), LOCATION_UNSERVICEABLE_* */
   const COPY = {
@@ -173,15 +253,31 @@
   const ADDR = { nm:"Rajouri Garden", ad:"Rajouri Garden, New Delhi, Delhi 110027, India" };
   const TV = { lbl:"तब तक के लिए", h:"व्योम TV — 100% फ्री", sub:"ढेरों लाइव चैनल • न्यूज़ • मूवी • भक्ति", see:"देखें ›" };
 
+  /* chat script (Option 4) — beat 1 varies by variant; beats 2-3 shared */
+  const CHAT = {
+    area:[ `नमस्ते! 🙏 माफ़ कीजिए — हम अभी <b>${ADDR.nm}</b> तक नहीं पहुँचे हैं`,
+           `जैसे ही व्योम नेट आपके इलाके में आएगा, हम आपको खुद बता देंगे` ],
+    city:[ `नमस्ते! 🙏 हम अभी आपके शहर नहीं पहुँचे हैं — पर जल्द आ रहे हैं!`,
+           `हम हर महीने एक नए शहर में व्योम नेट लगा रहे हैं — आपके शहर आते ही खुद बता देंगे` ],
+    searched:[ `नमस्ते! 🙏 जल्द आ रहा है व्योम — अभी हम आपके इलाके में उपलब्ध नहीं हैं`,
+           `जैसे ही व्योम नेट यहाँ आएगा, हम आपको खुद बता देंगे` ]
+  };
+  const CHAT_TV = `पर तब तक बोर क्यों होना? <b>व्योम TV</b> पर ढेरों लाइव चैनल — बिल्कुल <b>फ्री</b> 📺`;
+
   /* options — selection screen is English; the mock itself stays Hindi (real app copy) */
   const OPTIONS = [
-    { key:'toast', name:'Option 1 · Toast', final:true,
+    { key:'toast', name:'Option 1 · Toast', badge:'final',
       desc:'The screen stays exactly as it is. After 1 second a "तब तक के लिए" toast slides up from the bottom — the whole toast is tappable, ✕ dismisses it.' },
-    { key:'footer', name:'Option 2 · Footer Button', final:true,
+    { key:'footer', name:'Option 2 · Footer Button', badge:'final',
       desc:'The strong pink button moves up right under the message (message → action in one glance). After 2 seconds the whole footer slides in as one big button.' },
-    { key:'before', name:'Current App', final:false,
+    { key:'theatre', name:'Option 3 · Live Embed', badge:'newc',
+      desc:'The screen condenses (message stays #1) and a "तब तक के लिए" theatre opens below — with REAL wiom.tv live TV actually playing in it, muted. Toggle inside: Delayed vs Instant.' },
+    { key:'saathi', name:'Option 4 · Wiom Saathi', badge:'newc',
+      desc:'A friendly Wiom character narrates the page as a chat — the news, what happens next, then Wiom TV. All actions become reply chips. Tap the chat to skip ahead.' },
+    { key:'before', name:'Current App', badge:'base',
       desc:'Today\'s production screen, for comparison — no Wiom TV entry.' }
   ];
+  const BADGE_LABEL = { final:'FINAL', newc:'NEW', base:'Baseline' };
 
   const statusbar=()=>`<div class="statusbar"><span>4:35</span><span class="r"><span>📶</span><span>🔋50%</span></span></div>`;
   const appbar=()=>`<div class="appbar"><span class="back">
@@ -192,6 +288,20 @@
       <div class="play"><b><span class="playtri"></span></b></div>
     </div>`;
 
+  /* cartoon Wiom person (flat style, matches the screen graphic's art direction) */
+  const avatar=()=>`<svg class="avatar" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="32" cy="32" r="32" fill="#FFE5F6"/>
+      <path d="M12 64c1.5-11 9.5-17 20-17s18.5 6 20 17" fill="#D9008D"/>
+      <path d="M26 47h12v6c0 3.3-2.7 6-6 6s-6-2.7-6-6v-6z" fill="#EDB98A"/>
+      <circle cx="32" cy="30" r="13.5" fill="#F5C9A0"/>
+      <path d="M18.5 28.5C18.5 20 24 14.5 32 14.5S45.5 20 45.5 28.5c0-2-1-4.5-2.5-5.5-.6 1.2-1.6 2-3 2.4-3.4 1-8.6 1-12 0-1.4-.4-2.4-1.2-3-2.4-1.5 1-3 3.5-3 5.5z" fill="#2B2333"/>
+      <ellipse class="eye" cx="27" cy="30" rx="1.7" ry="2.1" fill="#2B2333"/>
+      <ellipse class="eye" cx="37" cy="30" rx="1.7" ry="2.1" fill="#2B2333"/>
+      <path d="M28 36.5c1.2 1.6 2.6 2.3 4 2.3s2.8-.7 4-2.3" stroke="#2B2333" stroke-width="1.6" stroke-linecap="round"/>
+      <circle cx="32" cy="55" r="3.2" fill="#FAF9FC"/>
+      <path d="M30.6 55l1 1.1 1.9-2.2" stroke="#D9008D" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+    </svg>`;
+
   const contentFor=(c)=>`
      <div class="gfx"><img src="assets/location_unserviceable_graphic.svg" alt=""></div>
      <div class="title">${c.title}</div>
@@ -199,40 +309,67 @@
        ? `<div class="addrcard"><img src="assets/location_pin.svg" alt=""><div><div class="nm">${ADDR.nm}</div><div class="ad">${ADDR.ad}</div></div></div>`
        : `<div class="subtitle">${c.subtitle}</div>`}`;
 
-  let screen='menu', view=null, variant='area';
-  let timer=null, promptTimer=null;
+  const addrcard=()=>`<div class="addrcard"><img src="assets/location_pin.svg" alt=""><div><div class="nm">${ADDR.nm}</div><div class="ad">${ADDR.ad}</div></div></div>`;
+
+  let screen='menu', view=null, variant='area', timing='delayed';
+  let timers=[], hlsPlayer=null;
   const viewed=new Set();
 
-  function clearTimers(){
-    if(timer){clearTimeout(timer);timer=null;}
-    if(promptTimer){clearTimeout(promptTimer);promptTimer=null;}
+  const later=(fn,ms)=>timers.push(setTimeout(fn,ms));
+  function clearTimers(){ timers.forEach(clearTimeout); timers=[]; }
+  function stopTv(){ if(hlsPlayer){ try{hlsPlayer.destroy();}catch(e){} hlsPlayer=null; } }
+
+  /* ===== live wiom.tv player (Option 3): try real channel streams in order ===== */
+  function startTv(){
+    const v=document.getElementById('tvvid'); if(!v) return;
+    v.muted=true;
+    let i=0;
+    const fail=()=>{ i++; if(i<STREAMS.length){ tryStream(); } else {
+      const h=document.getElementById('loadhint'); if(h) h.textContent="व्योम TV — लाइव चैनल"; } };
+    const ok=(name)=>{ v.play().catch(()=>{});
+      const cn=document.getElementById('chname'), h=document.getElementById('loadhint');
+      if(cn) cn.textContent=name; if(h) h.style.display='none'; };
+    const tryStream=()=>{
+      const s=STREAMS[i];
+      if(window.Hls && Hls.isSupported()){
+        stopTv();
+        hlsPlayer=new Hls({maxBufferLength:12});
+        hlsPlayer.loadSource(s.u); hlsPlayer.attachMedia(v);
+        hlsPlayer.on(Hls.Events.MANIFEST_PARSED,()=>ok(s.n));
+        hlsPlayer.on(Hls.Events.ERROR,(e,d)=>{ if(d.fatal) fail(); });
+      } else if(v.canPlayType('application/vnd.apple.mpegurl')){ /* iOS Safari native HLS */
+        v.src=s.u; v.onerror=fail; v.onloadedmetadata=()=>ok(s.n);
+      } else { fail(); }
+    };
+    if(window.Hls || v.canPlayType('application/vnd.apple.mpegurl')) tryStream();
+    else { later(startTv,400); } /* hls.js still loading (defer) */
   }
 
   /* ===== selection screen ===== */
   function renderMenu(){
-    clearTimers();
+    clearTimers(); stopTv();
     const vp=document.getElementById('vp');
-    vp.classList.remove('snackin','k2in','promptin');
+    vp.className='viewport';
     const nextKey=OPTIONS.find(o=>!viewed.has(o.key))?.key;
     const allDone=OPTIONS.every(o=>viewed.has(o.key));
 
     vp.innerHTML=`<div class="menu">
-      <div class="kick">Wiom TV Entry · Final Prototype</div>
+      <div class="kick">Wiom TV Entry · Prototype</div>
       <h1>Pick an option,<br>see it full-screen</h1>
-      <div class="sub">Two final designs for the Wiom TV entry on the unserviceable screen. Tap an option and the screen becomes that design — when you're done, the other options are shown again.</div>
+      <div class="sub">The two final designs plus two new concepts for the Wiom TV entry on the unserviceable screen. Tap an option and the screen becomes that design — when you're done, the other options are shown again.</div>
       <div class="cards">
         ${OPTIONS.map(o=>`
           <button class="card ${viewed.has(o.key)?'viewed':''} ${(!viewed.has(o.key)&&o.key===nextKey&&viewed.size>0)?'next':''}" data-k="${o.key}">
             <div class="row1">
               <span class="nm">${o.name}</span>
-              ${o.final?`<span class="badge final">FINAL</span>`:`<span class="badge base">Baseline</span>`}
+              <span class="badge ${o.badge}">${BADGE_LABEL[o.badge]}</span>
               ${viewed.has(o.key)?`<span class="badge done">✓ Viewed</span>`:''}
             </div>
             <div class="desc">${o.desc}</div>
             <div class="go">${viewed.has(o.key)?'View again':'View'} ›</div>
           </button>`).join('')}
       </div>
-      ${allDone?`<div class="alldone">✓ All options viewed — the final two: Option 1 (Toast) + Option 2 (Footer Button)</div>`
+      ${allDone?`<div class="alldone">✓ All options viewed — finals: Option 1 (Toast) + Option 2 (Footer Button) · new concepts: Option 3 (Live Embed) + Option 4 (Wiom Saathi)</div>`
                :`<div class="hint">Inside each option you can also switch the एरिया / शहर / सर्च variants</div>`}
     </div>`;
 
@@ -242,21 +379,26 @@
   }
 
   /* ===== option experience ===== */
-  const viewChrome=(o)=>`
+  const viewChrome=(o,extra='')=>`
     <button class="exit" id="exit"><span class="b">‹</span> All options</button>
     <div class="nav"><div class="navseg" id="varseg">
       <button data-v="area" class="${variant==='area'?'on':''}">एरिया</button>
       <button data-v="city" class="${variant==='city'?'on':''}">शहर</button>
       <button data-v="searched" class="${variant==='searched'?'on':''}">सर्च</button>
-    </div></div>
+    </div>${extra}</div>
     <button class="nextprompt" id="nextprompt">✓ Seen ${o.name.split(' · ')[0]} — <span class="b">other options ›</span></button>`;
 
+  const timingSeg=()=>`<div class="navseg" id="timeseg">
+      <button data-t="delayed" class="${timing==='delayed'?'on':''}">Delayed</button>
+      <button data-t="instant" class="${timing==='instant'?'on':''}">Instant</button>
+    </div>`;
+
   function renderView(){
-    clearTimers();
+    clearTimers(); stopTv();
     const c=COPY[variant];
     const o=OPTIONS.find(x=>x.key===view);
     const vp=document.getElementById('vp');
-    vp.classList.remove('snackin','k2in','promptin');
+    vp.className='viewport';
 
     if(view==='footer'){
       /* FINAL फ़ुटर बटन (K2): strong button under the message; whole footer = one button, arrives at 2s */
@@ -269,7 +411,78 @@
            <div class="lbl">${TV.lbl}</div>
            <div class="k2row">${tvframe()}<div class="k2t"><b>${TV.h}</b><span>${TV.sub}</span></div><span class="see">${TV.see}</span></div>
          </a>`;
-      timer=setTimeout(()=>vp.classList.add('k2in'),2000);
+      later(()=>vp.classList.add('k2in'),2000);
+
+    } else if(view==='theatre'){
+      /* OPTION 3 लाइव एम्बेड: condensed zone 1 (message stays #1) + dark theatre band with REAL wiom.tv playing */
+      vp.classList.add('vtheatre');
+      vp.innerHTML = viewChrome(o,timingSeg())+statusbar()+appbar()+
+        `<div class="body tmode">
+           <div class="compacthero">
+             <div class="gfx sm"><img src="assets/location_unserviceable_graphic.svg" alt=""></div>
+             <div class="ht"><div class="title">${c.title}</div>
+               ${c.addr?'':`<div class="subtitle">${c.subtitle}</div>`}</div>
+           </div>
+           ${c.addr?addrcard():''}
+           <button class="pribtn strong inbody">${c.button}</button>
+           <div class="loginlink">${LOGIN_CTA} <span class="arr">›</span></div>
+         </div>
+         <a class="theatre" href="${TV_URL}">
+           <div class="tlabel">${TV.lbl}</div>
+           <div class="thead"><b>व्योम TV</b><span class="freepill">🎁 100% फ्री</span></div>
+           <div class="screenwrap">
+             <video id="tvvid" muted autoplay playsinline></video>
+             <div class="loadhint" id="loadhint">चैनल लोड हो रहा है…</div>
+             <div class="live2"><i></i>LIVE</div>
+             <div class="chname" id="chname"></div>
+           </div>
+           <span class="pribtn strong tcta">फ्री में देखना शुरू करें</span>
+         </a>`;
+      if(timing==='delayed'){ later(()=>vp.classList.add('tin'),2000); }
+      else { vp.classList.add('tin'); }
+      startTv();
+      const ts=document.getElementById('timeseg');
+      if(ts) ts.onclick=(e)=>{const t=e.target.dataset.t;if(t){timing=t;renderView();}};
+
+    } else if(view==='saathi'){
+      /* OPTION 4 व्योम साथी: character narrates as chat; actions = reply chips; tap chat to skip */
+      const beats=[...CHAT[variant], CHAT_TV];
+      vp.innerHTML = viewChrome(o)+statusbar()+appbar()+
+        `<div class="chatwrap" id="chatwrap">
+           <div class="chathead">${avatar()}<div class="who"><b>व्योम साथी</b><span><i></i>ऑनलाइन</span></div></div>
+           <div class="bubble" id="b0">${beats[0]}</div>
+           <div class="bubble" id="b1">${beats[1]}</div>
+           <div class="bubble tv" id="b2">${beats[2]}
+             <div class="tvrow">${tvframe()}<div class="tt">${TV.sub}</div></div>
+           </div>
+           <div class="typing" id="typing"><i></i><i></i><i></i></div>
+         </div>
+         <div class="chips">
+           <div class="clbl">आपका जवाब</div>
+           <a class="chip primary" href="${TV_URL}">फ्री में व्योम TV देखें ›</a>
+           <button class="chip line">${c.button}</button>
+           <button class="chip ghost">${LOGIN_CTA} <span class="arr">›</span></button>
+         </div>`;
+
+      const typing=document.getElementById('typing');
+      const wrap=document.getElementById('chatwrap');
+      const showBubble=(i)=>{ typing.classList.remove('show');
+        const b=document.getElementById('b'+i); b.classList.add('show');
+        requestAnimationFrame(()=>requestAnimationFrame(()=>b.classList.add('in')));
+        wrap.appendChild(typing); wrap.scrollTop=wrap.scrollHeight; };
+      const showTyping=()=>{ typing.classList.add('show'); wrap.scrollTop=wrap.scrollHeight; };
+
+      later(showTyping,350);   later(()=>showBubble(0),1150);
+      later(showTyping,1600);  later(()=>showBubble(1),2550);
+      later(showTyping,3000);  later(()=>showBubble(2),4050);
+      later(()=>vp.classList.add('chipsin'),4650);
+
+      /* tap the chat → skip ahead: reveal everything instantly */
+      wrap.onclick=()=>{ clearTimers(); typing.classList.remove('show');
+        [0,1,2].forEach(i=>{const b=document.getElementById('b'+i);b.classList.add('show','in');});
+        vp.classList.add('chipsin');
+        later(()=>vp.classList.add('promptin'),1500); };
+
     } else {
       /* अभी का ऐप + FINAL टोस्ट (D): production screen (pinned bar); toast adds the 1s "तब तक के लिए" snackbar */
       vp.innerHTML = viewChrome(o)+statusbar()+appbar()+
@@ -281,13 +494,14 @@
          ${view==='toast'?`<a class="snack" href="${TV_URL}" id="snack">${tvframe()}
              <div class="qt"><span class="slbl">${TV.lbl}</span><b>${TV.h}</b><span>${TV.sub}</span></div>
              <span class="go">${TV.see}</span><span class="x" id="snackx">✕</span></a>`:''}`;
-      if(view==='toast') timer=setTimeout(()=>vp.classList.add('snackin'),1000);
+      if(view==='toast') later(()=>vp.classList.add('snackin'),1000);
       const x=document.getElementById('snackx');
       if(x) x.onclick=(e)=>{e.preventDefault();e.stopPropagation();vp.classList.remove('snackin');};
     }
 
     /* view "ends": after the animation has played + reading time, offer the other options */
-    promptTimer=setTimeout(()=>vp.classList.add('promptin'), view==='footer'?7000:6000);
+    const promptDelay = view==='footer'?7000 : view==='theatre'?8000 : view==='saathi'?9000 : 6000;
+    later(()=>vp.classList.add('promptin'), promptDelay);
 
     const back=()=>{ viewed.add(view); screen='menu'; render(); };
     document.getElementById('exit').onclick=back;
