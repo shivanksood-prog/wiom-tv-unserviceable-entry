@@ -155,15 +155,25 @@
   .k2row .see{color:var(--brand600);font-weight:700;font-size:14px;white-space:nowrap;}
 
   /* ===== OPTION 3 "लाइव एम्बेड" — condensed screen (same centered grammar as production, just smaller) + theatre band ===== */
-  .body.tmode{bottom:334px;padding-top:0;justify-content:center;}
-  .gfx.md{width:118px;height:118px;}
-  .title.compact{font-size:18px;margin-top:12px;}
+  /* --tvh: video height scales with the real phone viewport (browser bars eat a lot of dvh on iOS) */
+  .viewport{--tvh:clamp(118px,20dvh,196px);}
+  @media(min-width:520px){.viewport{--tvh:196px;}} /* desktop frame is fixed 812px tall */
+  .body.tmode{bottom:24px;padding-top:34px;justify-content:flex-start;
+    transition:bottom .6s cubic-bezier(.2,.8,.25,1);}
+  /* safe centering: auto margins center the group when space allows, collapse to 0 (→ scroll) when it doesn't.
+     justify-content:center would clip the TOP on overflow — the exact iPhone bug. */
+  .body.tmode > :first-child{margin-top:auto;}
+  .body.tmode .loginlink{margin-bottom:auto;}
+  .tin .body.tmode{bottom:calc(var(--tvh) + 152px);}
+  .gfx.md{width:clamp(84px,13dvh,118px);height:clamp(84px,13dvh,118px);}
+  @media(min-width:520px){.gfx.md{width:118px;height:118px;}}
+  .title.compact{font-size:18px;margin-top:10px;}
   .subtitle.compact{font-size:13.5px;margin-top:10px;color:var(--neutral700);}
-  .body.tmode .addrcard{margin-top:14px;padding:12px 16px;}
-  .body.tmode .inbody{margin-top:16px;}
-  @media(max-height:640px){
-    .body.tmode{bottom:286px;justify-content:flex-start;padding-top:10px;}
-    .gfx.md{width:88px;height:88px;}
+  .body.tmode .addrcard{margin-top:12px;padding:12px 16px;}
+  .body.tmode .inbody{margin-top:12px;}
+  @media(max-height:760px){
+    .title.compact{font-size:17px;}
+    .body.tmode .addrcard{padding:10px 14px;}
   }
   .theatre{position:absolute;left:0;right:0;bottom:0;z-index:8;display:block;background:var(--neutral900);
     border-radius:22px 22px 0 0;padding:13px 16px 16px;text-decoration:none;cursor:pointer;
@@ -174,8 +184,8 @@
   .theatre .thead{display:flex;align-items:center;gap:8px;margin-top:3px;}
   .theatre .thead b{color:var(--neutralWhite);font-size:16px;font-weight:700;}
   .freepill{font-size:10.5px;font-weight:700;background:var(--brand100);color:var(--brand600);padding:3px 8px;border-radius:999px;}
-  .screenwrap{position:relative;width:100%;aspect-ratio:16/9;background:#000;border-radius:12px;overflow:hidden;margin-top:10px;}
-  @media(max-height:640px){.screenwrap{aspect-ratio:auto;height:132px;}}
+  .screenwrap{position:relative;width:100%;height:var(--tvh,196px);background:#000;border-radius:12px;overflow:hidden;margin-top:10px;}
+  .bubble.prev .screenwrap{height:auto;aspect-ratio:16/9;} /* chat preview keeps its own aspect */
   .screenwrap video{width:100%;height:100%;object-fit:cover;display:block;pointer-events:none;}
   .screenwrap .live2{position:absolute;top:8px;left:8px;display:flex;align-items:center;gap:4px;
     background:rgba(0,0,0,.6);color:#fff;font-size:10px;font-weight:700;padding:3px 7px;border-radius:6px;}
