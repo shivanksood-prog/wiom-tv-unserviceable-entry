@@ -199,12 +199,36 @@
      no channel deep-link, and new users land in one of four random genre arms (fse_v2).
      Framed + inset promises "wiom.tv — lots of free live TV", which the landing keeps every
      time. Real stream still plays, so the "it's actually live" proof survives intact. */
-  .theatre .tstage{display:flex;gap:12px;align-items:center;margin-top:10px;}
-  .theatre .screenwrap{width:46%;flex:0 0 46%;height:auto;aspect-ratio:16/9;margin-top:0;
-    border-radius:10px;border:2px solid #4a4157;box-shadow:0 4px 14px rgba(0,0,0,.4);}
-  .theatre .tmeta{flex:1;min-width:0;}
-  .theatre .tmeta b{display:block;color:var(--neutralWhite);font-size:14.5px;font-weight:700;line-height:1.25;}
-  .theatre .tmeta span{display:block;color:var(--neutral500);font-size:11.5px;margin-top:4px;line-height:1.35;}
+  /* LARGE: the preview is the point of this option, so it runs near-full-width. The bezel +
+     inset (not the size) is what stops it claiming to BE wiom.tv, so we keep the frame and
+     put the breadth line UNDER it rather than stealing width for a side-by-side lockup. */
+  .theatre .tstage{display:block;margin-top:10px;}
+  .theatre .screenwrap{width:100%;height:auto;aspect-ratio:16/9;margin:0;
+    border-radius:12px;border:2px solid #4a4157;box-shadow:0 6px 18px rgba(0,0,0,.45);}
+  /* Short viewports: zone 1 has a hard floor (graphic+title+address+CTA+login ≈ 300px), so a
+     full-width frame pushes the primary CTA behind the band — measured at 360x640, the
+     screenutil design size. Scale the frame by HEIGHT and drop the breadth line (the frame
+     already carries that message) so the CTA is never hidden. */
+  @media(max-height:720px){
+    /* Spend the scarce height on the video, not the decoration: the cartoon is the least
+       load-bearing element on this screen, the playing preview is the whole point of the
+       option, and the CTA must never go behind the band. So the graphic goes first. */
+    .vtheatre .body.tmode{padding-top:14px;}
+    .vtheatre .gfx.md{display:none;}
+    .theatre{padding:10px 16px 12px;}
+    .theatre .screenwrap{width:100%;height:auto;aspect-ratio:16/9;margin:0;}
+    .theatre .tmeta{margin-top:6px;}
+    .theatre .tcta{margin-top:10px;}
+  }
+  @media(max-height:640px){
+    .theatre .tmeta{display:none;}
+    .theatre .screenwrap{width:auto;height:150px;margin:0 auto;}
+  }
+  @media(max-height:600px){.theatre .screenwrap{height:126px;}}
+  .theatre .tmeta{margin-top:8px;display:flex;gap:7px;justify-content:center;
+    align-items:baseline;flex-wrap:wrap;}
+  .theatre .tmeta b{color:var(--neutralWhite);font-size:14px;font-weight:700;line-height:1.25;}
+  .theatre .tmeta span{color:var(--neutral500);font-size:11.5px;line-height:1.35;}
 
   /* ---- NEVER EMPTY: local poster renders at t=0, stream fades in over it ---------------
      ~29% of stream starts fail in the wild. Without a local first frame that is a black
