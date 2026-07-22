@@ -158,8 +158,9 @@
   /* --tvh: video height scales with the real phone viewport (browser bars eat a lot of dvh on iOS) */
   .viewport{--tvh:clamp(118px,20dvh,196px);}
   @media(min-width:520px){.viewport{--tvh:196px;}} /* desktop frame is fixed 812px tall */
-  .body.tmode{bottom:24px;padding-top:34px;justify-content:flex-start;
-    transition:bottom .6s cubic-bezier(.2,.8,.25,1);}
+  /* PRESENT AT FIRST PAINT: no slide-in, no reflow. The band is whole and final the instant
+     the screen appears, so nothing moves while the user is reaching for the primary CTA. */
+  .body.tmode{bottom:24px;padding-top:34px;justify-content:flex-start;}
   /* safe centering: auto margins center the group when space allows, collapse to 0 (→ scroll) when it doesn't.
      justify-content:center would clip the TOP on overflow — the exact iPhone bug. */
   .body.tmode > :first-child{margin-top:auto;}
@@ -177,9 +178,7 @@
   }
   .theatre{position:absolute;left:0;right:0;bottom:0;z-index:8;display:block;background:var(--neutral900);
     border-radius:22px 22px 0 0;padding:13px 16px 16px;text-decoration:none;cursor:pointer;
-    box-shadow:0 -12px 34px rgba(22,16,33,.35);
-    transform:translateY(110%);transition:transform .6s cubic-bezier(.2,.8,.25,1);}
-  .tin .theatre{transform:none;}
+    box-shadow:0 -12px 34px rgba(22,16,33,.35);}
   .theatre .tlabel{font-size:11px;font-weight:700;color:var(--brand300);}
   .theatre .thead{display:flex;align-items:center;gap:8px;margin-top:3px;}
   .theatre .thead b{color:var(--neutralWhite);font-size:16px;font-weight:700;}
@@ -195,6 +194,40 @@
     font-size:10px;font-weight:600;padding:3px 7px;border-radius:6px;}
   .screenwrap .loadhint{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
     color:var(--neutral500);font-size:12px;}
+  /* ---- A WINDOW INTO wiom.tv, not the destination itself ----------------------------
+     Full-bleed video promises "this channel, now" — a promise wiom.tv cannot keep: it has
+     no channel deep-link, and new users land in one of four random genre arms (fse_v2).
+     Framed + inset promises "wiom.tv — lots of free live TV", which the landing keeps every
+     time. Real stream still plays, so the "it's actually live" proof survives intact. */
+  .theatre .tstage{display:flex;gap:12px;align-items:center;margin-top:10px;}
+  .theatre .screenwrap{width:46%;flex:0 0 46%;height:auto;aspect-ratio:16/9;margin-top:0;
+    border-radius:10px;border:2px solid #4a4157;box-shadow:0 4px 14px rgba(0,0,0,.4);}
+  .theatre .tmeta{flex:1;min-width:0;}
+  .theatre .tmeta b{display:block;color:var(--neutralWhite);font-size:14.5px;font-weight:700;line-height:1.25;}
+  .theatre .tmeta span{display:block;color:var(--neutral500);font-size:11.5px;margin-top:4px;line-height:1.35;}
+
+  /* ---- NEVER EMPTY: local poster renders at t=0, stream fades in over it ---------------
+     ~29% of stream starts fail in the wild. Without a local first frame that is a black
+     box on a production screen. The poster is a wiom.tv-style channel grid, so the "failed"
+     state is still a complete, intentional-looking surface — never a spinner, never blank. */
+  .theatre .poster{position:absolute;inset:0;display:grid;gap:3px;padding:3px;background:#0d0916;
+    grid-template-columns:repeat(3,1fr);grid-template-rows:repeat(2,1fr);}
+  .theatre .poster i{display:block;border-radius:3px;background:linear-gradient(135deg,#2a2336,#3b3348);}
+  .theatre .poster i:nth-child(2){background:linear-gradient(135deg,#3a2440,#4a2f52);}
+  .theatre .poster i:nth-child(4){background:linear-gradient(135deg,#24303f,#2f3f52);}
+  .theatre .poster i:nth-child(6){background:linear-gradient(135deg,#3f2a24,#52382f);}
+  .theatre .screenwrap video{position:relative;z-index:1;opacity:0;transition:opacity .45s ease;}
+  .theatre .screenwrap video.on{opacity:1;}
+  .theatre .live2,.theatre .replay{z-index:2;}
+  /* "LIVE" only ever appears over something actually live — never over the poster */
+  .theatre .live2{display:none;}
+  .theatre .screenwrap.playing .live2{display:flex;}
+
+  /* ---- BOUNDED DATA: auto-stop at ~25s, back to poster + replay ----------------------- */
+  .theatre .replay{position:absolute;inset:0;display:none;align-items:center;justify-content:center;}
+  .theatre .screenwrap.ended .replay{display:flex;}
+  .theatre .replay span{background:rgba(0,0,0,.62);color:#fff;font-size:11px;font-weight:700;
+    padding:5px 10px;border-radius:999px;}
   .tcta{margin-top:12px;}
 
   /* ===== OPTION 4 "व्योम साथी" — conversational character narrates the page (with voice) ===== */
@@ -281,7 +314,7 @@
     { key:'footer', name:'Option 2 · Footer Button', badge:'final',
       desc:'The strong pink button moves up right under the message (message → action in one glance). After 2 seconds the whole footer slides in as one big button.' },
     { key:'theatre', name:'Option 3 · Live Embed', badge:'newc',
-      desc:'The screen condenses but keeps its own centered layout (message stays #1) — and a "तब तक के लिए" theatre opens below with REAL wiom.tv live TV actually playing, muted. Toggle inside: Delayed vs Instant.' },
+      desc:'BUILD SPEC. The screen condenses but keeps its centered layout (message stays #1); a "तब तक के लिए" band sits below, present from first paint — it never slides in. Inside it a framed window shows REAL wiom.tv live TV playing, muted, over a local poster that is always there (so it is never a black box). Stops at ~25s → tap to replay.' },
     { key:'saathi', name:'Option 4 · Wiom Saathi', badge:'newc',
       desc:'A friendly Wiom character presents the page as a chat — the whole story lands in one go, and the character narrates it ALOUD (🔊 toggle). The news comes first with its own reply chip, then a live playing Wiom TV preview right inside the chat.' },
     { key:'before', name:'Current App', badge:'base',
@@ -351,6 +384,17 @@
     }catch(e){}
   }
 
+  /* Bounded data: stop the stream after ~25s and fall back to the poster + a replay tap.
+     Worst case is a few MB, not an open-ended stream on users who have no Wiom net.
+     Option 4's chat preview has no #tvscreen, so it is unaffected. */
+  const TV_CAP_MS = 25000;
+  function capTv(){
+    const sc=document.getElementById('tvscreen'); if(!sc) return;
+    later(()=>{ stopTv();
+      const v=document.getElementById('tvvid'); if(v) v.classList.remove('on');
+      sc.classList.remove('playing'); sc.classList.add('ended'); }, TV_CAP_MS);
+  }
+
   /* ===== live wiom.tv player (Option 3): try real channel streams in order ===== */
   function startTv(){
     const v=document.getElementById('tvvid'); if(!v) return;
@@ -360,7 +404,10 @@
       const h=document.getElementById('loadhint'); if(h) h.textContent="व्योम TV — लाइव चैनल"; } };
     const ok=(name)=>{ v.play().catch(()=>{});
       const cn=document.getElementById('chname'), h=document.getElementById('loadhint');
-      if(cn) cn.textContent=name; if(h) h.style.display='none'; };
+      if(cn) cn.textContent=name; if(h) h.style.display='none';
+      v.classList.add('on');   /* fade in OVER the local poster — the poster never disappears */
+      const sc=document.getElementById('tvscreen'); if(sc) sc.classList.add('playing');
+      capTv(); };
     const tryStream=()=>{
       const s=STREAMS[i];
       if(window.Hls && Hls.isSupported()){
@@ -448,7 +495,7 @@
     } else if(view==='theatre'){
       /* OPTION 3 लाइव एम्बेड: condensed zone 1 (message stays #1) + dark theatre band with REAL wiom.tv playing */
       vp.classList.add('vtheatre');
-      vp.innerHTML = viewChrome(o,timingSeg())+statusbar()+appbar()+
+      vp.innerHTML = viewChrome(o)+statusbar()+appbar()+
         `<div class="body tmode">
            <div class="gfx md"><img src="assets/location_unserviceable_graphic.svg" alt=""></div>
            <div class="title compact">${c.title}</div>
@@ -459,19 +506,28 @@
          <a class="theatre" href="${TV_URL}">
            <div class="tlabel">${TV.lbl}</div>
            <div class="thead"><b>व्योम TV</b><span class="freepill">🎁 100% फ्री</span></div>
-           <div class="screenwrap">
-             <video id="tvvid" muted autoplay playsinline></video>
-             <div class="loadhint" id="loadhint">चैनल लोड हो रहा है…</div>
-             <div class="live2"><i></i>LIVE</div>
-             <div class="chname" id="chname"></div>
+           <div class="tstage">
+             <div class="screenwrap" id="tvscreen">
+               <div class="poster"><i></i><i></i><i></i><i></i><i></i><i></i></div>
+               <video id="tvvid" muted autoplay playsinline></video>
+               <div class="live2"><i></i>LIVE</div>
+               <div class="replay" id="tvreplay"><span>▶ फिर से देखें</span></div>
+             </div>
+             <div class="tmeta"><b>ढेरों लाइव चैनल</b>
+               <span>न्यूज़ • मूवी • भक्ति • मनोरंजन • खेल</span></div>
            </div>
            <span class="pribtn strong tcta">फ्री में देखना शुरू करें</span>
          </a>`;
-      if(timing==='delayed'){ later(()=>vp.classList.add('tin'),2000); }
-      else { vp.classList.add('tin'); }
+      vp.classList.add('tin');   /* present at first paint — never animated in */
+      /* Reserve exactly the band's real height: it is now content-sized (framed preview),
+         not --tvh-sized, so the old calc() left a dead gap. Runs synchronously before paint. */
+      { const th=vp.querySelector('.theatre'), bd=vp.querySelector('.body.tmode');
+        if(th&&bd) bd.style.bottom=(th.offsetHeight+16)+'px'; }
       startTv();
-      const ts=document.getElementById('timeseg');
-      if(ts) ts.onclick=(e)=>{const t=e.target.dataset.t;if(t){timing=t;renderView();}};
+      /* replay lives inside the band's <a>, so it must not navigate */
+      const rp=document.getElementById('tvreplay');
+      if(rp) rp.onclick=(e)=>{ e.preventDefault(); e.stopPropagation();
+        document.getElementById('tvscreen').classList.remove('ended'); startTv(); };
 
     } else if(view==='saathi'){
       /* OPTION 4 व्योम साथी: whole chat lands in one go (0.3s cascade); voice narrates over it.
