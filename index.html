@@ -179,6 +179,13 @@
   .theatre{position:absolute;left:0;right:0;bottom:0;z-index:8;display:block;background:var(--neutral900);
     border-radius:22px 22px 0 0;padding:13px 16px 16px;text-decoration:none;cursor:pointer;
     box-shadow:0 -12px 34px rgba(22,16,33,.35);}
+  /* ENTRY ANIMATION — decoupled from the CTA. The body reserves the band's exact height at
+     first paint (JS), so the CTA is laid out in its final spot and never moves. The band then
+     TRANSLATES up into that already-empty slot; it can neither push layout nor cover the CTA,
+     so entryDelay is safe at any value. .slide = start below; .slide.up = slid home. */
+  .theatre.slide{transform:translateY(calc(100% + 16px));
+    transition:transform .5s cubic-bezier(.2,.8,.25,1);}
+  .theatre.slide.up{transform:translateY(0);}
   .theatre .tlabel{font-size:11px;font-weight:700;color:var(--brand300);}
   .theatre .thead{display:flex;align-items:center;gap:8px;margin-top:3px;}
   .theatre .thead b{color:var(--neutralWhite);font-size:16px;font-weight:700;}
@@ -378,7 +385,7 @@
 
   const addrcard=()=>`<div class="addrcard"><img src="assets/location_pin.svg" alt=""><div><div class="nm">${ADDR.nm}</div><div class="ad">${ADDR.ad}</div></div></div>`;
 
-  let screen='menu', view=null, variant='area', timing='delayed';
+  let screen='menu', view=null, variant='area', entryDelay=300;
   let timers=[], hlsPlayer=null;
   const viewed=new Set();
 
@@ -491,10 +498,11 @@
     </div>${extra}</div>
     <button class="nextprompt" id="nextprompt">✓ Seen ${o.name.split(' · ')[0]} — <span class="b">other options ›</span></button>`;
 
-  const timingSeg=()=>`<div class="navseg" id="timeseg">
-      <button data-t="delayed" class="${timing==='delayed'?'on':''}">Delayed</button>
-      <button data-t="instant" class="${timing==='instant'?'on':''}">Instant</button>
-    </div>`;
+  /* entryDelayMs picker — the band's slot is reserved at first paint, so this only controls
+     WHEN the band slides up into its own reserved space; the CTA above never moves. */
+  const ENTRY_PRESETS=[['तुरंत',0],['0.3s',300],['1.2s',1200],['2s',2000]];
+  const entrySeg=()=>`<div class="navseg" id="entryseg">${ENTRY_PRESETS.map(([lbl,ms])=>
+      `<button data-ms="${ms}" class="${entryDelay===ms?'on':''}">${lbl}</button>`).join('')}</div>`;
 
   function renderView(){
     clearTimers(); stopTv(); stopSpeech();
@@ -519,7 +527,7 @@
     } else if(view==='theatre'){
       /* OPTION 3 लाइव एम्बेड: condensed zone 1 (message stays #1) + dark theatre band with REAL wiom.tv playing */
       vp.classList.add('vtheatre');
-      vp.innerHTML = viewChrome(o)+statusbar()+appbar()+
+      vp.innerHTML = viewChrome(o,entrySeg())+statusbar()+appbar()+
         `<div class="body tmode">
            <div class="gfx md"><img src="assets/location_unserviceable_graphic.svg" alt=""></div>
            <div class="title compact">${c.title}</div>
@@ -542,16 +550,25 @@
            </div>
            <span class="pribtn strong tcta">फ्री में देखना शुरू करें</span>
          </a>`;
-      vp.classList.add('tin');   /* present at first paint — never animated in */
-      /* Reserve exactly the band's real height: it is now content-sized (framed preview),
-         not --tvh-sized, so the old calc() left a dead gap. Runs synchronously before paint. */
+      vp.classList.add('tin');
+      /* STEP 1 — reserve the band's exact height so the CTA is fixed from first paint (it is
+         content-sized now, not --tvh-sized). STEP 2 — if entryDelay>0, park the band below
+         and slide it up into that reserved slot after the delay. The CTA is immune either way. */
       { const th=vp.querySelector('.theatre'), bd=vp.querySelector('.body.tmode');
-        if(th&&bd) bd.style.bottom=(th.offsetHeight+16)+'px'; }
+        if(th&&bd){ bd.style.bottom=(th.offsetHeight+16)+'px';
+          if(entryDelay>0){ th.classList.add('slide');
+            void th.offsetHeight;               /* commit the parked position before animating */
+            later(()=>th.classList.add('slide','up'), entryDelay);
+          }
+        }
+      }
       startTv();
       /* replay lives inside the band's <a>, so it must not navigate */
       const rp=document.getElementById('tvreplay');
       if(rp) rp.onclick=(e)=>{ e.preventDefault(); e.stopPropagation();
         document.getElementById('tvscreen').classList.remove('ended'); startTv(); };
+      const es=document.getElementById('entryseg');
+      if(es) es.onclick=(e)=>{ const ms=e.target.dataset.ms; if(ms!=null){ entryDelay=+ms; renderView(); } };
 
     } else if(view==='saathi'){
       /* OPTION 4 व्योम साथी: whole chat lands in one go (0.3s cascade); voice narrates over it.
