@@ -67012,7 +67012,7 @@ aI(){var s=this
 s.b3()
 s.a.toString
 s.r=!1
-A.cl(A.cW(0,300,0),new A.ad3(s))
+A.cl(A.cW(0,1200,0),new A.ad3(s))
 s.a.toString
 s.xW(B.k6)},
 xW(a){var s,r=this,q="asset:///assets/video/preview.mp4",p=r.d

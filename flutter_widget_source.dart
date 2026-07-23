@@ -53,7 +53,7 @@ class BandConfig {
 const kDefaultConfig = BandConfig(
   primary: PreviewChannel(2, 'Dangal TV', 'asset:///assets/video/preview.mp4'),
   fallbacks: [],
-  entryDelayMs: 300,
+  entryDelayMs: 1200,
   capSeconds: 25,
 );
 
