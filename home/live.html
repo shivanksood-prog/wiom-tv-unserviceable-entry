@@ -1,0 +1,40 @@
+<!doctype html>
+<!-- Web-demo only: plays a LIVE HLS channel via hls.js, embedded by the Flutter
+     demo as an iframe. The real Android app has no such shim — video_player /
+     ExoPlayer plays HLS natively. -->
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <style>
+    html, body { margin: 0; height: 100%; background: #000; overflow: hidden; }
+    video { width: 100%; height: 100%; object-fit: cover; display: block; background: #000; }
+  </style>
+  <script src="https://cdn.jsdelivr.net/npm/hls.js@1.5.7"></script>
+</head>
+<body>
+  <video id="v" muted autoplay playsinline></video>
+  <script>
+    var streams = [
+      'https://live-dangal.akamaized.net/liveabr/playlist.m3u8',      // Dangal TV
+      'https://live-dangal2.akamaized.net/liveabr/playlist.m3u8',     // Dangal 2
+      'https://ndtvindiaelemarchana.akamaized.net/hls/live/2003679/ndtvindia/master.m3u8' // NDTV India
+    ];
+    var v = document.getElementById('v'), i = 0, hls = null;
+    function tryStream() {
+      var url = streams[i];
+      if (window.Hls && window.Hls.isSupported()) {
+        if (hls) { try { hls.destroy(); } catch (e) {} }
+        hls = new Hls({ maxBufferLength: 12 });
+        hls.loadSource(url); hls.attachMedia(v);
+        hls.on(Hls.Events.MANIFEST_PARSED, function () { v.play().catch(function () {}); });
+        hls.on(Hls.Events.ERROR, function (e, d) { if (d.fatal) { i++; if (i < streams.length) tryStream(); } });
+      } else if (v.canPlayType('application/vnd.apple.mpegurl')) {
+        v.src = url; v.play().catch(function () {});
+        v.onerror = function () { i++; if (i < streams.length) tryStream(); };
+      }
+    }
+    tryStream();
+  </script>
+</body>
+</html>
