@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Wiom TV repeat + booking chance — solutions</title>
+<title>Wiom TV re-entry — landing-screen only</title>
 <style>
   :root{
     --brand600:#D9008D; --brand300:#FFB2E4; --brand100:#FFE5F6; --brandSec:#443152;
@@ -19,161 +19,168 @@
     color:var(--brand600); background:var(--brand100); padding:5px 12px; border-radius:999px;}
   h1{font-size:30px; font-weight:800; line-height:1.2; margin:14px 0 8px; letter-spacing:-.01em;}
   h1 .g{background:linear-gradient(90deg,var(--brand600),var(--info600)); -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent;}
-  .lede{font-size:16px; color:var(--n700); max-width:760px;}
+  .lede{font-size:16px; color:var(--n700); max-width:780px;}
   h2{font-size:13px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:var(--n500);
-    margin:44px 0 16px; display:flex; align-items:center; gap:10px;}
+    margin:44px 0 8px; display:flex; align-items:center; gap:10px;}
   h2::after{content:''; flex:1; height:1px; background:var(--n300);}
-  /* problem / unlock */
+  .h2sub{font-size:14px; color:var(--n700); margin-bottom:18px; max-width:760px;}
   .grid2{display:grid; grid-template-columns:1fr 1fr; gap:16px;}
   .card{background:#fff; border:1px solid var(--n300); border-radius:18px; padding:20px;}
-  .card h3{font-size:16px; font-weight:800; margin-bottom:8px; display:flex; align-items:center; gap:8px;}
+  .card h3{font-size:16px; font-weight:800; margin-bottom:10px; display:flex; align-items:center; gap:8px;}
   .card p{font-size:14.5px; color:var(--n700);}
-  .card.problem{border-color:#FFD9CC; background:#FFF7F4;}
-  .card.unlock{border-color:var(--brand300); background:var(--brand100);}
-  .card.unlock h3{color:var(--brand600);}
-  ul.tick{list-style:none; margin-top:10px; display:flex; flex-direction:column; gap:6px;}
-  ul.tick li{font-size:13.5px; color:var(--n700); padding-left:22px; position:relative;}
-  ul.tick li::before{content:'→'; position:absolute; left:0; color:var(--brand600); font-weight:700;}
-  /* tech cards */
+  ul.tick,ul.cross{list-style:none; margin-top:6px; display:flex; flex-direction:column; gap:8px;}
+  ul.tick li,ul.cross li{font-size:13.5px; color:var(--n700); padding-left:24px; position:relative;}
+  ul.tick li::before{content:'+'; position:absolute; left:0; color:var(--pos600); font-weight:800;}
+  .card.change{border-color:var(--pos600); background:var(--pos100);}
+  .card.change h3{color:var(--pos600);} .card.change li::before{content:'✓'; color:var(--pos600); font-weight:800;}
+  .card.keep{border-color:var(--n300);}
+  .card.keep h3{color:var(--n700);} .card.keep li::before{content:'—'; position:absolute; left:0; color:var(--n500); font-weight:800;}
+  .card.keep li b{color:var(--n900);}
+  .parked{margin-top:16px; background:var(--warn200); border:1px solid #F2C89A; border-radius:14px; padding:14px 16px;}
+  .parked h3{font-size:14px; font-weight:800; color:#9a4d00; margin-bottom:4px;}
+  .parked p{font-size:13.5px; color:#7a4a12;}
+  /* tech: who sees it */
   .tech{display:grid; grid-template-columns:repeat(3,1fr); gap:16px;}
-  .tech .card{position:relative; display:flex; flex-direction:column;}
+  .tech .card{display:flex; flex-direction:column;}
   .rec-inline{align-self:flex-start; background:var(--pos600); color:#fff; font-size:11px; font-weight:800; padding:4px 10px; border-radius:999px; margin-bottom:10px;}
   .tcode{font-size:12px; font-weight:800; color:var(--n500); letter-spacing:.05em;}
   .tech h3{font-size:17px; margin:4px 0 6px;}
-  .chips{display:flex; flex-wrap:wrap; gap:6px; margin:12px 0;}
+  .chips{display:flex; flex-wrap:wrap; gap:6px; margin:10px 0 12px;}
   .chip{font-size:11.5px; font-weight:700; padding:4px 9px; border-radius:8px;}
   .chip.zero{background:var(--pos100); color:var(--pos600);}
   .chip.loc{background:var(--info100); color:var(--info600);}
   .chip.rc{background:var(--warn200); color:#9a4d00;}
+  .chip.notouch{background:var(--n100); color:var(--n700);}
   .card.recd{border-color:var(--pos600); box-shadow:0 0 0 3px var(--pos100);}
-  /* design columns with phone mockups */
+  .tfoot{margin-top:auto; padding-top:12px; font-size:12.5px; font-weight:700;}
+  /* design variations */
   .designs{display:grid; grid-template-columns:repeat(3,1fr); gap:20px;}
   .dcol .dhead{display:flex; align-items:baseline; gap:8px; margin-bottom:4px;}
   .dcol .dcode{font-size:12px; font-weight:800; color:var(--brand600);}
   .dcol h3{font-size:16px; font-weight:800;}
   .dcol .dsub{font-size:13px; color:var(--n700); margin-bottom:14px; min-height:38px;}
-  /* phone frame */
   .phone{width:100%; max-width:270px; margin:0 auto; aspect-ratio:9/19.2; background:var(--white);
     border:8px solid var(--n900); border-radius:30px; overflow:hidden; position:relative;
     box-shadow:0 14px 40px rgba(22,16,33,.18); display:flex; flex-direction:column;}
-  .sbar{height:26px; display:flex; align-items:center; justify-content:flex-end; gap:6px; padding:0 14px; font-size:9px; color:var(--n500);}
-  .topbar{display:flex; align-items:center; justify-content:flex-end; gap:6px; padding:2px 12px 6px;}
+  .sbar{height:24px; display:flex; align-items:center; justify-content:flex-end; gap:6px; padding:0 14px; font-size:9px; color:var(--n500);}
+  .topbar{display:flex; align-items:center; justify-content:flex-end; gap:6px; padding:0 12px 4px;}
   .pill{font-size:9px; font-weight:700; background:var(--n100); color:var(--n900); padding:3px 8px; border-radius:999px;}
   .ico{width:14px; height:14px; border-radius:4px; background:var(--n300);}
   .pbody{flex:1; display:flex; flex-direction:column; padding:6px 14px 12px; min-height:0;}
-  .devices{display:flex; justify-content:center; gap:8px; margin:10px 0 8px;}
+  .devices{display:flex; justify-content:center; gap:8px; margin:12px 0 8px;}
   .devices i{display:block; border:2px solid var(--n900); border-radius:3px;}
   .devices .lap{width:34px; height:22px;} .devices .ph{width:12px; height:22px;} .devices .tv{width:40px; height:24px;}
   .h-title{font-size:13px; font-weight:800; text-align:center; margin-top:4px;}
   .h-sub{font-size:10.5px; color:var(--n700); text-align:center; margin-top:2px;}
   .spacer{flex:1;}
-  .cta{background:var(--brand600); color:#fff; font-weight:800; text-align:center; border-radius:12px; padding:11px; font-size:12.5px;}
-  .cta.big{padding:14px; font-size:13.5px;}
-  .cta.ghost{background:transparent; color:var(--brand600); border:1.5px solid var(--brand300);}
-  .cta.sm{padding:9px; font-size:11px;}
-  .addr{display:flex; align-items:center; gap:6px; border:1px solid var(--n300); border-radius:10px; padding:8px 10px; font-size:10.5px; font-weight:700; color:var(--n900); background:#fff; margin-bottom:8px;}
-  .addr::before{content:'📍'; font-size:11px;}
   .note{font-size:9.5px; color:var(--n500); text-align:center; margin:8px 0;}
-  /* the wiom tv secondary treatments */
-  .tvstrip{background:var(--n900); color:#fff; border-radius:12px 12px 0 0; margin:8px -14px -12px; padding:10px 14px;
+  .cta{background:var(--brand600); color:#fff; font-weight:800; text-align:center; border-radius:12px; padding:13px; font-size:13px;}
+  /* the ONLY added element — highlighted so it's clear nothing else changes */
+  .add{position:relative;}
+  .add::before{content:'only change'; position:absolute; right:-2px; top:-15px; font-size:7px; font-weight:800;
+    color:var(--brand600); background:var(--brand100); padding:2px 6px; border-radius:999px;}
+  .add{outline:2px dashed var(--brand300); outline-offset:3px; border-radius:12px;}
+  /* V1 bottom strip */
+  .tvstrip{background:var(--n900); color:#fff; border-radius:12px; margin-top:10px; padding:11px 13px;
     display:flex; align-items:center; justify-content:space-between; font-size:11px; font-weight:700;}
-  .tvstrip .free{font-size:8.5px; background:var(--brand100); color:var(--brand600); padding:2px 6px; border-radius:999px; font-weight:800;}
-  .tvpill{position:absolute; left:14px; bottom:64px; background:var(--n900); color:#fff; font-size:10px; font-weight:700;
-    padding:7px 12px; border-radius:999px; box-shadow:0 6px 18px rgba(22,16,33,.35); display:flex; gap:5px; align-items:center;}
-  .nudge{background:var(--info100); border:1px solid #D9C2F5; border-radius:12px; padding:9px 11px; margin-top:6px;}
-  .nudge .n1{font-size:10px; font-weight:700; color:var(--info600);}
-  .nudge .n2{font-size:9.5px; color:var(--n700); margin-top:2px;}
-  .miniframe{background:var(--n900); border-radius:10px; padding:8px; margin:8px -2px; }
-  .miniframe .scr{aspect-ratio:16/9; border:1.5px solid #4a4157; border-radius:6px; background:linear-gradient(135deg,#2a2336,#3b3348); position:relative;}
-  .miniframe .scr::after{content:'● LIVE'; position:absolute; top:4px; left:4px; font-size:7px; font-weight:800; color:#fff; background:rgba(0,0,0,.5); padding:1px 4px; border-radius:3px;}
-  .miniframe .mrow{display:flex; align-items:center; gap:6px; margin-top:6px;}
-  .miniframe .mrow b{color:#fff; font-size:10px;} .miniframe .mrow span{color:var(--n500); font-size:8px;}
-  /* objective legend under each phone */
+  .tvstrip .free{font-size:8px; background:var(--brand100); color:var(--brand600); padding:2px 6px; border-radius:999px; font-weight:800;}
+  /* V2 inline link */
+  .tvlink{text-align:center; margin-top:12px; font-size:11.5px; font-weight:800; color:var(--brand600);}
+  /* V3 strip + live thumbnail */
+  .tvrich{background:var(--n900); border-radius:12px; margin-top:10px; padding:9px; display:flex; gap:9px; align-items:center;}
+  .tvrich .thumb{width:52px; flex:0 0 52px; aspect-ratio:16/9; border:1.5px solid #4a4157; border-radius:6px; position:relative;
+    background:linear-gradient(135deg,#3a2440,#4a2f52);}
+  .tvrich .thumb::after{content:'●'; position:absolute; top:2px; left:3px; font-size:6px; color:var(--neg600);}
+  .tvrich .tt b{color:#fff; font-size:10.5px; font-weight:800; display:block;}
+  .tvrich .tt span{color:var(--n500); font-size:8.5px;}
+  .tvrich .go{margin-left:auto; color:var(--brand300); font-size:14px;}
   .objs{display:flex; flex-direction:column; gap:7px; margin-top:14px;}
   .obj{display:flex; gap:8px; align-items:flex-start; font-size:12px; color:var(--n700);}
   .obj b{color:var(--n900);}
   .dot{width:10px; height:10px; border-radius:3px; margin-top:4px; flex:0 0 auto;}
-  .dot.book{background:var(--brand600);} .dot.tv{background:var(--n900);} .dot.win{background:var(--pos600);}
+  .dot.book{background:var(--brand600);} .dot.tv{background:var(--n900);}
   .best{display:inline-block; font-size:10.5px; font-weight:800; color:var(--pos600); background:var(--pos100); padding:3px 8px; border-radius:999px; margin-top:10px;}
-  /* recommendation */
   .rec{margin-top:44px; background:linear-gradient(135deg,var(--n900),var(--brandSec)); color:#fff; border-radius:20px; padding:26px;}
   .rec h3{font-size:18px; font-weight:800; margin-bottom:10px;}
   .rec p{font-size:14.5px; color:#E7E1F0;}
+  .rec code{color:#fff; background:rgba(255,255,255,.12); padding:1px 5px; border-radius:5px;}
   .rec .row{display:flex; flex-wrap:wrap; gap:10px; margin-top:14px;}
   .rec .box{background:rgba(255,255,255,.08); border:1px solid rgba(255,255,255,.16); border-radius:12px; padding:12px 14px; flex:1; min-width:200px;}
   .rec .box .l{font-size:11px; font-weight:800; letter-spacing:.05em; text-transform:uppercase; color:var(--brand300);}
   .rec .box .v{font-size:13.5px; margin-top:4px;}
-  .legend{display:flex; gap:16px; flex-wrap:wrap; margin:10px 0 0; font-size:12px; color:var(--n700);}
-  .legend span{display:flex; align-items:center; gap:6px;}
   .foot{margin-top:36px; font-size:12px; color:var(--n500); text-align:center;}
-  @media(max-width:880px){ .tech,.designs{grid-template-columns:1fr;} .grid2{grid-template-columns:1fr;} .designs{gap:32px;} .phone{max-width:300px;} }
+  @media(max-width:880px){ .tech,.designs,.grid2{grid-template-columns:1fr;} .designs{gap:34px;} .phone{max-width:300px;} }
 </style>
 </head>
 <body>
 <div class="wrap">
 
-  <span class="kick">Wiom TV × Booking · Solution options</span>
-  <h1>Bring the user back to <span class="g">Wiom TV</span> — without losing the booking</h1>
-  <p class="lede">A user hits the unserviceable screen, tries Wiom TV, then quits. On relaunch they land on <b>“check my area”</b> with no way back to Wiom TV. Solve the repeat‑access problem <b>and</b> give them a fair, objective‑1 chance to book.</p>
+  <span class="kick">Wiom TV re-entry · landing screen only</span>
+  <h1>Bring the user back to <span class="g">Wiom TV</span> — one addition, primary flow untouched</h1>
+  <p class="lede">A user tries Wiom TV on the unserviceable screen, quits, and relaunches onto “check my area” with no way back. We add <b>one</b> secondary re-entry on that landing screen — and we do <b>not</b> touch the booking / serviceability code, even where changing it would help.</p>
 
   <div class="grid2" style="margin-top:22px;">
-    <div class="card problem">
-      <h3>🎯 The problem</h3>
-      <p>Wiom TV lives only on the unserviceable screen. It isn’t saved to the app’s booking history, and the user didn’t add wiom.tv to their home screen — so the Wiom app is their only door back, and it opens on “enter location.”</p>
-    </div>
-    <div class="card unlock">
-      <h3>🔑 The unlock</h3>
-      <p>The screen they land on <b>is already the booking funnel</b>. Objective 1 is served by default. So this isn’t a tug‑of‑war — we just add a Wiom TV re‑entry and make the landing <i>smart</i> about the fact they were unserviceable.</p>
+    <div class="card change">
+      <h3>✓ What we change</h3>
       <ul class="tick">
-        <li>Location was mis‑detected → let them re‑check</li>
-        <li>They moved → new address, new check</li>
-        <li>Wiom expanded coverage → their area may now be serviceable</li>
+        <li><b>Who</b> sees a Wiom TV re-entry on the landing screen</li>
+        <li>A single, clearly-secondary element — added, never replacing</li>
+      </ul>
+    </div>
+    <div class="card keep">
+      <h3>What we don’t touch</h3>
+      <ul class="cross">
+        <li>The <b>booking / “check my area” funnel</b> — hero &amp; CTA unchanged</li>
+        <li>Serviceability logic, routing, navigation history</li>
+        <li>No new backend, no new dependency</li>
       </ul>
     </div>
   </div>
 
-  <!-- ───────────── TECH ───────────── -->
-  <h2>Tech options · leanest first · reuse existing infra</h2>
+  <div class="parked">
+    <h3>⏸ Parked on purpose — re-check ideas</h3>
+    <p>Auto re-checking the area on return (location error, address change, coverage expansion) would strengthen objective 1 — but that flow isn’t ours to change right now. We stick to the Wiom TV problem and leave the primary utility exactly as it is. Noted as a future option for whoever owns booking.</p>
+  </div>
+
+  <!-- ───────── TECH: WHO SEES IT ───────── -->
+  <h2>Tech · the only decision is <span style="color:var(--n700)">who sees the re-entry</span></h2>
+  <p class="h2sub">Every option is purely additive to the landing screen — a conditional widget. None reads or writes booking/serviceability code. Leanest first.</p>
   <div class="tech">
     <div class="card">
-      <span class="tcode">T1</span>
-      <h3>Local flag only</h3>
-      <div class="chips"><span class="chip zero">0 backend</span><span class="chip loc">~20–30 LOC</span></div>
-      <p>Stamp <code>lastUnserviceable&nbsp;{ts,&nbsp;lat,&nbsp;lng,&nbsp;address}</code> in <code>shared_preferences</code> on the unserviceable screen. On <code>locationHome</code>, if present &amp; fresh, render a Wiom TV re‑entry + a pre‑filled “re‑check” shortcut. Clear on a successful booking.</p>
-      <p style="margin-top:auto; padding-top:12px; font-size:12.5px; color:var(--n500);">Leanest possible first cut.</p>
+      <span class="tcode">W1</span>
+      <h3>Everyone</h3>
+      <div class="chips"><span class="chip zero">0 backend</span><span class="chip loc">~10 LOC</span><span class="chip notouch">no primary touch</span></div>
+      <p>A permanent secondary Wiom TV re-entry on the landing screen for all users. No flag, no state — just an always-present element.</p>
+      <p class="tfoot" style="color:var(--n500);">Leanest, but always-on for people who never opened Wiom TV.</p>
     </div>
     <div class="card recd">
-      <span class="rec-inline">✓ Recommended core</span>
-      <span class="tcode">T2</span>
-      <h3>Flag + auto re‑check</h3>
-      <div class="chips"><span class="chip zero">0 new backend</span><span class="chip loc">~40–60 LOC</span></div>
-      <p>Same flag, but on return silently re‑run the <b>existing</b> serviceability check on the stored lat/lng — catches company coverage change <i>and</i> the original location error. If now serviceable → straight into booking.</p>
-      <p style="margin-top:auto; padding-top:12px; font-size:12.5px; color:var(--pos600); font-weight:700;">Best objective‑1 payoff for ~zero backend.</p>
+      <span class="rec-inline">✓ Recommended</span>
+      <span class="tcode">W2</span>
+      <h3>Returning Wiom TV users only</h3>
+      <div class="chips"><span class="chip zero">0 backend</span><span class="chip loc">~20 LOC</span><span class="chip notouch">no primary touch</span></div>
+      <p>Set a local flag in <code>shared_preferences</code> when the user sees/taps the band on the unserviceable screen. The landing reads it and shows the re-entry <b>only to them</b>. Clear it after a successful booking or an expiry.</p>
+      <p class="tfoot" style="color:var(--pos600);">Solves the exact problem, shows it only to people who care.</p>
     </div>
     <div class="card">
-      <span class="tcode">T3</span>
-      <h3>Remote‑Config gated</h3>
-      <div class="chips"><span class="chip rc">managed config</span><span class="chip loc">~60–80 LOC</span></div>
-      <p>Firebase RC (already wired) controls on/off, copy, channel, placement &amp; the nudge threshold — layered on the local flag. No custom backend.</p>
-      <p style="margin-top:auto; padding-top:12px; font-size:12.5px; color:var(--warn600); font-weight:700;">Kill/tune without a release — the train is dormant.</p>
+      <span class="tcode">W3</span>
+      <h3>Remote-Config gated</h3>
+      <div class="chips"><span class="chip rc">managed config</span><span class="chip loc">~40 LOC</span><span class="chip notouch">no primary touch</span></div>
+      <p>Firebase RC (already wired) controls on/off, % rollout and audience (all vs flagged), layered on W2.</p>
+      <p class="tfoot" style="color:var(--warn600);">Kill / tune / stage without a release — the train is dormant.</p>
     </div>
   </div>
-  <p style="margin-top:14px; font-size:13.5px; color:var(--n700);"><b>Ship:</b> T2 as the core + T3’s RC kill‑switch as cheap insurance on a new production surface.</p>
+  <p style="margin-top:14px; font-size:13.5px; color:var(--n700);"><b>Ship:</b> W2 (flagged returners) + W3’s RC switch as a cheap kill/rollout control.</p>
 
-  <!-- ───────────── DESIGN ───────────── -->
-  <h2>Design options · booking stays hero · Wiom TV is the “meanwhile”</h2>
-  <div class="legend">
-    <span><i class="dot book" style="display:inline-block"></i> Objective 1 — booking / re‑check</span>
-    <span><i class="dot tv" style="display:inline-block"></i> Objective 2 — Wiom TV return</span>
-    <span><i class="dot win" style="display:inline-block"></i> The win</span>
-  </div>
+  <!-- ───────── DESIGN: VARIATIONS OF THE RESUME RE-ENTRY ───────── -->
+  <h2>Design · variations of the <span style="color:var(--n700)">resume re-entry</span> (Option 1)</h2>
+  <p class="h2sub">Same idea, three intensities. In all three the booking hero is <b>identical and untouched</b> — only the dashed element is added. They differ by how much they pull toward Wiom TV.</p>
 
-  <div class="designs" style="margin-top:18px;">
+  <div class="designs">
 
-    <!-- D1 -->
+    <!-- V1 -->
     <div class="dcol">
-      <div class="dhead"><span class="dcode">D1</span><h3>Resume strip</h3></div>
-      <div class="dsub">locationHome untouched as the hero. A slim Wiom TV strip pinned at the very bottom.</div>
+      <div class="dhead"><span class="dcode">V1</span><h3>Bottom strip</h3></div>
+      <div class="dsub">A dark Wiom TV strip below the primary CTA. Whole strip tappable.</div>
       <div class="phone">
         <div class="sbar">4:35 · 50%</div>
         <div class="topbar"><div class="ico"></div><span class="pill">English</span></div>
@@ -183,78 +190,80 @@
           <div class="h-sub">जब चाहिए, तब रिचार्ज।</div>
           <div class="spacer"></div>
           <div class="note">सिर्फ़ इलाके की जाँच करने के लिए</div>
-          <div class="cta big">मेरे इलाके में है या नहीं?</div>
-          <div class="tvstrip"><span>📺 व्योम TV वहीं से जारी रखें →</span><span class="free">फ्री</span></div>
+          <div class="cta">मेरे इलाके में है या नहीं?</div>
+          <div class="tvstrip add"><span>📺 व्योम TV वहीं से जारी रखें →</span><span class="free">फ्री</span></div>
         </div>
       </div>
       <div class="objs">
-        <div class="obj"><span class="dot book"></span><span><b>Booking hero</b> — the funnel CTA is fully dominant, unchanged.</span></div>
-        <div class="obj"><span class="dot tv"></span><span><b>Wiom TV</b> — a quiet door, one slim strip.</span></div>
+        <div class="obj"><span class="dot book"></span><span><b>Booking hero</b> — untouched.</span></div>
+        <div class="obj"><span class="dot tv"></span><span><b>Wiom TV</b> — one clear strip, medium pull.</span></div>
       </div>
-      <span class="best">Best: lowest cannibalization</span>
+      <span class="best">Balanced default</span>
     </div>
 
-    <!-- D2 -->
+    <!-- V2 -->
     <div class="dcol">
-      <div class="dhead"><span class="dcode">D2</span><h3>Two doors</h3></div>
-      <div class="dsub">A returning‑user variant that headlines the re‑check, with Wiom TV clearly secondary.</div>
+      <div class="dhead"><span class="dcode">V2</span><h3>Inline link</h3></div>
+      <div class="dsub">A lightweight text link under the CTA. Lowest footprint.</div>
       <div class="phone">
         <div class="sbar">4:35 · 50%</div>
         <div class="topbar"><div class="ico"></div><span class="pill">English</span></div>
         <div class="pbody">
-          <div class="h-title" style="margin-top:10px; font-size:14px;">क्या अब व्योम आपके<br>इलाके में है?</div>
-          <div class="h-sub" style="margin:6px 0 12px;">तब से हो सकता है अब उपलब्ध हो</div>
-          <div class="addr">Rajouri Garden, New Delhi</div>
-          <div class="cta big">दुबारा जाँचें</div>
-          <div class="note" style="margin:12px 0 8px;">— या —</div>
-          <div class="cta ghost sm">तब तक व्योम TV देखें 📺</div>
+          <div class="devices"><i class="lap"></i><i class="ph"></i><i class="tv"></i></div>
+          <div class="h-title">रिचार्ज वाला घर का नेट</div>
+          <div class="h-sub">जब चाहिए, तब रिचार्ज।</div>
           <div class="spacer"></div>
+          <div class="note">सिर्फ़ इलाके की जाँच करने के लिए</div>
+          <div class="cta">मेरे इलाके में है या नहीं?</div>
+          <div class="tvlink add">📺 व्योम TV वहीं से जारी रखें →</div>
         </div>
       </div>
       <div class="objs">
-        <div class="obj"><span class="dot book"></span><span><b>Objective 1 headlined</b> — pre‑filled re‑check (pairs with T2 auto‑check).</span></div>
-        <div class="obj"><span class="dot tv"></span><span><b>Wiom TV</b> — present, explicitly smaller.</span></div>
-        <div class="obj"><span class="dot win"></span><span><b>Uses</b> the unserviceable context instead of ignoring it.</span></div>
+        <div class="obj"><span class="dot book"></span><span><b>Booking hero</b> — untouched, most dominant.</span></div>
+        <div class="obj"><span class="dot tv"></span><span><b>Wiom TV</b> — a quiet text link, lightest pull.</span></div>
       </div>
-      <span class="best">Best: serves both intentionally</span>
+      <span class="best">Least intrusion on the funnel</span>
     </div>
 
-    <!-- D3 -->
+    <!-- V3 -->
     <div class="dcol">
-      <div class="dhead"><span class="dcode">D3</span><h3>Waiting room</h3></div>
-      <div class="dsub">Wiom TV always reachable via a low‑profile pill; the screen actively nudges a re‑check.</div>
+      <div class="dhead"><span class="dcode">V3</span><h3>Strip + live thumbnail</h3></div>
+      <div class="dsub">Same placement, but a live channel thumbnail makes it enticing.</div>
       <div class="phone">
         <div class="sbar">4:35 · 50%</div>
         <div class="topbar"><div class="ico"></div><span class="pill">English</span></div>
         <div class="pbody">
-          <div class="nudge"><div class="n1">⏱ जाँच हुए 5 दिन</div><div class="n2">आपके इलाके में अब शायद उपलब्ध हो — दुबारा जाँचें</div></div>
-          <div class="devices" style="margin:14px 0 6px;"><i class="lap"></i><i class="ph"></i><i class="tv"></i></div>
-          <div class="h-title" style="font-size:12px;">रिचार्ज वाला घर का नेट</div>
+          <div class="devices"><i class="lap"></i><i class="ph"></i><i class="tv"></i></div>
+          <div class="h-title">रिचार्ज वाला घर का नेट</div>
+          <div class="h-sub">जब चाहिए, तब रिचार्ज।</div>
           <div class="spacer"></div>
-          <div class="cta big">दुबारा जाँचें</div>
-          <div class="tvpill">📺 व्योम TV</div>
+          <div class="cta">मेरे इलाके में है या नहीं?</div>
+          <div class="tvrich add">
+            <div class="thumb"></div>
+            <div class="tt"><b>व्योम TV जारी रखें</b><span>अभी लाइव · फ्री</span></div>
+            <div class="go">→</div>
+          </div>
         </div>
       </div>
       <div class="objs">
-        <div class="obj"><span class="dot book"></span><span><b>Active nudge</b> — time/serviceability‑aware re‑check prompt.</span></div>
-        <div class="obj"><span class="dot tv"></span><span><b>Wiom TV</b> — ambient pill, never dominant.</span></div>
+        <div class="obj"><span class="dot book"></span><span><b>Booking hero</b> — untouched.</span></div>
+        <div class="obj"><span class="dot tv"></span><span><b>Wiom TV</b> — live preview, strongest pull.</span></div>
       </div>
-      <span class="best">Best: long gaps to coverage</span>
+      <span class="best">Highest Wiom TV recall</span>
     </div>
   </div>
 
-  <!-- ───────────── RECOMMENDATION ───────────── -->
   <div class="rec">
     <h3>Recommendation</h3>
-    <p><b>T2 + RC kill‑switch, presented as D2</b> — degrading to D1’s quiet strip once the flag is stale. The returning‑unserviceable user lands on a <code style="color:#fff">locationHome</code> that auto‑re‑checks their area for a real booking chance, and offers a clearly‑secondary “resume Wiom TV.” Zero new backend; ~1 screen variant + a stored flag.</p>
+    <p><b>W2 + RC switch, presented as V1</b> — the flagged returning user sees one <b>bottom Wiom TV strip</b> on an otherwise‑identical <code>locationHome</code>. Zero backend, no touch to the booking funnel, ~20 lines behind a config flag. Go <b>V2</b> if you want it even lighter, <b>V3</b> if early data says Wiom TV recall matters more than funnel calm.</p>
     <div class="row">
-      <div class="box"><div class="l">Tech</div><div class="v">T2 flag + auto re‑check · T3 RC switch</div></div>
-      <div class="box"><div class="l">Design</div><div class="v">D2 for flagged returners → D1 when stale</div></div>
-      <div class="box"><div class="l">Guardrail</div><div class="v">A/B booking‑start rate with vs without the TV entry — prove the balance, don’t assume it.</div></div>
+      <div class="box"><div class="l">Who sees it</div><div class="v">W2 — users who opened the band · RC‑gated</div></div>
+      <div class="box"><div class="l">How it looks</div><div class="v">V1 bottom strip (V2 lighter / V3 richer)</div></div>
+      <div class="box"><div class="l">Guardrail</div><div class="v">A/B booking‑start rate with vs without the strip — the funnel stays king.</div></div>
     </div>
   </div>
 
-  <div class="foot">Wiom TV × customer‑app · unserviceable → repeat access · solution options</div>
+  <div class="foot">Wiom TV × customer‑app · landing‑screen re‑entry · primary flow untouched</div>
 </div>
 </body>
 </html>
