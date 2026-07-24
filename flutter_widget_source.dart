@@ -1,7 +1,29 @@
 import 'dart:async';
+import 'dart:html' as html;
+import 'dart:ui_web' as ui_web;
 import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:video_player/video_player.dart';
+
+// Web-demo only: register a platform view that embeds live.html (a LIVE HLS channel
+// via hls.js) as an iframe. The real Android app uses video_player/ExoPlayer instead —
+// this shim exists purely so the browser demo shows live TV rather than an MP4.
+const String _kLiveViewType = 'wiom-live-tv';
+bool _liveViewRegistered = false;
+void _registerLiveView() {
+  if (_liveViewRegistered || !kIsWeb) return;
+  _liveViewRegistered = true;
+  ui_web.platformViewRegistry.registerViewFactory(
+    _kLiveViewType,
+    (int _) => html.IFrameElement()
+      ..src = 'live.html'
+      ..style.border = 'none'
+      ..style.width = '100%'
+      ..style.height = '100%'
+      ..allow = 'autoplay',
+  );
+}
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Wiom design tokens (from CLAUDE.md design system)
@@ -57,7 +79,10 @@ const kDefaultConfig = BandConfig(
   capSeconds: 25,
 );
 
-void main() => runApp(const ProtoApp());
+void main() {
+  _registerLiveView();
+  runApp(const ProtoApp());
+}
 
 class ProtoApp extends StatelessWidget {
   const ProtoApp({super.key});
@@ -225,6 +250,13 @@ class _WiomTvPreviewBandState extends State<WiomTvPreviewBand>
   }
 
   void _start(PreviewChannel c) {
+    if (kIsWeb) {
+      // Web demo: the hls.js platform view owns playback; just reveal it (over the
+      // poster) once it's had a moment to buffer the live stream.
+      Timer(const Duration(milliseconds: 1500),
+          () => mounted ? setState(() => _playing = true) : null);
+      return;
+    }
     _vc?.dispose();
     final uri = c.url.startsWith('asset:')
         ? null
@@ -362,16 +394,19 @@ class _WiomTvPreviewBandState extends State<WiomTvPreviewBand>
             AnimatedOpacity(
               opacity: _playing ? 1 : 0,
               duration: const Duration(milliseconds: 450),
-              child: (w != null && w.value.isInitialized)
-                  ? FittedBox(
-                      fit: BoxFit.cover,
-                      clipBehavior: Clip.hardEdge,
-                      child: SizedBox(
-                          width: w.value.size.width,
-                          height: w.value.size.height,
-                          child: VideoPlayer(w)),
-                    )
-                  : const SizedBox.shrink(),
+              child: kIsWeb
+                  // Web demo: live HLS channel via hls.js platform view.
+                  ? const HtmlElementView(viewType: _kLiveViewType)
+                  : (w != null && w.value.isInitialized)
+                      ? FittedBox(
+                          fit: BoxFit.cover,
+                          clipBehavior: Clip.hardEdge,
+                          child: SizedBox(
+                              width: w.value.size.width,
+                              height: w.value.size.height,
+                              child: VideoPlayer(w)),
+                        )
+                      : const SizedBox.shrink(),
             ),
             if (_playing)
               Positioned(
