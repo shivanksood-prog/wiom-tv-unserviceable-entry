@@ -75,25 +75,19 @@
   .spacer{flex:1;}
   .note{font-size:9.5px; color:var(--n500); text-align:center; margin:8px 0;}
   .cta{background:var(--brand600); color:#fff; font-weight:800; text-align:center; border-radius:12px; padding:13px; font-size:13px;}
-  /* the ONLY added element — highlighted so it's clear nothing else changes */
-  .add{position:relative;}
-  .add::before{content:'only change'; position:absolute; right:-2px; top:-15px; font-size:7px; font-weight:800;
-    color:var(--brand600); background:var(--brand100); padding:2px 6px; border-radius:999px;}
-  .add{outline:2px dashed var(--brand300); outline-offset:3px; border-radius:12px;}
-  /* V1 bottom strip */
-  .tvstrip{background:var(--n900); color:#fff; border-radius:12px; margin-top:10px; padding:11px 13px;
-    display:flex; align-items:center; justify-content:space-between; font-size:11px; font-weight:700;}
-  .tvstrip .free{font-size:8px; background:var(--brand100); color:var(--brand600); padding:2px 6px; border-radius:999px; font-weight:800;}
-  /* V2 inline link */
-  .tvlink{text-align:center; margin-top:12px; font-size:11.5px; font-weight:800; color:var(--brand600);}
-  /* V3 strip + live thumbnail */
-  .tvrich{background:var(--n900); border-radius:12px; margin-top:10px; padding:9px; display:flex; gap:9px; align-items:center;}
-  .tvrich .thumb{width:52px; flex:0 0 52px; aspect-ratio:16/9; border:1.5px solid #4a4157; border-radius:6px; position:relative;
-    background:linear-gradient(135deg,#3a2440,#4a2f52);}
-  .tvrich .thumb::after{content:'●'; position:absolute; top:2px; left:3px; font-size:6px; color:var(--neg600);}
-  .tvrich .tt b{color:#fff; font-size:10.5px; font-weight:800; display:block;}
-  .tvrich .tt span{color:var(--n500); font-size:8.5px;}
-  .tvrich .go{margin-left:auto; color:var(--brand300); font-size:14px;}
+  /* the ONLY added element — dashed ring marks it; everything else is the untouched screen */
+  .add{outline:2px dashed var(--brand300); outline-offset:3px; border-radius:10px;}
+  /* action zone marker: bottom CTA belongs to the funnel, kept clean */
+  .zone{margin-top:10px; padding-top:8px; border-top:1px dashed var(--n300); font-size:8px; color:var(--n500); text-align:center;}
+  /* V1 top resume banner (under app bar) */
+  .tvbanner{background:var(--brand100); border:1px solid var(--brand300); border-radius:10px; padding:7px 10px;
+    display:flex; align-items:center; gap:6px; font-size:9.5px; font-weight:800; color:var(--brand600); margin-bottom:2px;}
+  .tvbanner .x{margin-left:auto; color:var(--n500); font-weight:700;}
+  /* V2 header shortcut pill (in the app bar) */
+  .tvhpill{font-size:8.5px; font-weight:800; background:var(--n900); color:#fff; padding:4px 8px; border-radius:999px;}
+  /* V3 floating pill */
+  .tvfloat{position:absolute; right:16px; bottom:74px; background:var(--n900); color:#fff; font-size:10px; font-weight:800;
+    padding:8px 13px; border-radius:999px; box-shadow:0 8px 20px rgba(22,16,33,.42); z-index:5;}
   .objs{display:flex; flex-direction:column; gap:7px; margin-top:14px;}
   .obj{display:flex; gap:8px; align-items:flex-start; font-size:12px; color:var(--n700);}
   .obj b{color:var(--n900);}
@@ -171,16 +165,63 @@
   </div>
   <p style="margin-top:14px; font-size:13.5px; color:var(--n700);"><b>Ship:</b> W2 (flagged returners) + W3’s RC switch as a cheap kill/rollout control.</p>
 
-  <!-- ───────── DESIGN: VARIATIONS OF THE RESUME RE-ENTRY ───────── -->
-  <h2>Design · variations of the <span style="color:var(--n700)">resume re-entry</span> (Option 1)</h2>
-  <p class="h2sub">Same idea, three intensities. In all three the booking hero is <b>identical and untouched</b> — only the dashed element is added. They differ by how much they pull toward Wiom TV.</p>
+  <!-- ───────── DESIGN: POSITIONS THAT KEEP TV OUT OF THE ACTION ZONE ───────── -->
+  <h2>Design · positions that keep Wiom TV <span style="color:var(--n700)">out of the booking action zone</span></h2>
+  <p class="h2sub">The bottom full‑width slot is the funnel’s action zone — anything there reads as a booking step. So the re‑entry moves to a different <b>zone</b>. In all three the booking hero + bottom CTA are <b>identical &amp; untouched</b> (only the dashed element is added); the difference is separation vs. recall.</p>
 
   <div class="designs">
 
-    <!-- V1 -->
+    <!-- V1 top banner -->
     <div class="dcol">
-      <div class="dhead"><span class="dcode">V1</span><h3>Bottom strip</h3></div>
-      <div class="dsub">A dark Wiom TV strip below the primary CTA. Whole strip tappable.</div>
+      <div class="dhead"><span class="dcode">V1</span><h3>Top resume banner</h3></div>
+      <div class="dsub">A slim, dismissible “continue watching” strip under the app bar — opposite the CTA.</div>
+      <div class="phone">
+        <div class="sbar">4:35 · 50%</div>
+        <div class="topbar"><div class="ico"></div><span class="pill">English</span></div>
+        <div class="pbody">
+          <div class="tvbanner add">📺 व्योम TV वहीं से जारी रखें → <span class="x">✕</span></div>
+          <div class="devices"><i class="lap"></i><i class="ph"></i><i class="tv"></i></div>
+          <div class="h-title">रिचार्ज वाला घर का नेट</div>
+          <div class="h-sub">जब चाहिए, तब रिचार्ज।</div>
+          <div class="spacer"></div>
+          <div class="note">सिर्फ़ इलाके की जाँच करने के लिए</div>
+          <div class="cta">मेरे इलाके में है या नहीं?</div>
+        </div>
+      </div>
+      <div class="objs">
+        <div class="obj"><span class="dot book"></span><span><b>Action zone</b> — 100% booking, uncontested.</span></div>
+        <div class="obj"><span class="dot tv"></span><span><b>Wiom TV</b> — a resume banner, semantic match.</span></div>
+      </div>
+      <span class="best">✓ Recommended · separate + good recall</span>
+    </div>
+
+    <!-- V2 header pill -->
+    <div class="dcol">
+      <div class="dhead"><span class="dcode">V2</span><h3>Header shortcut</h3></div>
+      <div class="dsub">A small “Wiom TV” pill in the app bar — a pure nav utility, never in the content flow.</div>
+      <div class="phone">
+        <div class="sbar">4:35 · 50%</div>
+        <div class="topbar"><span class="tvhpill add">📺 Wiom TV</span><div class="ico"></div><span class="pill">EN</span></div>
+        <div class="pbody">
+          <div class="devices" style="margin-top:16px;"><i class="lap"></i><i class="ph"></i><i class="tv"></i></div>
+          <div class="h-title">रिचार्ज वाला घर का नेट</div>
+          <div class="h-sub">जब चाहिए, तब रिचार्ज।</div>
+          <div class="spacer"></div>
+          <div class="note">सिर्फ़ इलाके की जाँच करने के लिए</div>
+          <div class="cta">मेरे इलाके में है या नहीं?</div>
+        </div>
+      </div>
+      <div class="objs">
+        <div class="obj"><span class="dot book"></span><span><b>Content + action</b> — completely untouched.</span></div>
+        <div class="obj"><span class="dot tv"></span><span><b>Wiom TV</b> — nav shortcut, lowest pull / recall.</span></div>
+      </div>
+      <span class="best">Most separate, lowest pull</span>
+    </div>
+
+    <!-- V3 floating -->
+    <div class="dcol">
+      <div class="dhead"><span class="dcode">V3</span><h3>Floating pill</h3></div>
+      <div class="dsub">A detached pill floating above the content — clearly a separate layer, not a button.</div>
       <div class="phone">
         <div class="sbar">4:35 · 50%</div>
         <div class="topbar"><div class="ico"></div><span class="pill">English</span></div>
@@ -191,75 +232,24 @@
           <div class="spacer"></div>
           <div class="note">सिर्फ़ इलाके की जाँच करने के लिए</div>
           <div class="cta">मेरे इलाके में है या नहीं?</div>
-          <div class="tvstrip add"><span>📺 व्योम TV वहीं से जारी रखें →</span><span class="free">फ्री</span></div>
         </div>
+        <div class="tvfloat add">📺 व्योम TV</div>
       </div>
       <div class="objs">
-        <div class="obj"><span class="dot book"></span><span><b>Booking hero</b> — untouched.</span></div>
-        <div class="obj"><span class="dot tv"></span><span><b>Wiom TV</b> — one clear strip, medium pull.</span></div>
+        <div class="obj"><span class="dot book"></span><span><b>Booking</b> — untouched; pill sits on a separate layer.</span></div>
+        <div class="obj"><span class="dot tv"></span><span><b>Wiom TV</b> — detached, can overlap content.</span></div>
       </div>
-      <span class="best">Balanced default</span>
-    </div>
-
-    <!-- V2 -->
-    <div class="dcol">
-      <div class="dhead"><span class="dcode">V2</span><h3>Inline link</h3></div>
-      <div class="dsub">A lightweight text link under the CTA. Lowest footprint.</div>
-      <div class="phone">
-        <div class="sbar">4:35 · 50%</div>
-        <div class="topbar"><div class="ico"></div><span class="pill">English</span></div>
-        <div class="pbody">
-          <div class="devices"><i class="lap"></i><i class="ph"></i><i class="tv"></i></div>
-          <div class="h-title">रिचार्ज वाला घर का नेट</div>
-          <div class="h-sub">जब चाहिए, तब रिचार्ज।</div>
-          <div class="spacer"></div>
-          <div class="note">सिर्फ़ इलाके की जाँच करने के लिए</div>
-          <div class="cta">मेरे इलाके में है या नहीं?</div>
-          <div class="tvlink add">📺 व्योम TV वहीं से जारी रखें →</div>
-        </div>
-      </div>
-      <div class="objs">
-        <div class="obj"><span class="dot book"></span><span><b>Booking hero</b> — untouched, most dominant.</span></div>
-        <div class="obj"><span class="dot tv"></span><span><b>Wiom TV</b> — a quiet text link, lightest pull.</span></div>
-      </div>
-      <span class="best">Least intrusion on the funnel</span>
-    </div>
-
-    <!-- V3 -->
-    <div class="dcol">
-      <div class="dhead"><span class="dcode">V3</span><h3>Strip + live thumbnail</h3></div>
-      <div class="dsub">Same placement, but a live channel thumbnail makes it enticing.</div>
-      <div class="phone">
-        <div class="sbar">4:35 · 50%</div>
-        <div class="topbar"><div class="ico"></div><span class="pill">English</span></div>
-        <div class="pbody">
-          <div class="devices"><i class="lap"></i><i class="ph"></i><i class="tv"></i></div>
-          <div class="h-title">रिचार्ज वाला घर का नेट</div>
-          <div class="h-sub">जब चाहिए, तब रिचार्ज।</div>
-          <div class="spacer"></div>
-          <div class="cta">मेरे इलाके में है या नहीं?</div>
-          <div class="tvrich add">
-            <div class="thumb"></div>
-            <div class="tt"><b>व्योम TV जारी रखें</b><span>अभी लाइव · फ्री</span></div>
-            <div class="go">→</div>
-          </div>
-        </div>
-      </div>
-      <div class="objs">
-        <div class="obj"><span class="dot book"></span><span><b>Booking hero</b> — untouched.</span></div>
-        <div class="obj"><span class="dot tv"></span><span><b>Wiom TV</b> — live preview, strongest pull.</span></div>
-      </div>
-      <span class="best">Highest Wiom TV recall</span>
+      <span class="best">Separate layer, medium pull</span>
     </div>
   </div>
 
   <div class="rec">
     <h3>Recommendation</h3>
-    <p><b>W2 + RC switch, presented as V1</b> — the flagged returning user sees one <b>bottom Wiom TV strip</b> on an otherwise‑identical <code>locationHome</code>. Zero backend, no touch to the booking funnel, ~20 lines behind a config flag. Go <b>V2</b> if you want it even lighter, <b>V3</b> if early data says Wiom TV recall matters more than funnel calm.</p>
+    <p><b>W2 + RC switch, presented as V1</b> — the flagged returning user sees one <b>top resume banner</b> on an otherwise‑identical <code>locationHome</code>. It sits opposite the CTA, reads as “continue watching,” and leaves the bottom action zone 100% booking. Zero backend, no touch to the funnel, ~20 lines behind a config flag. Go <b>V2 (header shortcut)</b> if the funnel must feel completely untouched, <b>V3 (floating)</b> for a separate‑layer look.</p>
     <div class="row">
       <div class="box"><div class="l">Who sees it</div><div class="v">W2 — users who opened the band · RC‑gated</div></div>
-      <div class="box"><div class="l">How it looks</div><div class="v">V1 bottom strip (V2 lighter / V3 richer)</div></div>
-      <div class="box"><div class="l">Guardrail</div><div class="v">A/B booking‑start rate with vs without the strip — the funnel stays king.</div></div>
+      <div class="box"><div class="l">How it looks</div><div class="v">V1 top resume banner (V2 header / V3 floating)</div></div>
+      <div class="box"><div class="l">Guardrail</div><div class="v">A/B booking‑start rate with vs without the banner — the funnel stays king.</div></div>
     </div>
   </div>
 
