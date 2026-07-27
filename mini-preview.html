@@ -1,0 +1,328 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>V4 · Mini side preview — Wiom TV re-entry</title>
+<style>
+  :root{
+    --brand600:#D9008D; --brand300:#FFB2E4; --brand100:#FFE5F6; --brandSec:#443152;
+    --n900:#161021; --n800:#352D42; --n700:#665E75; --n500:#A7A1B2; --n300:#D7D3E0;
+    --n100:#F1EDF7; --white:#FAF9FC; --pos600:#008043; --pos100:#E1FAED;
+    --neg600:#E01E00; --warn600:#FF8000; --warn200:#FFE6CC; --info600:#6D17CE; --info100:#F1E5FF;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  body{font-family:'Noto Sans','Noto Sans Devanagari',system-ui,-apple-system,sans-serif;
+    background:var(--white); color:var(--n900); line-height:1.5; -webkit-font-smoothing:antialiased;}
+  .wrap{max-width:1080px; margin:0 auto; padding:28px 20px 80px;}
+  .kick{display:inline-block; font-size:12px; font-weight:700; letter-spacing:.04em; text-transform:uppercase;
+    color:var(--brand600); background:var(--brand100); padding:5px 12px; border-radius:999px;}
+  h1{font-size:30px; font-weight:800; line-height:1.2; margin:14px 0 8px; letter-spacing:-.01em;}
+  h1 .g{background:linear-gradient(90deg,var(--brand600),var(--info600)); -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent;}
+  .lede{font-size:16px; color:var(--n700); max-width:820px;}
+  h2{font-size:13px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:var(--n500);
+    margin:46px 0 8px; display:flex; align-items:center; gap:10px;}
+  h2::after{content:''; flex:1; height:1px; background:var(--n300);}
+  .h2sub{font-size:14px; color:var(--n700); margin-bottom:18px; max-width:800px;}
+  .grid2{display:grid; grid-template-columns:1fr 1fr; gap:16px;}
+  .card{background:#fff; border:1px solid var(--n300); border-radius:18px; padding:20px;}
+  .card h3{font-size:16px; font-weight:800; margin-bottom:10px;}
+  .card p{font-size:14.5px; color:var(--n700);}
+  ul.tick{list-style:none; margin-top:6px; display:flex; flex-direction:column; gap:8px;}
+  ul.tick li{font-size:13.5px; color:var(--n700); padding-left:24px; position:relative;}
+  ul.tick li::before{content:'✓'; position:absolute; left:0; color:var(--pos600); font-weight:800;}
+  .card.change{border-color:var(--pos600); background:var(--pos100);} .card.change h3{color:var(--pos600);}
+  .card.keep li::before{content:'—'; color:var(--n500);} .card.keep h3{color:var(--n700);}
+
+  /* phone mocks */
+  .designs{display:grid; grid-template-columns:repeat(3,1fr); gap:22px; align-items:start;}
+  .dcol .dhead{display:flex; align-items:baseline; gap:8px; margin-bottom:4px;}
+  .dcol .dcode{font-size:12px; font-weight:800; color:var(--brand600);}
+  .dcol h3{font-size:16px; font-weight:800;}
+  .dcol .dsub{font-size:13px; color:var(--n700); margin-bottom:14px; min-height:52px;}
+  .phone{width:100%; max-width:274px; margin:0 auto; aspect-ratio:9/19.2; background:var(--white);
+    border:8px solid var(--n900); border-radius:30px; overflow:hidden; position:relative;
+    box-shadow:0 14px 40px rgba(22,16,33,.18); display:flex; flex-direction:column;}
+  .sbar{height:22px; display:flex; align-items:center; justify-content:flex-end; gap:6px; padding:0 14px; font-size:9px; color:var(--n500);}
+  .topbar{display:flex; align-items:center; justify-content:space-between; padding:0 12px 4px;}
+  .logo{font-size:10px; font-weight:800; color:var(--brand600);}
+  .ico{width:14px; height:14px; border-radius:4px; background:var(--n300);}
+  .pbody{flex:1; display:flex; flex-direction:column; padding:6px 14px 12px; min-height:0; position:relative;}
+  .devices{display:flex; justify-content:center; gap:8px; margin:14px 0 8px;}
+  .devices i{display:block; border:2px solid var(--n900); border-radius:3px;}
+  .devices .lap{width:34px; height:22px;} .devices .ph{width:12px; height:22px;} .devices .tv{width:40px; height:24px;}
+  .h-title{font-size:13px; font-weight:800; text-align:center; margin-top:4px;}
+  .h-sub{font-size:10.5px; color:var(--n700); text-align:center; margin-top:2px;}
+  .spacer{flex:1;}
+  .note{font-size:9.5px; color:var(--n500); text-align:center; margin:8px 0;}
+  .cta{background:var(--brand600); color:#fff; font-weight:800; text-align:center; border-radius:12px; padding:13px; font-size:13px;}
+  .zone{margin-top:9px; padding-top:7px; border-top:1px dashed var(--n300); font-size:8px; color:var(--n500); text-align:center;}
+
+  /* ── the mini preview itself ── */
+  .mini{position:absolute; right:12px; border-radius:11px; overflow:hidden; background:#000;
+    border:1.5px solid var(--brandSec); box-shadow:0 8px 18px rgba(22,16,33,.38); z-index:6; cursor:pointer;}
+  .mini video{width:100%; height:100%; object-fit:cover; display:block; background:#0b0712;}
+  .mini .fallback{position:absolute; inset:0; display:flex; align-items:center; justify-content:center;
+    background:linear-gradient(135deg,#241a33,#0b0712); color:var(--brand300); font-size:15px;}
+  .mini .live{position:absolute; top:4px; left:4px; display:flex; align-items:center; gap:3px;
+    background:rgba(11,7,18,.72); padding:2px 5px; border-radius:4px; font-size:7px; font-weight:800; color:#fff; letter-spacing:.04em;}
+  .mini .live i{width:4px; height:4px; border-radius:50%; background:var(--brand600); display:block;}
+  .mini .cap{position:absolute; left:0; right:0; bottom:0; padding:9px 5px 3px; font-size:7.5px; font-weight:800; color:#fff;
+    background:linear-gradient(to top,rgba(11,7,18,.92),transparent); text-align:center;}
+  .mini .x{position:absolute; top:3px; right:3px; width:13px; height:13px; border-radius:50%; background:rgba(11,7,18,.72);
+    color:#fff; font-size:8px; line-height:13px; text-align:center; font-weight:700;}
+
+  /* size + placement variants */
+  .mini.m-s{width:78px; height:44px;}
+  .mini.m-m{width:104px; height:59px;}
+  .mini.m-l{width:126px; height:71px;}
+  .mini.pos-cta{bottom:64px;}
+  .mini.pos-mid{top:44%;}
+  /* collapsed peek tab: half off the right edge */
+  .mini.tab{width:34px; height:56px; right:-1px; border-radius:10px 0 0 10px; border-right:none;}
+  .mini.tab .cap,.mini.tab .x{display:none;}
+  .mini.tab .grip{position:absolute; inset:0; display:flex; align-items:center; justify-content:flex-start;
+    padding-left:3px; font-size:11px; color:#fff; text-shadow:0 1px 3px #000;}
+  .label{position:absolute; right:12px; font-size:8px; font-weight:800; color:var(--n700); text-align:right; z-index:6;}
+
+  /* reserved gutter visual */
+  .gutter{position:absolute; right:0; top:0; bottom:0; width:118px; background:repeating-linear-gradient(45deg,
+    rgba(217,0,141,.06) 0 6px, transparent 6px 12px); pointer-events:none; z-index:1;}
+  .safe{position:absolute; left:0; right:0; height:1px; background:var(--brand300);}
+
+  .toolbar{display:flex; flex-wrap:wrap; gap:8px; margin:18px 0 22px;}
+  .tbtn{font-size:12.5px; font-weight:700; border:1px solid var(--n300); background:#fff; color:var(--n700);
+    padding:7px 14px; border-radius:999px; cursor:pointer; font-family:inherit;}
+  .tbtn.on{background:var(--n900); border-color:var(--n900); color:#fff;}
+  .tbtn.brand.on{background:var(--brand600); border-color:var(--brand600);}
+
+  table{width:100%; border-collapse:collapse; font-size:13.5px; margin-top:6px;}
+  th{text-align:left; font-size:11px; text-transform:uppercase; letter-spacing:.06em; color:var(--n500);
+    padding:8px 10px; border-bottom:1px solid var(--n300);}
+  td{padding:9px 10px; border-bottom:1px solid var(--n100); color:var(--n700);}
+  td b{color:var(--n900);}
+  .yes{color:var(--pos600); font-weight:800;} .no{color:var(--neg600); font-weight:800;}
+  .spec{background:var(--n100); border:1px solid var(--n300); border-radius:14px; padding:16px 18px; margin-top:14px;}
+  .spec h4{font-size:12px; font-weight:800; letter-spacing:.06em; text-transform:uppercase; color:var(--n700); margin-bottom:8px;}
+  .spec code{background:#fff; border:1px solid var(--n300); padding:1px 6px; border-radius:5px; font-size:12.5px;}
+  .spec ul{list-style:none; display:flex; flex-direction:column; gap:7px;}
+  .spec li{font-size:13.5px; color:var(--n700); padding-left:18px; position:relative;}
+  .spec li::before{content:'·'; position:absolute; left:6px; color:var(--brand600); font-weight:800;}
+  .rec{margin-top:44px; background:linear-gradient(135deg,var(--n900),var(--brandSec)); color:#fff; border-radius:20px; padding:26px;}
+  .rec h3{font-size:18px; font-weight:800; margin-bottom:10px;}
+  .rec p{font-size:14.5px; color:#E7E1F0;}
+  .rec code{color:#fff; background:rgba(255,255,255,.12); padding:1px 5px; border-radius:5px;}
+  .rec .row{display:flex; flex-wrap:wrap; gap:10px; margin-top:14px;}
+  .rec .box{background:rgba(255,255,255,.08); border:1px solid rgba(255,255,255,.16); border-radius:12px; padding:12px 14px; flex:1; min-width:190px;}
+  .rec .box .l{font-size:11px; font-weight:800; letter-spacing:.05em; text-transform:uppercase; color:var(--brand300);}
+  .rec .box .v{font-size:13.5px; margin-top:4px;}
+  .foot{margin-top:36px; font-size:12px; color:var(--n500); text-align:center;}
+  .foot a{color:var(--brand600);}
+  @media(max-width:880px){ .designs,.grid2{grid-template-columns:1fr;} .designs{gap:36px;} .phone{max-width:300px;} }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <span class="kick">Wiom TV re-entry · V4</span>
+  <h1>Mini side preview — <span class="g">small, right-docked, nothing underneath it</span></h1>
+  <p class="lede">V3’s floating pill spans most of the width and sits on top of the screen. V4 keeps the “separate layer” feeling but shrinks it to a thumbnail in the right gutter, and <b>reserves its own space</b> so it never covers the hero, the address, or the CTA. It also does the one thing a pill can’t: it <b>shows live TV playing</b>, which is the actual reason to come back.</p>
+
+  <div class="grid2" style="margin-top:22px;">
+    <div class="card change">
+      <h3>What makes it different from V3</h3>
+      <ul class="tick">
+        <li><b>~104×59dp</b> instead of a full-width pill — about a fifth of the screen width</li>
+        <li><b>Right gutter only</b> — the content column keeps its own space, no overlap</li>
+        <li><b>Live picture, not a label</b> — a muted stream, the returning user’s last channel</li>
+        <li><b>Collapses to an edge tab</b> after 8s, so it’s never permanent furniture</li>
+      </ul>
+    </div>
+    <div class="card keep">
+      <h3>What still doesn’t change</h3>
+      <ul class="tick" style="list-style:none">
+        <li>The booking hero, copy and primary CTA</li>
+        <li>Serviceability logic, routing, navigation history</li>
+        <li>Bottom action zone stays 100% booking</li>
+      </ul>
+    </div>
+  </div>
+
+  <h2>Live mock</h2>
+  <p class="h2sub">Real Wiom TV stream playing muted inside the thumbnail. Toggle size and placement — the pink hatch marks the reserved gutter: no screen content is ever laid out inside it.</p>
+
+  <div class="toolbar">
+    <button class="tbtn brand on" data-size="m-m">Medium 104×59</button>
+    <button class="tbtn brand" data-size="m-s">Small 78×44</button>
+    <button class="tbtn brand" data-size="m-l">Large 126×71</button>
+    <button class="tbtn on" data-gutter="1" style="margin-left:14px">Show reserved gutter</button>
+  </div>
+
+  <div class="designs">
+    <div class="dcol">
+      <div class="dhead"><span class="dcode">V4a</span><h3>Above the action zone</h3></div>
+      <div class="dsub">Docked bottom-right, clear of the CTA. Highest visibility — sits where the thumb already is, without touching the button.</div>
+      <div class="phone">
+        <div class="sbar">15:25 ▪ ▪</div>
+        <div class="topbar"><span class="logo">wiom</span><span class="ico"></span></div>
+        <div class="pbody">
+          <div class="gutter" hidden></div>
+          <div class="devices"><i class="lap"></i><i class="ph"></i><i class="tv"></i></div>
+          <div class="h-title">अपने इलाके में व्योम चेक करें</div>
+          <div class="h-sub">घर-घर तक तेज़ इंटरनेट</div>
+          <div class="spacer"></div>
+          <div class="mini m-m pos-cta" data-slot="a">
+            <video muted playsinline autoplay></video>
+            <div class="fallback">▶</div>
+            <div class="live"><i></i>LIVE</div>
+            <div class="cap">व्योम TV</div>
+          </div>
+          <div class="note">आपके इलाके की जानकारी चाहिए</div>
+          <div class="cta">मेरा इलाका चेक करें</div>
+          <div class="zone">booking action zone — untouched</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="dcol">
+      <div class="dhead"><span class="dcode">V4b</span><h3>Mid-right, with label</h3></div>
+      <div class="dsub">Parked in the empty band beside the hero. Furthest from the CTA — zero competition with booking, slightly lower notice rate.</div>
+      <div class="phone">
+        <div class="sbar">15:25 ▪ ▪</div>
+        <div class="topbar"><span class="logo">wiom</span><span class="ico"></span></div>
+        <div class="pbody">
+          <div class="gutter" hidden></div>
+          <div class="devices"><i class="lap"></i><i class="ph"></i><i class="tv"></i></div>
+          <div class="h-title">अपने इलाके में व्योम चेक करें</div>
+          <div class="h-sub">घर-घर तक तेज़ इंटरनेट</div>
+          <div class="mini m-m pos-mid" data-slot="b">
+            <video muted playsinline autoplay></video>
+            <div class="fallback">▶</div>
+            <div class="live"><i></i>LIVE</div>
+            <div class="x">✕</div>
+          </div>
+          <div class="label" style="top:calc(44% + 62px)">वहीं से देखें ›</div>
+          <div class="spacer"></div>
+          <div class="note">आपके इलाके की जानकारी चाहिए</div>
+          <div class="cta">मेरा इलाका चेक करें</div>
+          <div class="zone">booking action zone — untouched</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="dcol">
+      <div class="dhead"><span class="dcode">V4c</span><h3>Collapsed peek tab</h3></div>
+      <div class="dsub">What V4a/b become after 8 seconds, or when dismissed: a sliver on the edge. Still live, still one tap, but almost no footprint.</div>
+      <div class="phone">
+        <div class="sbar">15:25 ▪ ▪</div>
+        <div class="topbar"><span class="logo">wiom</span><span class="ico"></span></div>
+        <div class="pbody">
+          <div class="devices"><i class="lap"></i><i class="ph"></i><i class="tv"></i></div>
+          <div class="h-title">अपने इलाके में व्योम चेक करें</div>
+          <div class="h-sub">घर-घर तक तेज़ इंटरनेट</div>
+          <div class="mini tab pos-mid" data-slot="c">
+            <video muted playsinline autoplay></video>
+            <div class="fallback">▶</div>
+            <div class="grip">‹</div>
+          </div>
+          <div class="spacer"></div>
+          <div class="note">आपके इलाके की जानकारी चाहिए</div>
+          <div class="cta">मेरा इलाका चेक करें</div>
+          <div class="zone">booking action zone — untouched</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <h2>How “no overlap” is actually guaranteed</h2>
+  <p class="h2sub">Floating usually means “painted on top and hope nothing important is under it”. Here the layout reserves the space, so the guarantee is structural rather than a judgement call about spacing.</p>
+  <div class="spec">
+    <h4>Layout contract</h4>
+    <ul>
+      <li>The preview lives in the <code>Scaffold</code> content <code>Box</code>, aligned <code>BottomEnd</code> — never inside the bottom bar, so it can’t grow the action zone.</li>
+      <li>The content column gets <code>padding(end = previewWidth + 12.dp)</code> for the vertical span the preview occupies (V4b), or <code>padding(bottom = previewHeight + 12.dp)</code> for V4a. Nothing is ever laid out beneath it.</li>
+      <li>Hero graphic keeps <code>weight(1f, fill = false)</code>, so the reserved space comes out of the graphic — never out of the title or the address.</li>
+      <li>Minimum tap target 48dp is met by the card at every size; the small variant pads its touch area beyond its visual bounds.</li>
+      <li>Collapse to the tab after 8s (<code>AnimatedVisibility</code> + slide to <code>x = width - 34.dp</code>), and drop the reserved padding with it.</li>
+    </ul>
+  </div>
+
+  <h2>V3 pill vs V4 mini</h2>
+  <table>
+    <thead><tr><th>&nbsp;</th><th>V3 floating pill</th><th>V4 mini side preview</th></tr></thead>
+    <tbody>
+      <tr><td><b>Footprint</b></td><td>~150×36dp, spans most of the width</td><td>104×59dp — ~20% of the width</td></tr>
+      <tr><td><b>Overlaps content</b></td><td class="no">Yes — floats over whatever is beneath</td><td class="yes">No — space is reserved</td></tr>
+      <tr><td><b>Shows the product</b></td><td>Text label only</td><td class="yes">Live channel, muted</td></tr>
+      <tr><td><b>Dismissable</b></td><td>✕ only</td><td>✕ or auto-collapse to edge tab</td></tr>
+      <tr><td><b>Data cost</b></td><td>None</td><td>Muted stream — cap at 30s, then freeze frame</td></tr>
+      <tr><td><b>Build</b></td><td>~20 lines</td><td>~90 lines + ExoPlayer instance (already shipped for the band)</td></tr>
+    </tbody>
+  </table>
+
+  <div class="rec">
+    <h3>Recommendation</h3>
+    <p><b>V4a at 104×59dp, auto-collapsing to V4c after 8s.</b> It is the only re-entry that answers “why would I go back?” with a picture instead of a promise, and the reserved-gutter contract means it can ship without re-litigating the booking layout. Keep it Remote-Config gated and returning-users-only — the same flag the band already uses — so it can be pulled without a release.</p>
+    <div class="row">
+      <div class="box"><div class="l">Reuse</div><div class="v">Same ExoPlayer + fallback chain + RC channel as the unserviceable band</div></div>
+      <div class="box"><div class="l">Data guard</div><div class="v">30s cap, freeze on last frame, pause on background</div></div>
+      <div class="box"><div class="l">Measure</div><div class="v">tv_reentry_shown / _clicked / _collapsed, split by variant</div></div>
+    </div>
+  </div>
+
+  <p class="foot">Wiom TV re-entry · V4 mini side preview — companion to <a href="solutions.html">solutions.html</a> (V1 banner · V2 header · V3 pill)</p>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/hls.js@1.5.13/dist/hls.min.js"></script>
+<script>
+  // Same channel the app band uses (Remote-Config default: Dangal TV), with the same fallback chain.
+  const SOURCES = [
+    'https://live-dangal.akamaized.net/liveabr/playlist.m3u8',
+    'https://live-dangal2.akamaized.net/liveabr/playlist.m3u8',
+    'https://ndtvindiaelemarchana.akamaized.net/hls/live/2003679/ndtvindia/master.m3u8',
+  ];
+
+  function attach(video, idx){
+    if (idx >= SOURCES.length) return;               // all failed → the ▶ fallback stays visible
+    const src = SOURCES[idx];
+    const ok = () => { video.closest('.mini').querySelector('.fallback').style.display = 'none'; };
+    if (video.canPlayType('application/vnd.apple.mpegurl')) {
+      video.src = src;
+      video.addEventListener('playing', ok, {once:true});
+      video.addEventListener('error', () => attach(video, idx+1), {once:true});
+      video.play().catch(()=>{});
+    } else if (window.Hls && Hls.isSupported()) {
+      const hls = new Hls({maxBufferLength:6, capLevelToPlayerSize:true});
+      hls.loadSource(src); hls.attachMedia(video);
+      hls.on(Hls.Events.ERROR, (_e, d) => { if (d.fatal) { hls.destroy(); attach(video, idx+1); } });
+      video.addEventListener('playing', ok, {once:true});
+      video.play().catch(()=>{});
+    }
+  }
+  document.querySelectorAll('.mini video').forEach(v => attach(v, 0));
+
+  // Size toggle — applies to the two expanded mocks (the tab keeps its own size).
+  document.querySelectorAll('[data-size]').forEach(b => b.onclick = () => {
+    document.querySelectorAll('[data-size]').forEach(x => x.classList.remove('on'));
+    b.classList.add('on');
+    document.querySelectorAll('.mini:not(.tab)').forEach(m => {
+      m.classList.remove('m-s','m-m','m-l'); m.classList.add(b.dataset.size);
+    });
+  });
+
+  // Reserved-gutter overlay.
+  const gutterBtn = document.querySelector('[data-gutter]');
+  const syncGutter = () => {
+    const show = gutterBtn.classList.contains('on');
+    document.querySelectorAll('.gutter').forEach(g => g.hidden = !show);
+  };
+  gutterBtn.onclick = () => { gutterBtn.classList.toggle('on'); syncGutter(); };
+  syncGutter();                                    // button ships "on" → gutter visible on load
+
+  // Whole preview is one tap target → wiom.tv, carrying the same params as the app band.
+  document.querySelectorAll('.mini').forEach(m => m.onclick = () => {
+    window.open('https://wiom.tv/?ch=2&src=app_reentry_mini', '_blank');
+  });
+</script>
+</body>
+</html>
