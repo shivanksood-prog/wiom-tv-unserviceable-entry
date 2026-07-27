@@ -58,46 +58,51 @@
   .cta{background:var(--brand600); color:#fff; font-weight:800; text-align:center; border-radius:12px; padding:13px; font-size:13px;}
   .zone{margin-top:9px; padding-top:7px; border-top:1px dashed var(--n300); font-size:8px; color:var(--n500); text-align:center;}
 
-  /* ── the mini preview itself ── */
-  .mini{position:absolute; right:12px; border-radius:11px; overflow:hidden; background:#000;
-    border:1.5px solid var(--brandSec); box-shadow:0 8px 18px rgba(22,16,33,.38); z-index:6; cursor:pointer;}
+  /* ── the mini preview itself: a live screen with a Wiom TV brand bar across it ── */
+  .mini{position:absolute; right:12px; border-radius:11px; overflow:hidden; background:#0b0712;
+    box-shadow:0 8px 18px rgba(22,16,33,.38); z-index:6; cursor:pointer; display:flex; flex-direction:column;}
+  .mini .scr{position:relative; width:100%; flex:1; overflow:hidden; background:#0b0712;}
   .mini video{width:100%; height:100%; object-fit:cover; display:block; background:#0b0712;}
   .mini .fallback{position:absolute; inset:0; display:flex; align-items:center; justify-content:center;
     background:linear-gradient(135deg,#241a33,#0b0712); color:var(--brand300); font-size:15px;}
   .mini .live{position:absolute; top:4px; left:4px; display:flex; align-items:center; gap:3px;
     background:rgba(11,7,18,.72); padding:2px 5px; border-radius:4px; font-size:7px; font-weight:800; color:#fff; letter-spacing:.04em;}
   .mini .live i{width:4px; height:4px; border-radius:50%; background:var(--brand600); display:block;}
-  /* branding lockup: brand mark + wordmark + free tag, on the thumbnail's bottom edge */
-  .mini .cap{position:absolute; left:0; right:0; bottom:0; padding:10px 4px 3px;
-    background:linear-gradient(to top,rgba(11,7,18,.94) 45%,transparent);
-    display:flex; align-items:center; justify-content:center; gap:3px;}
-  .mini .cap .mark{width:9px; height:9px; border-radius:2.5px; background:var(--brand600); position:relative; flex:0 0 auto;}
-  .mini .cap .mark::after{content:''; position:absolute; left:2.5px; top:2.5px; width:4px; height:4px; border-radius:1px; background:#fff;}
-  .mini .cap .wm{font-size:7.5px; font-weight:800; color:#fff; letter-spacing:.02em; white-space:nowrap;}
-  .mini .cap .free{font-size:6px; font-weight:800; color:var(--brand600); background:var(--brand100);
-    padding:1px 4px; border-radius:999px; white-space:nowrap;}
-  .mini.m-s .cap .free{display:none;}
-  /* inline placement: the preview sits in the flow, 5px above the line of text below it */
+  .mini .x{position:absolute; top:3px; right:3px; width:13px; height:13px; border-radius:50%; background:rgba(11,7,18,.72);
+    color:#fff; font-size:8px; line-height:13px; text-align:center; font-weight:700;}
+  /* brand bar spans the full width of the card — the branding IS the base of the pill */
+  .mini .brandbar{flex:0 0 auto; background:var(--brand600); display:flex; align-items:center;
+    justify-content:center; gap:4px; padding:0 5px;}
+  .mini .brandbar .mark{width:8px; height:8px; border-radius:2px; background:#fff; position:relative; flex:0 0 auto;}
+  .mini .brandbar .mark::after{content:''; position:absolute; left:2.2px; top:2.2px; width:3.6px; height:3.6px;
+    border-radius:1px; background:var(--brand600);}
+  .mini .brandbar .wm{font-weight:800; color:#fff; letter-spacing:.02em; white-space:nowrap;}
+  .mini .brandbar .free{font-weight:800; color:var(--brand600); background:#fff; border-radius:999px; white-space:nowrap;}
+  /* inline placement: the card sits in the flow, 5px above the line of text below it */
   .miniRow{display:flex; justify-content:flex-end; padding-bottom:5px; position:relative; z-index:6;}
   .miniRow.guide::after{content:'5px'; position:absolute; right:0; bottom:0; left:0; height:5px;
     background:var(--brand300); font-size:5px; font-weight:800; color:var(--brand600); text-align:right; line-height:5px;}
   .miniRow .mini{position:static;}
-  .mini .x{position:absolute; top:3px; right:3px; width:13px; height:13px; border-radius:50%; background:rgba(11,7,18,.72);
-    color:#fff; font-size:8px; line-height:13px; text-align:center; font-weight:700;}
 
-  /* size + placement variants */
-  .mini.m-s{width:78px; height:44px;}
-  .mini.m-m{width:104px; height:59px;}
-  .mini.m-l{width:126px; height:71px;}
-  .mini.pos-cta{bottom:64px;}
+  /* sizes: screen keeps 16:9, brand bar scales with it */
+  .mini.m-s{width:78px;}  .mini.m-s .scr{height:44px;}
+  .mini.m-s .brandbar{height:13px;} .mini.m-s .wm{font-size:6.5px;} .mini.m-s .free{display:none;}
+  .mini.m-s .brandbar .mark{width:6px; height:6px;}
+  .mini.m-m{width:104px;} .mini.m-m .scr{height:59px;}
+  .mini.m-m .brandbar{height:16px;} .mini.m-m .wm{font-size:8px;}
+  .mini.m-m .free{font-size:6px; padding:1px 4px;}
+  .mini.m-l{width:126px;} .mini.m-l .scr{height:71px;}
+  .mini.m-l .brandbar{height:19px;} .mini.m-l .wm{font-size:9.5px;}
+  .mini.m-l .free{font-size:7px; padding:1px 5px;}
   .mini.pos-mid{top:44%;}
-  /* collapsed peek tab: half off the right edge */
-  .mini.tab{width:34px; height:56px; right:-1px; border-radius:10px 0 0 10px; border-right:none;}
-  .mini.tab .cap,.mini.tab .x{display:none;}
-  .mini.tab .tabmark{position:absolute; right:5px; bottom:6px; width:8px; height:8px; border-radius:2.5px; background:var(--brand600);}
-  .mini.tab .tabmark::after{content:''; position:absolute; left:2.2px; top:2.2px; width:3.6px; height:3.6px; border-radius:1px; background:#fff;}
+  /* collapsed peek tab: half off the right edge, brand bar becomes the visible spine */
+  .mini.tab{width:34px; height:56px; right:-1px; border-radius:10px 0 0 10px;}
+  .mini.tab .x{display:none;}
+  .mini.tab .scr{height:44px;}
+  .mini.tab .brandbar{height:12px; padding:0;}
+  .mini.tab .brandbar .wm,.mini.tab .brandbar .free{display:none;}
   .mini.tab .grip{position:absolute; inset:0; display:flex; align-items:center; justify-content:flex-start;
-    padding-left:3px; font-size:11px; color:#fff; text-shadow:0 1px 3px #000;}
+    padding-left:3px; font-size:11px; color:#fff; text-shadow:0 1px 3px #000; z-index:2;}
   .label{position:absolute; right:12px; font-size:8px; font-weight:800; color:var(--n700); text-align:right; z-index:6;}
 
   .safe{position:absolute; left:0; right:0; height:1px; background:var(--brand300);}
@@ -146,7 +151,7 @@
       <ul class="tick">
         <li><b>~104×59dp</b> instead of a full-width pill — about a fifth of the screen width</li>
         <li><b>In the flow, 5px above the text</b> — reserves its own height, cannot overlap</li>
-        <li><b>Branded and live</b> — Wiom mark + व्योम TV wordmark + फ्री tag over a muted live stream</li>
+        <li><b>Branded across the base</b> — a full-width व्योम TV bar under a muted live stream, so it reads as a Wiom product at a glance</li>
         <li><b>Collapses to an edge tab</b> after 8s, so it’s never permanent furniture</li>
       </ul>
     </div>
@@ -161,7 +166,7 @@
   </div>
 
   <h2>Live mock</h2>
-  <p class="h2sub">Real Wiom TV stream playing muted inside a branded thumbnail. Toggle the size; the pink rule marks the 5px gap between the preview and the text beneath it.</p>
+  <p class="h2sub">A live muted stream with the व्योम TV brand bar running across the full width of the card. <b>V4a is the chosen placement.</b> Toggle the size; the pink rule marks the 5px gap to the text beneath.</p>
 
   <div class="toolbar">
     <button class="tbtn brand on" data-size="m-m">Medium 104×59</button>
@@ -172,7 +177,7 @@
 
   <div class="designs">
     <div class="dcol">
-      <div class="dhead"><span class="dcode">V4a</span><h3>Above the action zone</h3></div>
+      <div class="dhead"><span class="dcode">V4a</span><h3>Above the action zone ✓</h3></div>
       <div class="dsub">Right-aligned and sitting <b>5px above the line of text</b> below it, in the flow — so it is physically incapable of covering anything. Highest visibility: right where the thumb already is.</div>
       <div class="phone">
         <div class="sbar">15:25 ▪ ▪</div>
@@ -184,10 +189,13 @@
           <div class="spacer"></div>
           <div class="miniRow">
             <div class="mini m-m" data-slot="a">
-              <video muted playsinline autoplay></video>
-              <div class="fallback">▶</div>
-              <div class="live"><i></i>LIVE</div>
-              <div class="cap"><span class="mark"></span><span class="wm">व्योम TV</span><span class="free">फ्री</span></div>
+              <div class="scr">
+                <video muted playsinline autoplay></video>
+                <div class="fallback">▶</div>
+                <div class="live"><i></i>LIVE</div>
+                
+              </div>
+              <div class="brandbar"><span class="mark"></span><span class="wm">व्योम TV</span><span class="free">फ्री</span></div>
             </div>
           </div>
           <div class="note">आपके इलाके की जानकारी चाहिए</div>
@@ -207,11 +215,13 @@
           <div class="devices"><i class="lap"></i><i class="ph"></i><i class="tv"></i></div>
           <div class="miniRow">
             <div class="mini m-m" data-slot="b">
-              <video muted playsinline autoplay></video>
-              <div class="fallback">▶</div>
-              <div class="live"><i></i>LIVE</div>
-              <div class="x">✕</div>
-              <div class="cap"><span class="mark"></span><span class="wm">व्योम TV</span><span class="free">फ्री</span></div>
+              <div class="scr">
+                <video muted playsinline autoplay></video>
+                <div class="fallback">▶</div>
+                <div class="live"><i></i>LIVE</div>
+                <div class="x">✕</div>
+              </div>
+              <div class="brandbar"><span class="mark"></span><span class="wm">व्योम TV</span><span class="free">फ्री</span></div>
             </div>
           </div>
           <div class="h-title">अपने इलाके में व्योम चेक करें</div>
@@ -235,9 +245,12 @@
           <div class="h-title">अपने इलाके में व्योम चेक करें</div>
           <div class="h-sub">घर-घर तक तेज़ इंटरनेट</div>
           <div class="mini tab pos-mid" data-slot="c">
-            <video muted playsinline autoplay></video>
-            <div class="fallback">▶</div>
-            <div class="grip">‹</div><span class="tabmark"></span>
+            <div class="scr">
+              <video muted playsinline autoplay></video>
+              <div class="fallback">▶</div>
+              <div class="grip">‹</div>
+            </div>
+            <div class="brandbar"><span class="mark"></span></div>
           </div>
           <div class="spacer"></div>
           <div class="note">आपके इलाके की जानकारी चाहिए</div>
@@ -267,7 +280,7 @@
     <tbody>
       <tr><td><b>Footprint</b></td><td>~150×36dp, spans most of the width</td><td>104×59dp — ~20% of the width</td></tr>
       <tr><td><b>Overlaps content</b></td><td class="no">Yes — floats over whatever is beneath</td><td class="yes">No — sits in the flow, 5px above the text</td></tr>
-      <tr><td><b>Shows the product</b></td><td>Text label only</td><td class="yes">Live channel + Wiom TV branding</td></tr>
+      <tr><td><b>Shows the product</b></td><td>Text label only</td><td class="yes">Live channel + व्योम TV brand bar</td></tr>
       <tr><td><b>Dismissable</b></td><td>✕ only</td><td>✕ or auto-collapse to edge tab</td></tr>
       <tr><td><b>Data cost</b></td><td>None</td><td>Muted stream — cap at 30s, then freeze frame</td></tr>
       <tr><td><b>Build</b></td><td>~20 lines</td><td>~90 lines + ExoPlayer instance (already shipped for the band)</td></tr>
