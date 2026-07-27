@@ -67,8 +67,21 @@
   .mini .live{position:absolute; top:4px; left:4px; display:flex; align-items:center; gap:3px;
     background:rgba(11,7,18,.72); padding:2px 5px; border-radius:4px; font-size:7px; font-weight:800; color:#fff; letter-spacing:.04em;}
   .mini .live i{width:4px; height:4px; border-radius:50%; background:var(--brand600); display:block;}
-  .mini .cap{position:absolute; left:0; right:0; bottom:0; padding:9px 5px 3px; font-size:7.5px; font-weight:800; color:#fff;
-    background:linear-gradient(to top,rgba(11,7,18,.92),transparent); text-align:center;}
+  /* branding lockup: brand mark + wordmark + free tag, on the thumbnail's bottom edge */
+  .mini .cap{position:absolute; left:0; right:0; bottom:0; padding:10px 4px 3px;
+    background:linear-gradient(to top,rgba(11,7,18,.94) 45%,transparent);
+    display:flex; align-items:center; justify-content:center; gap:3px;}
+  .mini .cap .mark{width:9px; height:9px; border-radius:2.5px; background:var(--brand600); position:relative; flex:0 0 auto;}
+  .mini .cap .mark::after{content:''; position:absolute; left:2.5px; top:2.5px; width:4px; height:4px; border-radius:1px; background:#fff;}
+  .mini .cap .wm{font-size:7.5px; font-weight:800; color:#fff; letter-spacing:.02em; white-space:nowrap;}
+  .mini .cap .free{font-size:6px; font-weight:800; color:var(--brand600); background:var(--brand100);
+    padding:1px 4px; border-radius:999px; white-space:nowrap;}
+  .mini.m-s .cap .free{display:none;}
+  /* inline placement: the preview sits in the flow, 5px above the line of text below it */
+  .miniRow{display:flex; justify-content:flex-end; padding-bottom:5px; position:relative; z-index:6;}
+  .miniRow.guide::after{content:'5px'; position:absolute; right:0; bottom:0; left:0; height:5px;
+    background:var(--brand300); font-size:5px; font-weight:800; color:var(--brand600); text-align:right; line-height:5px;}
+  .miniRow .mini{position:static;}
   .mini .x{position:absolute; top:3px; right:3px; width:13px; height:13px; border-radius:50%; background:rgba(11,7,18,.72);
     color:#fff; font-size:8px; line-height:13px; text-align:center; font-weight:700;}
 
@@ -81,13 +94,12 @@
   /* collapsed peek tab: half off the right edge */
   .mini.tab{width:34px; height:56px; right:-1px; border-radius:10px 0 0 10px; border-right:none;}
   .mini.tab .cap,.mini.tab .x{display:none;}
+  .mini.tab .tabmark{position:absolute; right:5px; bottom:6px; width:8px; height:8px; border-radius:2.5px; background:var(--brand600);}
+  .mini.tab .tabmark::after{content:''; position:absolute; left:2.2px; top:2.2px; width:3.6px; height:3.6px; border-radius:1px; background:#fff;}
   .mini.tab .grip{position:absolute; inset:0; display:flex; align-items:center; justify-content:flex-start;
     padding-left:3px; font-size:11px; color:#fff; text-shadow:0 1px 3px #000;}
   .label{position:absolute; right:12px; font-size:8px; font-weight:800; color:var(--n700); text-align:right; z-index:6;}
 
-  /* reserved gutter visual */
-  .gutter{position:absolute; right:0; top:0; bottom:0; width:118px; background:repeating-linear-gradient(45deg,
-    rgba(217,0,141,.06) 0 6px, transparent 6px 12px); pointer-events:none; z-index:1;}
   .safe{position:absolute; left:0; right:0; height:1px; background:var(--brand300);}
 
   .toolbar{display:flex; flex-wrap:wrap; gap:8px; margin:18px 0 22px;}
@@ -126,15 +138,15 @@
 
   <span class="kick">Wiom TV re-entry · V4</span>
   <h1>Mini side preview — <span class="g">small, right-docked, nothing underneath it</span></h1>
-  <p class="lede">V3’s floating pill spans most of the width and sits on top of the screen. V4 keeps the “separate layer” feeling but shrinks it to a thumbnail in the right gutter, and <b>reserves its own space</b> so it never covers the hero, the address, or the CTA. It also does the one thing a pill can’t: it <b>shows live TV playing</b>, which is the actual reason to come back.</p>
+  <p class="lede">V3’s floating pill spans most of the width and sits on top of the screen. V4 shrinks it to a small branded thumbnail, right-aligned and sitting <b>5px above the text below it</b> — in the layout flow, so it can never cover the hero, the address, or the CTA. It also does the one thing a pill can’t: it <b>shows live TV playing</b>, which is the actual reason to come back.</p>
 
   <div class="grid2" style="margin-top:22px;">
     <div class="card change">
       <h3>What makes it different from V3</h3>
       <ul class="tick">
         <li><b>~104×59dp</b> instead of a full-width pill — about a fifth of the screen width</li>
-        <li><b>Right gutter only</b> — the content column keeps its own space, no overlap</li>
-        <li><b>Live picture, not a label</b> — a muted stream, the returning user’s last channel</li>
+        <li><b>In the flow, 5px above the text</b> — reserves its own height, cannot overlap</li>
+        <li><b>Branded and live</b> — Wiom mark + व्योम TV wordmark + फ्री tag over a muted live stream</li>
         <li><b>Collapses to an edge tab</b> after 8s, so it’s never permanent furniture</li>
       </ul>
     </div>
@@ -149,33 +161,34 @@
   </div>
 
   <h2>Live mock</h2>
-  <p class="h2sub">Real Wiom TV stream playing muted inside the thumbnail. Toggle size and placement — the pink hatch marks the reserved gutter: no screen content is ever laid out inside it.</p>
+  <p class="h2sub">Real Wiom TV stream playing muted inside a branded thumbnail. Toggle the size; the pink rule marks the 5px gap between the preview and the text beneath it.</p>
 
   <div class="toolbar">
     <button class="tbtn brand on" data-size="m-m">Medium 104×59</button>
     <button class="tbtn brand" data-size="m-s">Small 78×44</button>
     <button class="tbtn brand" data-size="m-l">Large 126×71</button>
-    <button class="tbtn on" data-gutter="1" style="margin-left:14px">Show reserved gutter</button>
+    <button class="tbtn on" data-guide="1" style="margin-left:14px">Show the 5px offset</button>
   </div>
 
   <div class="designs">
     <div class="dcol">
       <div class="dhead"><span class="dcode">V4a</span><h3>Above the action zone</h3></div>
-      <div class="dsub">Docked bottom-right, clear of the CTA. Highest visibility — sits where the thumb already is, without touching the button.</div>
+      <div class="dsub">Right-aligned and sitting <b>5px above the line of text</b> below it, in the flow — so it is physically incapable of covering anything. Highest visibility: right where the thumb already is.</div>
       <div class="phone">
         <div class="sbar">15:25 ▪ ▪</div>
         <div class="topbar"><span class="logo">wiom</span><span class="ico"></span></div>
         <div class="pbody">
-          <div class="gutter" hidden></div>
           <div class="devices"><i class="lap"></i><i class="ph"></i><i class="tv"></i></div>
           <div class="h-title">अपने इलाके में व्योम चेक करें</div>
           <div class="h-sub">घर-घर तक तेज़ इंटरनेट</div>
           <div class="spacer"></div>
-          <div class="mini m-m pos-cta" data-slot="a">
-            <video muted playsinline autoplay></video>
-            <div class="fallback">▶</div>
-            <div class="live"><i></i>LIVE</div>
-            <div class="cap">व्योम TV</div>
+          <div class="miniRow">
+            <div class="mini m-m" data-slot="a">
+              <video muted playsinline autoplay></video>
+              <div class="fallback">▶</div>
+              <div class="live"><i></i>LIVE</div>
+              <div class="cap"><span class="mark"></span><span class="wm">व्योम TV</span><span class="free">फ्री</span></div>
+            </div>
           </div>
           <div class="note">आपके इलाके की जानकारी चाहिए</div>
           <div class="cta">मेरा इलाका चेक करें</div>
@@ -185,23 +198,24 @@
     </div>
 
     <div class="dcol">
-      <div class="dhead"><span class="dcode">V4b</span><h3>Mid-right, with label</h3></div>
-      <div class="dsub">Parked in the empty band beside the hero. Furthest from the CTA — zero competition with booking, slightly lower notice rate.</div>
+      <div class="dhead"><span class="dcode">V4b</span><h3>Above the headline</h3></div>
+      <div class="dsub">Same 5px offset, but parked above the hero headline instead. Furthest from the CTA — zero competition with booking, seen a beat earlier on cold start.</div>
       <div class="phone">
         <div class="sbar">15:25 ▪ ▪</div>
         <div class="topbar"><span class="logo">wiom</span><span class="ico"></span></div>
         <div class="pbody">
-          <div class="gutter" hidden></div>
           <div class="devices"><i class="lap"></i><i class="ph"></i><i class="tv"></i></div>
+          <div class="miniRow">
+            <div class="mini m-m" data-slot="b">
+              <video muted playsinline autoplay></video>
+              <div class="fallback">▶</div>
+              <div class="live"><i></i>LIVE</div>
+              <div class="x">✕</div>
+              <div class="cap"><span class="mark"></span><span class="wm">व्योम TV</span><span class="free">फ्री</span></div>
+            </div>
+          </div>
           <div class="h-title">अपने इलाके में व्योम चेक करें</div>
           <div class="h-sub">घर-घर तक तेज़ इंटरनेट</div>
-          <div class="mini m-m pos-mid" data-slot="b">
-            <video muted playsinline autoplay></video>
-            <div class="fallback">▶</div>
-            <div class="live"><i></i>LIVE</div>
-            <div class="x">✕</div>
-          </div>
-          <div class="label" style="top:calc(44% + 62px)">वहीं से देखें ›</div>
           <div class="spacer"></div>
           <div class="note">आपके इलाके की जानकारी चाहिए</div>
           <div class="cta">मेरा इलाका चेक करें</div>
@@ -223,7 +237,7 @@
           <div class="mini tab pos-mid" data-slot="c">
             <video muted playsinline autoplay></video>
             <div class="fallback">▶</div>
-            <div class="grip">‹</div>
+            <div class="grip">‹</div><span class="tabmark"></span>
           </div>
           <div class="spacer"></div>
           <div class="note">आपके इलाके की जानकारी चाहिए</div>
@@ -239,8 +253,8 @@
   <div class="spec">
     <h4>Layout contract</h4>
     <ul>
-      <li>The preview lives in the <code>Scaffold</code> content <code>Box</code>, aligned <code>BottomEnd</code> — never inside the bottom bar, so it can’t grow the action zone.</li>
-      <li>The content column gets <code>padding(end = previewWidth + 12.dp)</code> for the vertical span the preview occupies (V4b), or <code>padding(bottom = previewHeight + 12.dp)</code> for V4a. Nothing is ever laid out beneath it.</li>
+      <li>The preview is a <b>right-aligned Row in the content column</b> with <code>Modifier.padding(bottom = 5.dp)</code> — it occupies real layout space directly above the next text, so overlap is impossible by construction rather than by careful spacing.</li>
+      <li>Nothing needs reserved padding any more: the flow itself reserves the height. The floating/absolute version stays available only for the collapsed tab (V4c), which sits in the screen’s dead right edge.</li>
       <li>Hero graphic keeps <code>weight(1f, fill = false)</code>, so the reserved space comes out of the graphic — never out of the title or the address.</li>
       <li>Minimum tap target 48dp is met by the card at every size; the small variant pads its touch area beyond its visual bounds.</li>
       <li>Collapse to the tab after 8s (<code>AnimatedVisibility</code> + slide to <code>x = width - 34.dp</code>), and drop the reserved padding with it.</li>
@@ -252,8 +266,8 @@
     <thead><tr><th>&nbsp;</th><th>V3 floating pill</th><th>V4 mini side preview</th></tr></thead>
     <tbody>
       <tr><td><b>Footprint</b></td><td>~150×36dp, spans most of the width</td><td>104×59dp — ~20% of the width</td></tr>
-      <tr><td><b>Overlaps content</b></td><td class="no">Yes — floats over whatever is beneath</td><td class="yes">No — space is reserved</td></tr>
-      <tr><td><b>Shows the product</b></td><td>Text label only</td><td class="yes">Live channel, muted</td></tr>
+      <tr><td><b>Overlaps content</b></td><td class="no">Yes — floats over whatever is beneath</td><td class="yes">No — sits in the flow, 5px above the text</td></tr>
+      <tr><td><b>Shows the product</b></td><td>Text label only</td><td class="yes">Live channel + Wiom TV branding</td></tr>
       <tr><td><b>Dismissable</b></td><td>✕ only</td><td>✕ or auto-collapse to edge tab</td></tr>
       <tr><td><b>Data cost</b></td><td>None</td><td>Muted stream — cap at 30s, then freeze frame</td></tr>
       <tr><td><b>Build</b></td><td>~20 lines</td><td>~90 lines + ExoPlayer instance (already shipped for the band)</td></tr>
@@ -262,7 +276,7 @@
 
   <div class="rec">
     <h3>Recommendation</h3>
-    <p><b>V4a at 104×59dp, auto-collapsing to V4c after 8s.</b> It is the only re-entry that answers “why would I go back?” with a picture instead of a promise, and the reserved-gutter contract means it can ship without re-litigating the booking layout. Keep it Remote-Config gated and returning-users-only — the same flag the band already uses — so it can be pulled without a release.</p>
+    <p><b>V4a at 104×59dp, auto-collapsing to V4c after 8s.</b> It is the only re-entry that answers “why would I go back?” with a picture instead of a promise, and sitting in the flow means it can ship without re-litigating the booking layout. Keep it Remote-Config gated and returning-users-only — the same flag the band already uses — so it can be pulled without a release.</p>
     <div class="row">
       <div class="box"><div class="l">Reuse</div><div class="v">Same ExoPlayer + fallback chain + RC channel as the unserviceable band</div></div>
       <div class="box"><div class="l">Data guard</div><div class="v">30s cap, freeze on last frame, pause on background</div></div>
@@ -310,14 +324,14 @@
     });
   });
 
-  // Reserved-gutter overlay.
-  const gutterBtn = document.querySelector('[data-gutter]');
-  const syncGutter = () => {
-    const show = gutterBtn.classList.contains('on');
-    document.querySelectorAll('.gutter').forEach(g => g.hidden = !show);
+  // 5px offset guide.
+  const guideBtn = document.querySelector('[data-guide]');
+  const syncGuide = () => {
+    const show = guideBtn.classList.contains('on');
+    document.querySelectorAll('.miniRow').forEach(r => r.classList.toggle('guide', show));
   };
-  gutterBtn.onclick = () => { gutterBtn.classList.toggle('on'); syncGutter(); };
-  syncGutter();                                    // button ships "on" → gutter visible on load
+  guideBtn.onclick = () => { guideBtn.classList.toggle('on'); syncGuide(); };
+  syncGuide();                                     // button ships "on" → offset marked on load
 
   // Whole preview is one tap target → wiom.tv, carrying the same params as the app band.
   document.querySelectorAll('.mini').forEach(m => m.onclick = () => {
