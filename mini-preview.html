@@ -3,107 +3,64 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>V4a · Mini side preview — branding options</title>
+<title>V4a · Wiom TV re-entry card — final</title>
 <style>
   :root{
     --brand600:#D9008D; --brand300:#FFB2E4; --brand100:#FFE5F6; --brandSec:#443152;
     --n900:#161021; --n800:#352D42; --n700:#665E75; --n500:#A7A1B2; --n300:#D7D3E0;
     --n100:#F1EDF7; --white:#FAF9FC; --pos600:#008043; --pos100:#E1FAED;
     --neg600:#E01E00; --warn600:#FF8000; --warn200:#FFE6CC; --info600:#6D17CE; --info100:#F1E5FF;
-    --gold1:#D5AF4A; --gold2:#F2E983; --gold3:#D5B14B;
   }
   *{box-sizing:border-box; margin:0; padding:0;}
   body{font-family:'Noto Sans','Noto Sans Devanagari',system-ui,-apple-system,sans-serif;
-    background:var(--white); color:var(--n900); line-height:1.5; -webkit-font-smoothing:antialiased;}
-  .wrap{max-width:1080px; margin:0 auto; padding:28px 20px 80px;}
-  .kick{display:inline-block; font-size:12px; font-weight:700; letter-spacing:.04em; text-transform:uppercase;
+    background:var(--white); color:var(--n900); line-height:1.55; -webkit-font-smoothing:antialiased;}
+  .wrap{max-width:1080px; margin:0 auto; padding:30px 20px 90px;}
+  .nav{display:flex; gap:8px; flex-wrap:wrap; margin-bottom:24px;}
+  .nav a{font-size:12.5px; font-weight:700; text-decoration:none; padding:7px 14px; border-radius:999px;
+    border:1px solid var(--n300); color:var(--n700); background:#fff;}
+  .nav a.on{background:var(--n900); border-color:var(--n900); color:#fff;}
+  .nav a.pr{background:var(--brand600); border-color:var(--brand600); color:#fff;}
+  .kick{display:inline-block; font-size:12px; font-weight:700; letter-spacing:.05em; text-transform:uppercase;
     color:var(--brand600); background:var(--brand100); padding:5px 12px; border-radius:999px;}
-  h1{font-size:30px; font-weight:800; line-height:1.2; margin:14px 0 8px; letter-spacing:-.01em;}
-  h1 .g{background:linear-gradient(90deg,var(--brand600),var(--info600)); -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent;}
-  .lede{font-size:16px; color:var(--n700); max-width:840px;}
-  h2{font-size:13px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:var(--n500);
-    margin:46px 0 8px; display:flex; align-items:center; gap:10px;}
+  h1{font-size:32px; font-weight:800; line-height:1.18; margin:14px 0 10px; letter-spacing:-.015em;}
+  h1 .g{background:linear-gradient(90deg,var(--brand600),var(--info600)); -webkit-background-clip:text;
+    background-clip:text; -webkit-text-fill-color:transparent;}
+  .lede{font-size:16.5px; color:var(--n700); max-width:820px;}
+  h2{font-size:12.5px; font-weight:800; letter-spacing:.09em; text-transform:uppercase; color:var(--n500);
+    margin:48px 0 10px; display:flex; align-items:center; gap:12px;}
   h2::after{content:''; flex:1; height:1px; background:var(--n300);}
-  .h2sub{font-size:14px; color:var(--n700); margin-bottom:20px; max-width:820px;}
+  h3{font-size:16px; font-weight:800; margin-bottom:8px;}
+  p{font-size:15px; color:var(--n700);} p + p{margin-top:10px;}
+  b,strong{color:var(--n900);}
+  ul{list-style:none; display:flex; flex-direction:column; gap:9px; margin-top:8px;}
+  li{font-size:14.5px; color:var(--n700); padding-left:22px; position:relative;}
+  li::before{content:'·'; position:absolute; left:7px; color:var(--brand600); font-weight:800; font-size:19px; line-height:1;}
+  ul.tick li::before{content:'✓'; left:0; color:var(--pos600); font-size:14px;}
+  code{background:var(--n100); border:1px solid var(--n300); padding:1px 6px; border-radius:6px;
+    font-size:13px; font-family:ui-monospace,Menlo,monospace; color:var(--n900);}
 
-  /* ── the card ── */
-  .mini{width:125px; border-radius:11px; overflow:hidden; background:#0b0712; cursor:pointer;
-    display:flex; flex-direction:column; box-shadow:0 8px 18px rgba(22,16,33,.38); flex:0 0 auto;}
-  .mini .scr{position:relative; width:100%; height:70px; overflow:hidden; background:#0b0712;}
+  /* ── the card: one size, corner-badge branding ── */
+  .mini{width:116px; border-radius:11px; overflow:hidden; background:#0b0712; cursor:pointer;
+    position:relative; box-shadow:0 8px 18px rgba(22,16,33,.38); flex:0 0 auto;}
+  .mini .scr{position:relative; width:100%; height:65px; overflow:hidden; background:#0b0712;}
   .mini video{width:100%; height:100%; object-fit:cover; display:block; background:#0b0712;}
-  .mini .poster{position:absolute; inset:0; background:
-      radial-gradient(120% 90% at 30% 20%, rgba(217,0,141,.34), transparent 60%),
-      radial-gradient(100% 80% at 80% 90%, rgba(109,23,206,.34), transparent 60%), #150e21;}
   .mini .fallback{position:absolute; inset:0; display:flex; align-items:center; justify-content:center;
-    color:var(--brand300); font-size:15px;}
-  .mini .live{position:absolute; top:4px; left:4px; display:flex; align-items:center; gap:3px;
+    background:linear-gradient(135deg,#241a33,#0b0712); color:var(--brand300); font-size:15px;}
+  .mini .live{position:absolute; top:4px; right:4px; display:flex; align-items:center; gap:3px;
     background:rgba(11,7,18,.7); padding:2px 5px; border-radius:4px; font-size:7px; font-weight:800; color:#fff;}
   .mini .live i{width:4px; height:4px; border-radius:50%; background:var(--brand600); display:block;}
-  .mini .badge{display:none;}
-  .mini .bar{display:none;}
-
-  /* the Wiom mark, drawn once and reused at any size/colour */
-  .mk{width:9px; height:9px; border-radius:2.5px; background:#fff; position:relative; flex:0 0 auto;}
-  .mk::after{content:''; position:absolute; left:2.4px; top:2.4px; width:4.2px; height:4.2px; border-radius:1.2px; background:var(--brand600);}
-  .mk.inv{background:var(--brand600);} .mk.inv::after{background:#fff;}
-
-  /* ── B1 · solid brand bar ── */
-  .b1 .bar{display:flex; height:16px; background:var(--brand600); align-items:center; justify-content:center; gap:4px;}
-  .b1 .wm{font-size:8px; font-weight:800; color:#fff;}
-  .b1 .free{font-size:6px; font-weight:800; color:var(--brand600); background:#fff; padding:1px 4px; border-radius:999px;}
-
-  /* ── B2 · dark bar, pink rule ── */
-  .b2 .bar{display:flex; height:16px; background:var(--n900); align-items:center; justify-content:center; gap:4px;
-    border-top:1.5px solid var(--brand600);}
-  .b2 .wm{font-size:8px; font-weight:800; color:#fff;}
-  .b2 .free{font-size:6px; font-weight:800; color:var(--brand300);}
-
-  /* ── B3 · no bar, floating corner badge ── */
-  .b3 .badge{display:flex; position:absolute; left:5px; bottom:5px; align-items:center; gap:3px;
+  .mini .badge{display:flex; position:absolute; left:5px; bottom:5px; align-items:center; gap:3px;
     background:var(--brand600); padding:3px 7px 3px 4.5px; border-radius:999px; box-shadow:0 2px 8px rgba(0,0,0,.45);}
-  .b3 .badge .wm{font-size:8px; font-weight:800; color:#fff;}
-  .b3 .live{left:auto; right:4px;}
+  .mini .badge .wm{font-size:8px; font-weight:800; color:#fff;}
+  .mk{width:9px; height:9px; border-radius:2.5px; background:#fff; position:relative; flex:0 0 auto;}
+  .mk::after{content:''; position:absolute; left:2.4px; top:2.4px; width:4.2px; height:4.2px;
+    border-radius:1.2px; background:var(--brand600);}
 
-  /* ── B4 · glass bar over the picture ── */
-  .b4 .bar{display:flex; height:17px; background:rgba(11,7,18,.55); backdrop-filter:blur(6px); -webkit-backdrop-filter:blur(6px);
-    align-items:center; justify-content:center; gap:4px; border-top:1px solid rgba(255,255,255,.18);
-    margin-top:-17px; position:relative; z-index:2;}
-  .b4 .wm{font-size:8px; font-weight:800; color:#fff;}
-  .b4 .free{font-size:6px; font-weight:800; color:var(--brand300);}
-
-  /* ── B5 · pink bezel TV set ── */
-  .b5{background:var(--brand600); padding:2.5px 2.5px 0; border-radius:12px;}
-  .b5 .scr{border-radius:8px 8px 0 0;}
-  .b5 .bar{display:flex; height:15px; align-items:center; justify-content:center; gap:4px;}
-  .b5 .wm{font-size:7.5px; font-weight:800; color:#fff;}
-  .b5 .free{display:none;}
-
-  /* ── B6 · gold plate ── */
-  .b6 .bar{display:flex; height:16px; background:linear-gradient(90deg,var(--gold1),var(--gold2),var(--gold3));
-    align-items:center; justify-content:center; gap:4px;}
-  .b6 .wm{font-size:8px; font-weight:800; color:#3d2f06;}
-  .b6 .free{display:none;}
-  .b6 .bar .mk{background:#3d2f06;} .b6 .bar .mk::after{background:var(--gold2);}
-
-  /* chooser grid */
-  .opts{display:grid; grid-template-columns:repeat(3,1fr); gap:18px;}
-  .opt{border:1.5px solid var(--n300); border-radius:16px; padding:16px; background:#fff; cursor:pointer;
-    display:flex; gap:14px; align-items:flex-start; transition:border-color .15s, box-shadow .15s;}
-  .opt:hover{border-color:var(--brand300);}
-  .opt.sel{border-color:var(--brand600); box-shadow:0 0 0 3px var(--brand100);}
-  .opt .meta h3{font-size:14px; font-weight:800; display:flex; align-items:center; gap:6px;}
-  .opt .meta .code{font-size:11px; font-weight:800; color:var(--brand600);}
-  .opt .meta p{font-size:12.5px; color:var(--n700); margin-top:4px;}
-  .opt .meta .tag{display:inline-block; font-size:10px; font-weight:800; padding:2px 7px; border-radius:999px; margin-top:8px;}
-  .tag.loud{background:var(--brand100); color:var(--brand600);}
-  .tag.calm{background:var(--n100); color:var(--n700);}
-  .tag.rich{background:#FBF3D8; color:#7a5c05;}
-
-  /* phone preview */
-  .stage{display:grid; grid-template-columns:300px 1fr; gap:34px; align-items:start; margin-top:8px;}
+  /* phone */
+  .stage{display:grid; grid-template-columns:300px 1fr; gap:38px; align-items:start; margin-top:18px;}
   .phone{width:100%; max-width:274px; aspect-ratio:9/19.2; background:var(--white);
     border:8px solid var(--n900); border-radius:30px; overflow:hidden; position:relative;
-    box-shadow:0 14px 40px rgba(22,16,33,.18); display:flex; flex-direction:column;}
+    box-shadow:0 16px 44px rgba(22,16,33,.20); display:flex; flex-direction:column;}
   .sbar{height:22px; display:flex; align-items:center; justify-content:flex-end; gap:6px; padding:0 14px; font-size:9px; color:var(--n500);}
   .topbar{display:flex; align-items:center; justify-content:space-between; padding:0 12px 4px;}
   .logo{font-size:10px; font-weight:800; color:var(--brand600);}
@@ -115,118 +72,61 @@
   .h-title{font-size:13px; font-weight:800; text-align:center; margin-top:4px;}
   .h-sub{font-size:10.5px; color:var(--n700); text-align:center; margin-top:2px;}
   .spacer{flex:1;}
-  .miniRow{display:flex; justify-content:flex-end; padding-bottom:5px; position:relative;}
-  .miniRow.guide::after{content:''; position:absolute; left:0; right:0; bottom:0; height:5px; background:var(--brand300);}
+  .miniRow{display:flex; justify-content:flex-end; padding-bottom:4px;}
   .note{font-size:9.5px; color:var(--n500); text-align:center; margin:8px 0;}
   .cta{background:var(--brand600); color:#fff; font-weight:800; text-align:center; border-radius:12px; padding:13px; font-size:13px;}
   .zone{margin-top:9px; padding-top:7px; border-top:1px dashed var(--n300); font-size:8px; color:var(--n500); text-align:center;}
+  .shotcap{font-size:12px; color:var(--n500); text-align:center; margin-top:10px;}
 
-  .toolbar{display:flex; flex-wrap:wrap; gap:8px; margin:0 0 18px;}
-  .tbtn{font-size:12.5px; font-weight:700; border:1px solid var(--n300); background:#fff; color:var(--n700);
-    padding:7px 14px; border-radius:999px; cursor:pointer; font-family:inherit;}
-  .tbtn.on{background:var(--brand600); border-color:var(--brand600); color:#fff;}
-  .side h3{font-size:15px; font-weight:800; margin-bottom:6px;}
-  .side p{font-size:14px; color:var(--n700);}
-  .side .why{background:var(--n100); border:1px solid var(--n300); border-radius:14px; padding:16px 18px; margin-top:16px;}
-  .side .why h4{font-size:11px; font-weight:800; letter-spacing:.06em; text-transform:uppercase; color:var(--n700); margin-bottom:8px;}
-  .side .why ul{list-style:none; display:flex; flex-direction:column; gap:7px;}
-  .side .why li{font-size:13.5px; color:var(--n700); padding-left:18px; position:relative;}
-  .side .why li::before{content:'·'; position:absolute; left:6px; color:var(--brand600); font-weight:800;}
-  .side .why code{background:#fff; border:1px solid var(--n300); padding:1px 6px; border-radius:5px; font-size:12.5px;}
-  .rec{margin-top:44px; background:linear-gradient(135deg,var(--n900),var(--brandSec)); color:#fff; border-radius:20px; padding:26px;}
-  .rec h3{font-size:18px; font-weight:800; margin-bottom:10px;}
-  .rec p{font-size:14.5px; color:#E7E1F0;}
-  .foot{margin-top:36px; font-size:12px; color:var(--n500); text-align:center;}
+  .callouts{display:flex; flex-direction:column; gap:14px;}
+  .co{display:flex; gap:12px; align-items:flex-start;}
+  .co .n{flex:0 0 auto; width:24px; height:24px; border-radius:50%; background:var(--brand600); color:#fff;
+    font-size:12px; font-weight:800; display:flex; align-items:center; justify-content:center; margin-top:2px;}
+  .co .t{font-size:14.5px; color:var(--n700);} .co .t b{display:block; color:var(--n900); font-size:15px;}
+
+  .specs{display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:12px; margin-top:18px;}
+  .spec{background:#fff; border:1px solid var(--n300); border-radius:14px; padding:12px 14px;}
+  .spec .l{font-size:10.5px; font-weight:800; letter-spacing:.07em; text-transform:uppercase; color:var(--n500);}
+  .spec .v{font-size:15px; font-weight:800; color:var(--n900); margin-top:3px;}
+
+  table{width:100%; border-collapse:collapse; font-size:14px; margin-top:8px;}
+  th{text-align:left; font-size:11px; text-transform:uppercase; letter-spacing:.07em; color:var(--n500);
+    padding:9px 12px; border-bottom:1px solid var(--n300);}
+  td{padding:10px 12px; border-bottom:1px solid var(--n100); color:var(--n700); vertical-align:top;}
+  td b{color:var(--n900);}
+  pre{background:var(--n900); color:#F1EDF7; border-radius:14px; padding:16px 18px; overflow-x:auto;
+    font-size:13px; line-height:1.7; font-family:ui-monospace,Menlo,monospace; margin-top:12px;}
+  pre .c{color:#A7A1B2;} pre .k{color:#FFB2E4;} pre .s{color:#9BE3C0;}
+  .flow{display:flex; flex-wrap:wrap; align-items:center; gap:10px; margin-top:14px;}
+  .step{background:#fff; border:1px solid var(--n300); border-radius:12px; padding:11px 14px; font-size:13.5px; color:var(--n700);}
+  .step b{display:block; color:var(--n900); font-size:14px;}
+  .arrow{color:var(--brand300); font-weight:800;}
+  .warn{background:var(--warn200); border:1px solid #F0C089; border-radius:16px; padding:18px 20px; margin-top:18px;}
+  .warn h3{color:#8a4600;} .warn p{color:#7a4a12; font-size:14.5px;}
+  .foot{margin-top:44px; padding-top:18px; border-top:1px solid var(--n300); font-size:12.5px; color:var(--n500);}
   .foot a{color:var(--brand600);}
-  @media(max-width:940px){ .opts{grid-template-columns:repeat(2,1fr);} .stage{grid-template-columns:1fr;} }
-  @media(max-width:620px){ .opts{grid-template-columns:1fr;} }
+  @media(max-width:900px){ .stage{grid-template-columns:1fr;} }
 </style>
 </head>
 <body>
 <div class="wrap">
 
-  <span class="kick">Wiom TV re-entry · V4a · branding</span>
-  <h1>Corner badge, bigger window — <span class="g">V4a, locked</span></h1>
-  <p class="lede">Settled: <b>V4a</b> placement — right-aligned, in the flow, 5px above the text — with the <b>B3 corner badge</b> branding and the TV window stepped up twice to <b>125×70dp</b>. The other five treatments stay below for the record; tap any of them to compare against the pick.</p>
+<div class="nav">
+  <a href="pr352-unserviceable.html">1 · Unserviceable screen</a>
+  <a href="pr352-repeat-user.html">2 · Repeat user</a>
+  <a href="pr352-prd.html">PRD &amp; handoff contract</a>
+  <a href="https://github.com/wiom-tech/customer-app-kotlin/pull/352" class="pr" target="_blank">PR #352 ↗</a>
+</div>
 
-  <h2>Pick a treatment</h2>
-  <p class="h2sub">Same card, same channel, six ways of wearing the brand. The trade-off runs from loud (obviously a Wiom product) to calm (obviously live TV).</p>
+<span class="kick">Wiom TV re-entry · V4a · final</span>
+<h1>A small live window that brings a <span class="g">returning user</span> back</h1>
+<p class="lede">One card, one size, one branding treatment. It sits in the layout flow on the right, just above the
+text beneath it — so it can never cover the hero, the address or the booking CTA. The card is all picture, because
+the picture is the reason to come back.</p>
 
-  <div class="opts" id="opts">
-    <div class="opt" data-b="b1">
-      <div class="mini b1">
-        <div class="scr"><div class="poster"></div><div class="live"><i></i>LIVE</div></div>
-        <div class="bar"><span class="mk"></span><span class="wm">व्योम TV</span><span class="free">फ्री</span></div>
-      </div>
-      <div class="meta"><h3><span class="code">B1</span> Solid brand bar</h3>
-        <p>Full-width brand-600 base. Loudest read, least picture.</p>
-        <span class="tag loud">Loud</span></div>
-    </div>
-
-    <div class="opt" data-b="b2">
-      <div class="mini b2">
-        <div class="scr"><div class="poster"></div><div class="live"><i></i>LIVE</div></div>
-        <div class="bar"><span class="mk inv"></span><span class="wm">व्योम TV</span><span class="free">फ्री</span></div>
-      </div>
-      <div class="meta"><h3><span class="code">B2</span> Dark bar, pink rule</h3>
-        <p>Neutral-900 chin with a brand hairline. Reads as a TV set, not a banner.</p>
-        <span class="tag calm">Calm</span></div>
-    </div>
-
-    <div class="opt" data-b="b3">
-      <div class="mini b3">
-        <div class="scr"><div class="poster"></div><div class="live"><i></i>LIVE</div>
-          <div class="badge"><span class="mk"></span><span class="wm">व्योम TV</span></div>
-        </div>
-        <div class="bar"><span class="mk"></span><span class="wm">व्योम TV</span><span class="free">फ्री</span></div>
-      </div>
-      <div class="meta"><h3><span class="code">B3</span> Corner badge ✓</h3>
-        <p>No chin — a small pill over the picture. Maximum video, brand still present.</p>
-        <span class="tag calm">Calm</span></div>
-    </div>
-
-    <div class="opt" data-b="b4">
-      <div class="mini b4">
-        <div class="scr"><div class="poster"></div><div class="live"><i></i>LIVE</div></div>
-        <div class="bar"><span class="mk"></span><span class="wm">व्योम TV</span><span class="free">फ्री</span></div>
-      </div>
-      <div class="meta"><h3><span class="code">B4</span> Glass bar</h3>
-        <p>Blurred bar sitting <i>over</i> the video, so no height is lost to branding.</p>
-        <span class="tag calm">Calm</span></div>
-    </div>
-
-    <div class="opt" data-b="b5">
-      <div class="mini b5">
-        <div class="scr"><div class="poster"></div><div class="live"><i></i>LIVE</div></div>
-        <div class="bar"><span class="mk"></span><span class="wm">व्योम TV</span></div>
-      </div>
-      <div class="meta"><h3><span class="code">B5</span> Pink bezel TV</h3>
-        <p>The card itself is the brand: pink frame, name on the chin.</p>
-        <span class="tag loud">Loud</span></div>
-    </div>
-
-    <div class="opt" data-b="b6">
-      <div class="mini b6">
-        <div class="scr"><div class="poster"></div><div class="live"><i></i>LIVE</div></div>
-        <div class="bar"><span class="mk"></span><span class="wm">व्योम TV</span></div>
-      </div>
-      <div class="meta"><h3><span class="code">B6</span> Gold plate</h3>
-        <p>Gold-gradient chin from the Wiom palette. Premium — but we sell free.</p>
-        <span class="tag rich">Premium</span></div>
-    </div>
-  </div>
-
-  <h2>On the screen</h2>
-  <p class="h2sub">V4a placement with the selected treatment, playing the same channel the shipped app band uses.</p>
-
-  <div class="toolbar">
-    <button class="tbtn on" data-size="125">125×70</button>
-    <button class="tbtn" data-size="106">106×60</button>
-    <button class="tbtn" data-size="153">153×86</button>
-    <button class="tbtn on" data-guide="1" style="margin-left:14px">Mark the 5px gap</button>
-  </div>
-
-  <div class="stage">
+<h2>The card, on the screen</h2>
+<div class="stage">
+  <div>
     <div class="phone">
       <div class="sbar">15:25 ▪ ▪</div>
       <div class="topbar"><span class="logo">wiom</span><span class="ico"></span></div>
@@ -235,15 +135,14 @@
         <div class="h-title">अपने इलाके में व्योम चेक करें</div>
         <div class="h-sub">घर-घर तक तेज़ इंटरनेट</div>
         <div class="spacer"></div>
-        <div class="miniRow guide">
-          <div class="mini b3" id="stageCard">
+        <div class="miniRow">
+          <div class="mini" id="card">
             <div class="scr">
               <video muted playsinline autoplay></video>
               <div class="fallback">▶</div>
               <div class="live"><i></i>LIVE</div>
               <div class="badge"><span class="mk"></span><span class="wm">व्योम TV</span></div>
             </div>
-            <div class="bar"><span class="mk"></span><span class="wm">व्योम TV</span><span class="free">फ्री</span></div>
           </div>
         </div>
         <div class="note">आपके इलाके की जानकारी चाहिए</div>
@@ -251,42 +150,148 @@
         <div class="zone">booking action zone — untouched</div>
       </div>
     </div>
+    <div class="shotcap">Real Wiom TV stream, muted · card shown to scale</div>
+  </div>
 
-    <div class="side">
-      <h3 id="sideTitle">B3 · Corner badge — chosen</h3>
-      <p id="sideBody">No chin at all — a small brand-600 pill sits over the picture, so the whole card is TV. The window is 125×70dp — two 10% steps up from where it started — because nothing is spent on branding furniture.</p>
-      <div class="why">
-        <h4>What to judge it on</h4>
-        <ul>
-          <li><b>At arm’s length</b> — does it read as live TV, or as an ad banner?</li>
-          <li><b>Against the CTA</b> — the booking button is already brand-600. Two strong pinks on one screen is exactly what B2, B3 and B4 avoid.</li>
-          <li><b>At 88×50</b> — the wordmark must survive the smallest size; B5 and B6 drop the फ्री tag there.</li>
-          <li><b>Build cost is identical</b> across all six — a <code>Column</code> with a bar, or a <code>Box</code> overlay. Pick on looks, not effort.</li>
-        </ul>
-      </div>
+  <div>
+    <div class="callouts">
+      <div class="co"><span class="n">1</span><span class="t"><b>153 × 86 dp</b>
+        The largest of the sizes we tested — big enough to read the programme, still clearly secondary to booking.</span></div>
+      <div class="co"><span class="n">2</span><span class="t"><b>All picture, no chrome</b>
+        No branding bar eating the frame. The whole card is the channel.</span></div>
+      <div class="co"><span class="n">3</span><span class="t"><b>Corner badge for identity</b>
+        One brand-600 pill (mark + व्योम TV) bottom-left, LIVE opposite it so the two never collide.</span></div>
+      <div class="co"><span class="n">4</span><span class="t"><b>In the flow, right-aligned</b>
+        It occupies real layout height above the text below it, so "doesn't overlap" is structural, not a spacing judgement.</span></div>
+      <div class="co"><span class="n">5</span><span class="t"><b>One tap resumes</b>
+        Opens wiom.tv on the same channel that's playing, carrying who and where from.</span></div>
+      <div class="co"><span class="n">6</span><span class="t"><b>Booking keeps the pink</b>
+        "मेरा इलाका चेक करें" stays the only solid brand block on the screen.</span></div>
     </div>
   </div>
+</div>
 
-  <div class="rec">
-    <h3>Locked: B3 corner badge, window 125×70dp</h3>
-    <p>Branding is a single brand-600 pill in the bottom-left of the picture — mark plus <b>व्योम TV</b> — with the LIVE dot moved to the right so the two never collide. Because no height goes to a chin, the window grows to <b>125×70dp</b> and the card is all television, which is the whole argument for a preview over a text pill. It also keeps the screen’s only solid pink block on the booking CTA, where the tap is meant to go.</p>
-  </div>
+<div class="specs">
+  <div class="spec"><div class="l">Size</div><div class="v">153 × 86 dp</div></div>
+  <div class="spec"><div class="l">Corner radius</div><div class="v">12 dp</div></div>
+  <div class="spec"><div class="l">Gap to text below</div><div class="v">5 dp</div></div>
+  <div class="spec"><div class="l">Appears</div><div class="v">0.6s after render</div></div>
+  <div class="spec"><div class="l">Plays for</div><div class="v">30s, then freezes</div></div>
+  <div class="spec"><div class="l">Audio</div><div class="v">Always muted</div></div>
+</div>
 
-  <p class="foot">Wiom TV re-entry · V4a branding study — companion to <a href="solutions.html">solutions.html</a> (V1 banner · V2 header · V3 pill)</p>
+<h2>How tech enables this</h2>
+<p>The card is a self-gating composable: the landing screen mounts it unconditionally and it decides for itself
+whether to render. That means turning it on, tuning it or pulling it entirely is a <b>config change, not a release</b>.</p>
+
+<h3 style="margin-top:22px">1 · Where it lives</h3>
+<table>
+<tr><th>File</th><th>Role</th></tr>
+<tr><td><code>feature/booking/ui/WiomTvMiniPreview.kt</code></td>
+    <td>The card, its ExoPlayer lifecycle, and <code>WiomTvReentryViewModel</code> (gate, deep link, events)</td></tr>
+<tr><td><code>feature/booking/ui/SplashHomeScreen.kt</code></td>
+    <td>Hosts it — one line, a right-aligned <code>Row</code> in the content column with <code>padding(bottom = 5.dp)</code></td></tr>
+<tr><td><code>core/data/store/AnalyticsPrefs.kt</code></td>
+    <td><code>hasVisitedWiomTv</code> — the durable flag that qualifies a user</td></tr>
+<tr><td><code>core/data/config/AppRemoteConfig.kt</code></td>
+    <td>Remote Config schema, including the master switch</td></tr>
+</table>
+
+<h3 style="margin-top:26px">2 · Who it renders for — two locks</h3>
+<pre><span class="c">// WiomTvReentryViewModel — both must be true, no exceptions</span>
+val enabled: Boolean
+    get() = remoteConfig.current.<span class="k">wiomTvReentryEnabled</span>   <span class="c">// Remote Config, default false</span>
+            &amp;&amp; prefs.<span class="k">hasVisitedWiomTv</span>                  <span class="c">// this device opened Wiom TV before</span></pre>
+<p style="margin-top:10px">The second lock is what makes this a <i>re-entry</i> surface rather than an ad. It latches
+at exactly one moment — when a user taps the Wiom TV band on the unserviceable screen and wiom.tv opens:</p>
+<pre><span class="c">// WiomTvBandViewModel.logClicked()</span>
+prefs.<span class="k">hasVisitedWiomTv</span> = <span class="s">true</span>   <span class="c">// SharedPreferences — survives app kills and updates</span></pre>
+<p style="margin-top:10px">A user who has never seen Wiom TV gets today's landing screen byte-for-byte. Debug builds
+render the card unconditionally so QA needs no Firebase and no prior visit.</p>
+
+<h3 style="margin-top:26px">3 · What plays</h3>
+<ul>
+  <li>Channel comes from Remote Config (<code>WIOM_TV_CHANNEL_NUM</code> / <code>_URL</code>) — the same source the band uses, so both surfaces always show the same channel.</li>
+  <li>ExoPlayer (media3), muted, no controls, with a two-step fallback chain if the primary stream fails.</li>
+  <li>A poster covers the gap before the first frame and retires permanently once the stream renders, so a paused card never looks broken.</li>
+  <li>Stops after 30s and freezes on the last frame — these users have no Wiom net, so the stream costs them cellular.</li>
+  <li>Pauses when the app backgrounds, resumes on return, and the player is released when the screen leaves.</li>
+</ul>
+
+<h3 style="margin-top:26px">4 · What the tap does</h3>
+<pre>https://wiom.tv/?<span class="k">ch</span>=<span class="s">2</span>&amp;<span class="k">src</span>=<span class="s">app_reentry_mini</span>&amp;<span class="k">ctid</span>=<span class="s">__abc123def456</span></pre>
+<table>
+<tr><th>Param</th><th>Carries</th><th>Why it matters</th></tr>
+<tr><td><code>ch</code></td><td>The channel currently playing in the card</td>
+    <td>The user resumes on what they tapped, not a generic landing channel</td></tr>
+<tr><td><code>src</code></td><td><code>app_reentry_mini</code></td>
+    <td>Separates re-entry traffic from first-contact traffic in the wiom.tv numbers</td></tr>
+<tr><td><code>ctid</code></td><td>CleverTap device id (omitted if blank)</td>
+    <td>Joins an app user to their wiom.tv behaviour</td></tr>
+</table>
+
+<div class="warn">
+  <h3>⚠ One dependency on the wiom.tv side</h3>
+  <p>wiom.tv already records every landing query param, so <code>src</code> and <code>ctid</code> work for attribution
+  today. But <b>nothing reads <code>ch=</code> yet</b> — a user who taps a live Dangal TV card currently lands on the
+  default channel instead. The ask is small: read <code>ch</code> in the boot path, resolve it against the channel
+  list, tune to it, and fall back silently if it's unknown. Full spec in the
+  <a href="pr352-prd.html">PRD handoff contract</a>.</p>
+</div>
+
+<h3 style="margin-top:26px">5 · How to switch it on</h3>
+<p>Add the key to the <code>customer_kotlin_app_config</code> blob in Firebase Remote Config. No build, no release,
+effective on the next config fetch:</p>
+<pre>{
+  <span class="k">"WIOM_TV_REENTRY_ENABLED"</span>: <span class="s">true</span>,      <span class="c">// this card</span>
+  <span class="k">"WIOM_TV_BAND_ENABLED"</span>: <span class="s">true</span>,         <span class="c">// the unserviceable band — enable first, it creates the audience</span>
+  <span class="k">"WIOM_TV_CHANNEL_NUM"</span>: <span class="s">2</span>,
+  <span class="k">"WIOM_TV_CHANNEL_URL"</span>: <span class="s">"https://live-dangal.akamaized.net/liveabr/playlist.m3u8"</span>
+}</pre>
+<div class="flow">
+  <div class="step"><b>1</b> Merge — both off, production unchanged</div><span class="arrow">→</span>
+  <div class="step"><b>2</b> wiom.tv ships <code>?ch=</code></div><span class="arrow">→</span>
+  <div class="step"><b>3</b> Enable the band — it creates the audience</div><span class="arrow">→</span>
+  <div class="step"><b>4</b> Enable this card</div>
+</div>
+<p style="margin-top:12px">Order matters: this card has <b>no audience</b> until the band has been live long enough
+for users to have tapped it. Killing either is the same flag set back to <code>false</code>.</p>
+
+<h3 style="margin-top:26px">6 · What we'll see</h3>
+<table>
+<tr><th>Event</th><th>When</th></tr>
+<tr><td><code>wiom_tv_reentry_shown</code></td><td>The card actually appears — not when the screen mounts</td></tr>
+<tr><td><code>wiom_tv_reentry_clicked</code></td><td>Tapped, with the channel number attached</td></tr>
+</table>
+<p style="margin-top:10px">Primary metric is tap-through (<code>_clicked ÷ _shown</code>); the wiom.tv side of the
+funnel joins on <code>src=app_reentry_mini</code> for watch-time and D1 return.</p>
+
+<div class="warn" style="background:var(--info100); border-color:#D9C2F5;">
+  <h3 style="color:var(--info600)">Note for tech — the build is currently 125 × 70</h3>
+  <p style="color:#4b2a78">PR #352 ships the card at <b>125 × 70 dp</b>, the size before this final step up.
+  Locking the largest size means one constant change in <code>WiomTvMiniPreview.kt</code>
+  (<code>CARD_WIDTH = 153.dp</code>, <code>CARD_HEIGHT = 86.dp</code>) — no layout rework, since the card is in the
+  flow and the row simply reserves more height.</p>
+</div>
+
+<div class="foot">Wiom TV re-entry · V4a final ·
+<a href="pr352-repeat-user.html">product &amp; design page</a> ·
+<a href="pr352-prd.html">PRD</a> ·
+<a href="https://github.com/wiom-tech/customer-app-kotlin/pull/352">PR #352</a></div>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/hls.js@1.5.13/dist/hls.min.js"></script>
 <script>
-  // Same channel + fallback chain as the shipped app band (Remote-Config default: Dangal TV).
+  // Same channel + fallback chain as the shipped app surfaces (RC default: Dangal TV).
   const SOURCES = [
     'https://live-dangal.akamaized.net/liveabr/playlist.m3u8',
     'https://live-dangal2.akamaized.net/liveabr/playlist.m3u8',
     'https://ndtvindiaelemarchana.akamaized.net/hls/live/2003679/ndtvindia/master.m3u8',
   ];
-  const video = document.querySelector('#stageCard video');
+  const video = document.querySelector('#card video');
   (function attach(idx){
-    if (idx >= SOURCES.length) return;                       // all failed → the ▶ fallback stays
-    const ok = () => document.querySelector('#stageCard .fallback').style.display = 'none';
+    if (idx >= SOURCES.length) return;                    // all failed → the ▶ fallback stays
+    const ok = () => document.querySelector('#card .fallback').style.display = 'none';
     if (video.canPlayType('application/vnd.apple.mpegurl')) {
       video.src = SOURCES[idx];
       video.addEventListener('playing', ok, {once:true});
@@ -300,42 +305,8 @@
     video.play().catch(()=>{});
   })(0);
 
-  const COPY = {
-    b1:['B1 · Solid brand bar','Full-width brand-600 base. The loudest read of the six — unmistakably a Wiom product, at the cost of 16dp of picture and a second strong pink shape sitting just above the pink CTA.'],
-    b2:['B2 · Dark bar, pink rule','Neutral-900 chin with a 1.5dp brand-600 hairline. Says Wiom TV without a second pink block, and matches the dark band already shipping on the unserviceable screen.'],
-    b3:['B3 · Corner badge','No chin at all — a small pink pill over the picture, so the full 16:9 stays video. Brand is quiet here: weakest at a glance, strongest as a TV.'],
-    b4:['B4 · Glass bar','Blurred dark bar sitting over the bottom of the video. Costs no height, but legibility depends on the frame behind it — risky on bright content.'],
-    b5:['B5 · Pink bezel TV','The card itself becomes the brand: a pink frame around the screen with the name on the chin. Charming, but the heaviest pink footprint of the six.'],
-    b6:['B6 · Gold plate','Gold-gradient chin from the Wiom palette. Reads premium — which fights the “100% free, free-to-air” story we lead with everywhere else.'],
-  };
-  const card = document.getElementById('stageCard');
-  document.querySelectorAll('.opt').forEach(o => o.onclick = () => {
-    document.querySelectorAll('.opt').forEach(x => x.classList.remove('sel'));
-    o.classList.add('sel');
-    const w = card.style.width, h = card.querySelector('.scr').style.height;
-    card.className = 'mini ' + o.dataset.b;
-    card.style.width = w; card.querySelector('.scr').style.height = h;   // keep the chosen size
-    const [t, b] = COPY[o.dataset.b];
-    document.getElementById('sideTitle').textContent = t;
-    document.getElementById('sideBody').textContent = b;
-  });
-  document.querySelector('.opt[data-b="b3"]').classList.add('sel');
-
-  // Size toggle — width drives the card; the screen keeps 16:9.
-  document.querySelectorAll('[data-size]').forEach(b => b.onclick = () => {
-    document.querySelectorAll('[data-size]').forEach(x => x.classList.remove('on'));
-    b.classList.add('on');
-    const w = +b.dataset.size;
-    card.style.width = w + 'px';
-    card.querySelector('.scr').style.height = Math.round(w * 9 / 16) + 'px';
-  });
-
-  // 5px gap marker.
-  const guideBtn = document.querySelector('[data-guide]');
-  guideBtn.onclick = () => {
-    guideBtn.classList.toggle('on');
-    document.querySelector('.miniRow').classList.toggle('guide', guideBtn.classList.contains('on'));
-  };
+  document.getElementById('card').onclick = () =>
+    window.open('https://wiom.tv/?ch=2&src=app_reentry_mini', '_blank');
 </script>
 </body>
 </html>
