@@ -641,6 +641,16 @@
   }
 
   function render(){ screen==='menu' ? renderMenu() : renderView(); }
+  // Deep links: ?view=theatre|toast|footer|saathi|before (&v=area|city|searched) opens an
+  // option directly, so a single option can be shared without walking the chooser.
+  (function deepLink(){
+    const q = new URLSearchParams(location.search);
+    const wanted = q.get('view');
+    const wantedVar = q.get('v');
+    if (wantedVar && ['area','city','searched'].includes(wantedVar)) variant = wantedVar;
+    if (wanted && OPTIONS.some(o => o.key === wanted)) { view = wanted; screen = 'view'; }
+  })();
+
   render();
 </script>
 </body>
