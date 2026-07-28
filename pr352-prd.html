@@ -1,0 +1,350 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PRD · Wiom TV entry points in the customer app</title><style>
+:root{
+  --brand600:#D9008D; --brand300:#FFB2E4; --brand100:#FFE5F6; --brandSec:#443152;
+  --n900:#161021; --n800:#352D42; --n700:#665E75; --n500:#A7A1B2; --n300:#D7D3E0;
+  --n100:#F1EDF7; --white:#FAF9FC; --pos600:#008043; --pos100:#E1FAED;
+  --neg600:#E01E00; --warn600:#FF8000; --warn200:#FFE6CC; --info600:#6D17CE; --info100:#F1E5FF;
+}
+*{box-sizing:border-box; margin:0; padding:0;}
+body{font-family:'Noto Sans','Noto Sans Devanagari',system-ui,-apple-system,sans-serif;
+  background:var(--white); color:var(--n900); line-height:1.55; -webkit-font-smoothing:antialiased;}
+.wrap{max-width:1080px; margin:0 auto; padding:30px 20px 90px;}
+.nav{display:flex; gap:8px; flex-wrap:wrap; margin-bottom:24px;}
+.nav a{font-size:12.5px; font-weight:700; text-decoration:none; padding:7px 14px; border-radius:999px;
+  border:1px solid var(--n300); color:var(--n700); background:#fff;}
+.nav a.on{background:var(--n900); border-color:var(--n900); color:#fff;}
+.nav a.pr{background:var(--brand600); border-color:var(--brand600); color:#fff;}
+.kick{display:inline-block; font-size:12px; font-weight:700; letter-spacing:.05em; text-transform:uppercase;
+  color:var(--brand600); background:var(--brand100); padding:5px 12px; border-radius:999px;}
+h1{font-size:32px; font-weight:800; line-height:1.18; margin:14px 0 10px; letter-spacing:-.015em;}
+h1 .g{background:linear-gradient(90deg,var(--brand600),var(--info600)); -webkit-background-clip:text;
+  background-clip:text; -webkit-text-fill-color:transparent;}
+.lede{font-size:16.5px; color:var(--n700); max-width:820px;}
+h2{font-size:12.5px; font-weight:800; letter-spacing:.09em; text-transform:uppercase; color:var(--n500);
+  margin:48px 0 10px; display:flex; align-items:center; gap:12px;}
+h2::after{content:''; flex:1; height:1px; background:var(--n300);}
+h3{font-size:16px; font-weight:800; margin-bottom:8px;}
+p{font-size:15px; color:var(--n700);}
+p + p{margin-top:10px;}
+b,strong{color:var(--n900);}
+.job{display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-top:20px;}
+.card{background:#fff; border:1px solid var(--n300); border-radius:18px; padding:20px;}
+.card.hot{border-color:var(--brand600); background:linear-gradient(160deg,var(--brand100),#fff 65%);}
+.card.ok{border-color:var(--pos600); background:var(--pos100);} .card.ok h3{color:var(--pos600);}
+ul{list-style:none; display:flex; flex-direction:column; gap:9px; margin-top:8px;}
+li{font-size:14.5px; color:var(--n700); padding-left:22px; position:relative;}
+li::before{content:'—'; position:absolute; left:0; color:var(--n500); font-weight:800;}
+ul.tick li::before{content:'✓'; color:var(--pos600);}
+ul.dot li::before{content:'·'; left:7px; color:var(--brand600); font-size:19px; line-height:1;}
+/* showcase */
+.showcase{display:grid; grid-template-columns:430px 1fr; gap:38px; align-items:start; margin-top:18px;}
+.shot{border-radius:26px; overflow:hidden; border:9px solid var(--n900); box-shadow:0 18px 46px rgba(22,16,33,.20);}
+.shot img{width:100%; display:block;}
+.shotcap{font-size:12px; color:var(--n500); text-align:center; margin-top:10px;}
+.callouts{display:flex; flex-direction:column; gap:14px;}
+.co{display:flex; gap:12px; align-items:flex-start;}
+.co .n{flex:0 0 auto; width:24px; height:24px; border-radius:50%; background:var(--brand600); color:#fff;
+  font-size:12px; font-weight:800; display:flex; align-items:center; justify-content:center; margin-top:2px;}
+.co .t{font-size:14.5px; color:var(--n700);} .co .t b{display:block; color:var(--n900); font-size:15px;}
+.cta-link{display:inline-flex; align-items:center; gap:8px; margin-top:20px; background:var(--n900); color:#fff;
+  text-decoration:none; font-weight:700; font-size:14.5px; padding:12px 20px; border-radius:14px;}
+.cta-link:hover{background:var(--brandSec);}
+.cta-link.alt{background:#fff; color:var(--n900); border:1px solid var(--n300); margin-left:8px;}
+/* tech */
+table{width:100%; border-collapse:collapse; font-size:14px; margin-top:8px;}
+th{text-align:left; font-size:11px; text-transform:uppercase; letter-spacing:.07em; color:var(--n500);
+  padding:9px 12px; border-bottom:1px solid var(--n300);}
+td{padding:10px 12px; border-bottom:1px solid var(--n100); color:var(--n700); vertical-align:top;}
+td b{color:var(--n900);}
+code{background:var(--n100); border:1px solid var(--n300); padding:1px 6px; border-radius:6px;
+  font-size:13px; font-family:ui-monospace,Menlo,monospace; color:var(--n900);}
+.flow{display:flex; flex-wrap:wrap; align-items:center; gap:10px; margin-top:14px;}
+.step{background:#fff; border:1px solid var(--n300); border-radius:12px; padding:11px 14px; font-size:13.5px; color:var(--n700);}
+.step b{display:block; color:var(--n900); font-size:14px;}
+.arrow{color:var(--brand300); font-weight:800;}
+.warn{background:var(--warn200); border:1px solid #F0C089; border-radius:16px; padding:18px 20px; margin-top:16px;}
+.warn h3{color:#8a4600;} .warn p{color:#7a4a12; font-size:14.5px;}
+.q{background:var(--info100); border:1px solid #D9C2F5; border-radius:16px; padding:18px 20px; margin-top:16px;}
+.q h3{color:var(--info600);} .q li::before{content:'?'; color:var(--info600); font-weight:800;}
+.q li{color:#4b2a78;}
+.foot{margin-top:44px; padding-top:18px; border-top:1px solid var(--n300); font-size:12.5px; color:var(--n500);}
+.foot a{color:var(--brand600);}
+@media(max-width:900px){ .showcase{grid-template-columns:1fr;} .job{grid-template-columns:1fr;} }
+
+.meta{display:grid; grid-template-columns:repeat(auto-fit,minmax(160px,1fr)); gap:12px; margin-top:20px;}
+.meta .m{background:#fff; border:1px solid var(--n300); border-radius:14px; padding:12px 14px;}
+.meta .m .l{font-size:10.5px; font-weight:800; letter-spacing:.07em; text-transform:uppercase; color:var(--n500);}
+.meta .m .v{font-size:14px; font-weight:700; color:var(--n900); margin-top:3px;}
+.req{border-left:3px solid var(--brand600); padding-left:16px; margin-top:18px;}
+.req .id{font-size:11px; font-weight:800; color:var(--brand600); letter-spacing:.06em;}
+.req p{margin-top:3px;}
+pre{background:var(--n900); color:#F1EDF7; border-radius:14px; padding:16px 18px; overflow-x:auto;
+  font-size:13px; line-height:1.65; font-family:ui-monospace,Menlo,monospace; margin-top:12px;}
+pre .c{color:#A7A1B2;} pre .k{color:#FFB2E4;} pre .s{color:#9BE3C0;}
+.status{display:inline-block; font-size:10.5px; font-weight:800; padding:3px 9px; border-radius:999px; letter-spacing:.04em;}
+.status.done{background:var(--pos100); color:var(--pos600);}
+.status.todo{background:var(--warn200); color:#8a4600;}
+.status.dec{background:var(--info100); color:var(--info600);}
+.split{display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-top:16px;}
+@media(max-width:900px){ .split{grid-template-columns:1fr;} }
+</style></head>
+<body><div class="wrap"><div class="nav">
+      <a href="pr352-unserviceable.html" class="">1 · Unserviceable screen</a>
+      <a href="pr352-repeat-user.html" class="">2 · Repeat user</a>
+      <a href="pr352-prd.html" class="on">PRD &amp; handoff contract</a>
+      <a href="https://github.com/wiom-tech/customer-app-kotlin/pull/352" class="pr" target="_blank">PR #352 ↗</a>
+    </div>
+<span class="kick">PRD · Wiom TV entry points in the customer app</span>
+<h1>Meet the user where we already said <span class="g">no</span></h1>
+<p class="lede">Two surfaces in the customer app hand a user to Wiom TV, and one contract that carries
+<b>which channel, where they came from and who they are</b> across the handoff. This document covers the product
+requirements and the technical contract; the design detail for each surface lives on its own page.</p>
+
+<div class="meta">
+  <div class="m"><div class="l">Status</div><div class="v">In review — PR #352</div></div>
+  <div class="m"><div class="l">Surfaces</div><div class="v">2 (band + re-entry)</div></div>
+  <div class="m"><div class="l">Rollout</div><div class="v">Remote Config, default off</div></div>
+  <div class="m"><div class="l">App impact</div><div class="v">No-op until enabled</div></div>
+  <div class="m"><div class="l">Blocked on</div><div class="v">wiom.tv <code>?ch=</code> support</div></div>
+</div>
+
+<h2>1 · Problem</h2>
+<p>The customer app has exactly one job today: sell Wiom Net. When it can't — because the user's area isn't served —
+the journey ends with an apology. That's a large, qualified, disappointed audience walking away with nothing, on a day
+when we have a second product that is <b>free, live right now, and needs no installation</b>.</p>
+<p>And once a user does try Wiom TV, the app forgets. They reopen it days later, land on "check my area", and there is
+no route back to the thing they actually used.</p>
+
+<h2>2 · Goals &amp; non-goals</h2>
+<div class="split">
+  <div class="card ok">
+    <h3>Goals</h3>
+    <ul class="tick">
+      <li>Give an unserviceable user something usable the same minute, instead of a dead end.</li>
+      <li>Give a returning Wiom TV user a one-tap route back, resuming on the same channel.</li>
+      <li>Make wiom.tv traffic from the app <b>attributable per surface</b>, so we can tell first contact from re-entry.</li>
+      <li>Ship behind switches so the whole thing can be turned on, tuned or pulled without an app release.</li>
+    </ul>
+  </div>
+  <div class="card">
+    <h3>Non-goals</h3>
+    <ul>
+      <li>Changing the booking funnel — the location CTA, login link and serviceability logic are untouched.</li>
+      <li>Building a player inside the app. We hand off to wiom.tv; the app only previews.</li>
+      <li>Account linking or login on wiom.tv. The handoff carries an analytics identity, not an authenticated session.</li>
+      <li>Monetisation. Wiom TV here is free-to-air, and the copy says so.</li>
+    </ul>
+  </div>
+</div>
+
+<h2>3 · Scope</h2>
+<table>
+<tr><th>#</th><th>Surface</th><th>Trigger</th><th>Design</th></tr>
+<tr><td><b>S1</b></td><td><b>Wiom TV band</b> — unserviceable screen (pre-booking)</td>
+  <td>User checks their area, we can't serve it</td>
+  <td><a href="pr352-unserviceable.html">Page 1</a> · <a href="index.html?view=theatre" target="_blank">live prototype</a></td></tr>
+<tr><td><b>S2</b></td><td><b>Re-entry preview</b> — booking landing screen</td>
+  <td>User who already opened Wiom TV relaunches the app</td>
+  <td><a href="pr352-repeat-user.html">Page 2</a> · <a href="mini-preview.html" target="_blank">live prototype</a></td></tr>
+</table>
+
+<h2>4 · Functional requirements</h2>
+
+<div class="req"><span class="id">FR-1 · S1 visibility</span>
+<p>The band renders on the unserviceable screen <b>only</b> in the pre-booking variant
+(<code>fromConfirmLocation = false</code>) and <b>only</b> when <code>WIOM_TV_BAND_ENABLED</code> is true.
+The post-booking install-confirm variant is out of scope for v1.</p></div>
+
+<div class="req"><span class="id">FR-2 · S1 sequencing</span>
+<p>The screen's own message, address and primary CTA must render first. The band enters after
+<code>WIOM_TV_BAND_ENTRY_DELAY_MS</code> (default 1200) by sliding up from the bottom. It must never displace or
+overlay the message, the address or the booking CTA.</p></div>
+
+<div class="req"><span class="id">FR-3 · S2 visibility</span>
+<p>The re-entry card renders on the landing screen only when <code>WIOM_TV_REENTRY_ENABLED</code> is true
+<b>AND</b> the device has previously opened Wiom TV (<code>hasVisitedWiomTv</code>). A user who has never seen
+Wiom TV must get today's landing screen byte-for-byte.</p></div>
+
+<div class="req"><span class="id">FR-4 · Preview behaviour (both)</span>
+<p>A real channel plays <b>muted</b>, with no player controls. Playback stops after the configured budget
+(S1 60s, S2 30s) and freezes on the last rendered frame — no replay affordance. The player pauses when the app
+backgrounds, resumes on return, and is released when the composable leaves.</p></div>
+
+<div class="req"><span class="id">FR-5 · Never a black box</span>
+<p>A poster is shown until the first frame renders and is retired permanently once the stream has played, so a
+frozen or paused preview can never look broken. If the primary channel fails, the player walks a fallback chain
+before giving up.</p></div>
+
+<div class="req"><span class="id">FR-6 · Handoff</span>
+<p>Tapping anywhere on either surface opens wiom.tv with the contract in §5. The channel opened must be the
+channel that was playing in the preview.</p></div>
+
+<div class="req"><span class="id">FR-7 · Identity latch</span>
+<p>Opening Wiom TV from the band sets a durable device flag (<code>hasVisitedWiomTv</code>). This is the sole
+qualifier for S2 today. <span class="status dec">DECISION NEEDED</span> — see §10.</p></div>
+
+<h2>5 · The handoff contract — app → wiom.tv</h2>
+<p>This is the part that spans two codebases and two teams, so it is specified rather than implied.
+The app is the <b>producer</b>; wiom.tv is the <b>consumer</b>.</p>
+
+<pre><span class="c">// Produced by WiomTvBandViewModel / WiomTvReentryViewModel</span>
+https://wiom.tv/?<span class="k">ch</span>=<span class="s">2</span>&amp;<span class="k">src</span>=<span class="s">app_unserviceable</span>&amp;<span class="k">ctid</span>=<span class="s">__abc123def456</span>
+
+<span class="c">// Re-entry surface differs only in src</span>
+https://wiom.tv/?<span class="k">ch</span>=<span class="s">2</span>&amp;<span class="k">src</span>=<span class="s">app_reentry_mini</span>&amp;<span class="k">ctid</span>=<span class="s">__abc123def456</span>
+
+<span class="c">// ctid is omitted entirely when the analytics id is blank — never sent empty</span>
+https://wiom.tv/?<span class="k">ch</span>=<span class="s">2</span>&amp;<span class="k">src</span>=<span class="s">app_unserviceable</span></pre>
+
+<table>
+<tr><th>Param</th><th>Type</th><th>Produced by</th><th>What wiom.tv must do</th><th>Status</th></tr>
+<tr><td><code>ch</code></td><td>int, channel number</td>
+  <td>Remote Config <code>WIOM_TV_CHANNEL_NUM</code> — the same value that drives the preview, so the picture the
+      user tapped and the channel they land on cannot drift apart</td>
+  <td><b>Land directly on this channel</b>, skipping the default landing channel. Unknown or missing ⇒ fall back to
+      normal landing behaviour, never an error state.</td>
+  <td><span class="status todo">NOT BUILT</span></td></tr>
+<tr><td><code>src</code></td><td>enum string</td>
+  <td>Hardcoded per surface: <code>app_unserviceable</code> or <code>app_reentry_mini</code></td>
+  <td>Already captured — every query param is serialised into <code>entry_params</code> on
+      <code>session_start</code>. Usable for attribution today.</td>
+  <td><span class="status done">WORKS</span></td></tr>
+<tr><td><code>ctid</code></td><td>CleverTap device id</td>
+  <td><code>AnalyticsTracker.getCleverTapId()</code>; omitted when blank</td>
+  <td>Captured in <code>entry_params</code> on the first session only. To join an app user to their wiom.tv
+      behaviour <b>beyond that first session</b>, wiom.tv must persist it against its own <code>uid</code>.</td>
+  <td><span class="status todo">PARTIAL</span></td></tr>
+</table>
+
+<div class="warn">
+  <h3>⚠ Required change on wiom.tv — this is the blocker</h3>
+  <p>Verified in <code>public/wiom-tv.html</code> on <code>origin/main</code>: wiom.tv serialises <b>every</b> landing
+  query param into <code>entry_params</code>, so <code>src</code> and <code>ctid</code> already flow into analytics.
+  But <b>nothing reads <code>ch=</code></b> — there is no code path that lands a user on a specified channel.
+  Until that exists, a user who taps a live Dangal TV preview arrives on whatever the default landing channel is.
+  The preview promise and the landing experience don't match.</p>
+  <p style="margin-top:8px"><b>Ask:</b> in the boot path, read <code>ch</code> from <code>location.search</code>,
+  resolve it against the channel list, and tune to it instead of the default — with a silent fallback when the
+  channel is unknown, off-air or health-gated out.</p>
+</div>
+
+<h3 style="margin-top:26px">Sequence</h3>
+<div class="flow">
+  <div class="step"><b>App</b> RC gives channel num + URL</div><span class="arrow">→</span>
+  <div class="step"><b>Preview</b> plays that channel muted</div><span class="arrow">→</span>
+  <div class="step"><b>Tap</b> builds URL with ch + src + ctid</div><span class="arrow">→</span>
+  <div class="step"><b>Browser</b> opens wiom.tv</div><span class="arrow">→</span>
+  <div class="step"><b>wiom.tv</b> logs entry_params, tunes to ch</div>
+</div>
+
+<h3 style="margin-top:26px">Failure modes</h3>
+<ul>
+  <li><b>No browser available</b> — the app wraps the intent in <code>runCatching</code>; a failed launch is silent, never a crash.</li>
+  <li><b>Channel unknown to wiom.tv</b> — must degrade to default landing, not an error.</li>
+  <li><b>RC unavailable in the app</b> — defaults apply: surfaces stay hidden, so no broken handoff is possible.</li>
+  <li><b>Blank analytics id</b> — <code>ctid</code> is dropped from the URL rather than sent empty.</li>
+</ul>
+
+<h3 style="margin-top:26px">Privacy</h3>
+<p><code>ctid</code> is a CleverTap device identifier, not a phone number, name or address. It travels in a URL, so it
+is visible in browser history and any referrer — acceptable for an analytics id, and deliberately <b>not</b> the phone
+number. Note wiom.tv already receives <code>?phone=</code> on some other entry paths; this handoff does not add to that.</p>
+
+<h2>6 · Remote Config schema</h2>
+<table>
+<tr><th>Key</th><th>Type</th><th>Default</th><th>Purpose</th></tr>
+<tr><td><code>WIOM_TV_BAND_ENABLED</code></td><td>bool</td><td><b>false</b></td><td>Master switch, S1</td></tr>
+<tr><td><code>WIOM_TV_REENTRY_ENABLED</code></td><td>bool</td><td><b>false</b></td><td>Master switch, S2</td></tr>
+<tr><td><code>WIOM_TV_CHANNEL_NUM</code></td><td>int</td><td>2</td><td>Channel to preview <i>and</i> to open via <code>?ch=</code></td></tr>
+<tr><td><code>WIOM_TV_CHANNEL_URL</code></td><td>string</td><td>Dangal TV HLS</td><td>Stream the preview plays</td></tr>
+<tr><td><code>WIOM_TV_BAND_ENTRY_DELAY_MS</code></td><td>long</td><td>1200</td><td>Delay before the band slides up; 0 = immediate</td></tr>
+<tr><td><code>WIOM_TV_PREVIEW_SECONDS</code></td><td>int</td><td>60</td><td>S1 playback budget; 0 = never stop</td></tr>
+</table>
+<p style="margin-top:10px">All keys live in the existing <code>customer_kotlin_app_config</code> blob. A missing or
+corrupt blob falls back to the defaults above — which keep both surfaces <b>off</b>. Failure mode is exclusion,
+never a half-configured surface.</p>
+
+<h2>7 · Analytics &amp; measurement</h2>
+<table>
+<tr><th>Event</th><th>Fires when</th><th>Properties</th></tr>
+<tr><td><code>wiom_tv_band_shown</code></td><td>Band actually appears (after the delay), not on mount</td><td>—</td></tr>
+<tr><td><code>wiom_tv_band_clicked</code></td><td>Band tapped, before the browser opens</td><td><code>ch</code></td></tr>
+<tr><td><code>wiom_tv_reentry_shown</code></td><td>Re-entry card appears</td><td>—</td></tr>
+<tr><td><code>wiom_tv_reentry_clicked</code></td><td>Card tapped</td><td><code>ch</code></td></tr>
+</table>
+<p style="margin-top:12px">The funnel spans two systems and joins on <code>src</code>:</p>
+<div class="flow">
+  <div class="step"><b>App</b> _shown → _clicked</div><span class="arrow">→</span>
+  <div class="step"><b>wiom.tv</b> session_start with entry_params.src</div><span class="arrow">→</span>
+  <div class="step"><b>wiom.tv</b> tune / watch-time</div><span class="arrow">→</span>
+  <div class="step"><b>wiom.tv</b> D1 return</div>
+</div>
+<p style="margin-top:12px"><b>Success metrics.</b> Primary: tap-through rate per surface (<code>_clicked</code> ÷
+<code>_shown</code>). Secondary: median watch-minutes of app-referred sessions vs organic, and D1 return of the
+app-referred cohort. Guardrail: no regression in the booking funnel — "choose different location" and login tap
+rates on the unserviceable screen must not move.</p>
+
+<div class="q" style="margin-top:16px">
+  <h3>Analytical caveat worth deciding before we read results</h3>
+  <p style="color:#4b2a78">wiom.tv runs a live landing experiment (fse_v2, four arms). App-referred users arrive with
+  intent <i>and</i> a specified channel, so they behave nothing like organic first-time visitors — and as new uids
+  they would be enrolled into that experiment and dilute it. Recommend excluding <code>src=app_*</code> sessions from
+  fse_v2 enrolment, and reading them as their own cohort.</p>
+</div>
+
+<h2>8 · Non-functional</h2>
+<ul>
+  <li><b>Data.</b> These users have no Wiom net — a muted stream burns their cellular. Bounded by the preview budget, stopped on background.</li>
+  <li><b>Devices.</b> Target is 2–4GB Android phones. One ExoPlayer instance per surface, released on dispose; no player is retained across screens.</li>
+  <li><b>Layout.</b> Verified at 360×640dp, the smallest realistic profile. The message and address are pinned in the action zone so they cannot be squeezed by the band.</li>
+  <li><b>Dependency.</b> One addition: <code>androidx.media3:media3-exoplayer-hls</code> for <code>.m3u8</code>. media3 core and ui were already present.</li>
+</ul>
+
+<h2>9 · Rollout</h2>
+<div class="flow">
+  <div class="step"><b>1</b> Merge with both switches off — production unchanged</div><span class="arrow">→</span>
+  <div class="step"><b>2</b> wiom.tv ships <code>?ch=</code> support</div><span class="arrow">→</span>
+  <div class="step"><b>3</b> Enable S1, watch tap-through + booking guardrails</div><span class="arrow">→</span>
+  <div class="step"><b>4</b> Enable S2 once S1 has produced a returning cohort</div>
+</div>
+<p style="margin-top:12px">S2 is deliberately second: it has no audience until S1 has created one, since the
+qualifying flag is only set by tapping the band. Kill switch is either flag flipped to false — effective on the
+next config fetch, no release.</p>
+
+<h2>10 · Open decisions</h2>
+<table>
+<tr><th>#</th><th>Decision</th><th>Owner</th></tr>
+<tr><td>D1</td><td><b>Re-entry audience.</b> The flag latches on <i>tapping</i> the band. Should everyone who
+  <i>saw</i> the unserviceable screen qualify? They've also been told we can't serve them, and it's a far larger pool.</td><td>Product</td></tr>
+<tr><td>D2</td><td><b>Other entry points.</b> The payment-success banner and any future Wiom TV link don't latch the
+  flag, so those users aren't recognised as returning. One line each — do we do it now?</td><td>Product + Tech</td></tr>
+<tr><td>D3</td><td><b>Illustration.</b> Dropped on the unserviceable screen whenever the band renders. If the kill
+  switch turns the band off, that screen is text + address only. Condition it on the flag instead?</td><td>Design</td></tr>
+<tr><td>D4</td><td><b>Debug override.</b> Both surfaces render unconditionally in debug builds so QA needs no Firebase.
+  Keep, or gate strictly on RC?</td><td>Tech</td></tr>
+<tr><td>D5</td><td><b>Typography token.</b> <code>T3_20_*</code> puts 20sp text in a 28sp line box, clipping the
+  shirorekha on <b>every 20sp Hindi heading in the app</b>. Fixed locally here; the app-wide fix is one line in
+  <code>Type.kt</code>.</td><td>Design system</td></tr>
+<tr><td>D6</td><td><b>Frequency.</b> The re-entry card shows on every launch for a qualifying user, with no dismiss.
+  Cap after N impressions without a tap, or collapse to an edge tab?</td><td>Product</td></tr>
+</table>
+
+<h2>11 · Appendix — where the code lives</h2>
+<table>
+<tr><th>File</th><th>Role</th></tr>
+<tr><td><code>feature/booking/ui/WiomTvPreviewBand.kt</code></td><td>S1 band + its ViewModel (gate, deep link, events)</td></tr>
+<tr><td><code>feature/booking/ui/WiomTvMiniPreview.kt</code></td><td>S2 re-entry card + its ViewModel</td></tr>
+<tr><td><code>feature/booking/ui/UnserviceableScreen.kt</code></td><td>Hosts S1; layout restructured so message + address are pinned</td></tr>
+<tr><td><code>feature/booking/ui/SplashHomeScreen.kt</code></td><td>Hosts S2 (one line)</td></tr>
+<tr><td><code>core/data/config/AppRemoteConfig.kt</code> + <code>RemoteConfigManager.kt</code></td><td>RC schema and parsing</td></tr>
+<tr><td><code>core/data/store/AnalyticsPrefs.kt</code></td><td><code>hasVisitedWiomTv</code> latch</td></tr>
+<tr><td><code>core/data/analytics/Events.kt</code></td><td>Event name constants</td></tr>
+<tr><td><code>public/wiom-tv.html</code> (wiom.tv repo)</td><td><b>Change required</b> — read and honour <code>?ch=</code></td></tr>
+</table>
+
+<div class="foot">Wiom TV · customer app (Kotlin) · <a href="https://github.com/wiom-tech/customer-app-kotlin/pull/352">PR #352</a> ·
+branch <code>CX-wiom-tv-unserviceable-band</code> · screenshots captured from the build on a 360×640dp emulator</div>
+</div></body></html>
