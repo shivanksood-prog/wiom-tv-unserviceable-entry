@@ -186,6 +186,20 @@
   .theatre.slide{transform:translateY(calc(100% + 16px));
     transition:transform .5s cubic-bezier(.2,.8,.25,1);}
   .theatre.slide.up{transform:translateY(0);}
+  /* COLLAPSE — tapping the screen above drops the band out of the way, leaving a peek strip
+     with the title still readable. Tapping the strip brings it back. Uses the same transform
+     channel as the entry animation, and --peek is set by JS from the real header height so
+     the label + name line are always the part that stays visible. */
+  .theatre{transition:transform .42s cubic-bezier(.2,.8,.25,1);}
+  .theatre.down{transform:translateY(calc(100% - var(--peek,58px)));}
+  .theatre.down .tstage,.theatre.down .tcta{opacity:0;transition:opacity .18s;}
+  .theatre .thandle{position:absolute;top:7px;left:50%;transform:translateX(-50%);
+    width:34px;height:4px;border-radius:99px;background:rgba(255,255,255,.28);}
+  .theatre.down .thead{margin-bottom:2px;}
+  .theatre .backup{display:none;position:absolute;right:16px;top:20px;align-items:center;gap:5px;
+    font-size:11px;font-weight:700;color:var(--brand300);}
+  .theatre.down .backup{display:flex;}
+  .theatre .backup .chev{display:inline-block;transform:rotate(-90deg);font-weight:800;}
   .theatre .tlabel{font-size:11px;font-weight:700;color:var(--brand300);}
   .theatre .thead{display:flex;align-items:center;gap:8px;margin-top:3px;}
   .theatre .thead b{color:var(--neutralWhite);font-size:16px;font-weight:700;}
@@ -536,6 +550,8 @@
            <div class="loginlink">${LOGIN_CTA} <span class="arr">›</span></div>
          </div>
          <a class="theatre" href="${TV_URL}">
+           <div class="thandle"></div>
+           <div class="backup"><span class="chev">‹</span> देखें</div>
            <div class="tlabel">${TV.lbl}</div>
            <div class="thead"><b>व्योम TV</b><span class="freepill">🎁 100% फ्री</span></div>
            <div class="tstage">
@@ -560,6 +576,27 @@
             void th.offsetHeight;               /* commit the parked position before animating */
             later(()=>th.classList.add('slide','up'), entryDelay);
           }
+        }
+      }
+      /* COLLAPSE / RESTORE — the band is a big dark surface on a screen whose real job is the
+         location CTA. Tapping anywhere outside it drops it to a peek strip (label + व्योम TV
+         still legible, so it reads as parked, not dismissed); tapping the strip restores it.
+         While collapsed the band's own link is suppressed, so the restoring tap can never
+         navigate to wiom.tv by accident. */
+      { const th=vp.querySelector('.theatre'), bd=vp.querySelector('.body.tmode');
+        if(th&&bd){
+          const setPeek=()=>{ const head=th.querySelector('.thead');
+            th.style.setProperty('--peek', (head.offsetTop+head.offsetHeight+14)+'px'); };
+          setPeek();
+          const collapse=()=>{ if(th.classList.contains('down'))return; setPeek();
+            th.classList.add('down'); bd.style.bottom='24px'; };
+          const restore =()=>{ th.classList.remove('down');
+            bd.style.bottom=(th.offsetHeight+16)+'px'; };
+          bd.addEventListener('click', collapse);
+          vp.addEventListener('click', e=>{ if(!th.contains(e.target)) collapse(); });
+          th.addEventListener('click', e=>{
+            if(th.classList.contains('down')){ e.preventDefault(); e.stopPropagation(); restore(); }
+          });
         }
       }
       startTv();
@@ -602,6 +639,27 @@
       requestAnimationFrame(()=>requestAnimationFrame(()=>{
         ['b0','r0','b1','b2','b3'].forEach(id=>document.getElementById(id).classList.add('in'));
       }));
+      /* COLLAPSE / RESTORE — the band is a big dark surface on a screen whose real job is the
+         location CTA. Tapping anywhere outside it drops it to a peek strip (label + व्योम TV
+         still legible, so it reads as parked, not dismissed); tapping the strip restores it.
+         While collapsed the band's own link is suppressed, so the restoring tap can never
+         navigate to wiom.tv by accident. */
+      { const th=vp.querySelector('.theatre'), bd=vp.querySelector('.body.tmode');
+        if(th&&bd){
+          const setPeek=()=>{ const head=th.querySelector('.thead');
+            th.style.setProperty('--peek', (head.offsetTop+head.offsetHeight+14)+'px'); };
+          setPeek();
+          const collapse=()=>{ if(th.classList.contains('down'))return; setPeek();
+            th.classList.add('down'); bd.style.bottom='24px'; };
+          const restore =()=>{ th.classList.remove('down');
+            bd.style.bottom=(th.offsetHeight+16)+'px'; };
+          bd.addEventListener('click', collapse);
+          vp.addEventListener('click', e=>{ if(!th.contains(e.target)) collapse(); });
+          th.addEventListener('click', e=>{
+            if(th.classList.contains('down')){ e.preventDefault(); e.stopPropagation(); restore(); }
+          });
+        }
+      }
       startTv();
       narrate(beats);
       later(()=>vp.classList.add('promptin'),5000);
